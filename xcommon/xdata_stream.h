@@ -70,10 +70,11 @@ class xdata_stream
         xdata_stream& operator >> (std::wstring& value);
 
         void seek(xint32_t offset, seek_where where = seek_beg) { data_buffer_.seek(offset, where); }
-        bool good() const { return true; }
+        bool good() const { return good_; }
         bool at_end() const { return data_buffer_.at_end(); }
         xsize_t pos() const { return data_buffer_.current_offset(); }
     private:
+        bool good_;
         xdata_buffer data_buffer_;
 };
 } // namespace xws

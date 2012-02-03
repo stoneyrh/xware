@@ -161,19 +161,28 @@ TEST(xbyte_array_tests, test_function_append)
     byte_array.append(ns);
     byte_array.append(ws);
     ASSERT_EQ(byte_array.str_at(offset, ns.length()), ns);
-    offset += ns.length() * sizeof(char);
+    // Plus 1 to skip the _X('\0') char
+    offset += (ns.length() + 1) * sizeof(char);
     ASSERT_EQ(byte_array.wstr_at(offset, ws.length()), ws);
-    offset += ws.length() * sizeof(wchar_t);
+    offset += (ws.length() + 1) * sizeof(wchar_t);
 
     xstring xs(_X("abcdefghijklmn"));
     byte_array.append(xs);
     ASSERT_EQ(byte_array.xstr_at(offset, xs.length()), xs);
-    offset += xs.length() * sizeof(xchar);
+    offset += (xs.length() + 1) * sizeof(xchar);
 
     xbyte_ptr raw = (xbyte_ptr)"khkl;,nko3jfkdsl";
     xsize_t size = strlen((char*)raw) * sizeof(xbyte);
     byte_array.append(raw, size);
     EXPECT_STREQ((char*)raw, byte_array.str_at(offset, size).c_str());
+}
+
+TEST(xbyte_array_tests, test_append_empty_string)
+{
+    xbyte_array byte_array;
+    xstring empty;
+    byte_array.append(empty);
+    ASSERT_EQ(byte_array.size(), sizeof(xchar));
 }
 
 TEST(xbyte_array_tests, test_invalid_append)

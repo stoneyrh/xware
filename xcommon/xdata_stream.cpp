@@ -37,16 +37,16 @@
 namespace xws
 {
 
-xdata_stream::xdata_stream()
+xdata_stream::xdata_stream() : good_(true)
 {
 }
 
-xdata_stream::xdata_stream(const xbyte_array& byte_array)
+xdata_stream::xdata_stream(const xbyte_array& byte_array) : good_(true)
 {
     data_buffer_.set_data(byte_array);
 }
 
-xdata_stream::xdata_stream(xbyte_array* byte_array) : data_buffer_(byte_array)
+xdata_stream::xdata_stream(xbyte_array* byte_array) : good_(true), data_buffer_(byte_array)
 {
 }
 
@@ -56,121 +56,123 @@ xdata_stream::~xdata_stream()
 
 xdata_stream& xdata_stream::operator << (xint8_t value)
 {
-    data_buffer_.write(value);
+    good_ = data_buffer_.write(value) == sizeof(value);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator << (xint16_t value)
 {
-    data_buffer_.write(value);
+    good_ = data_buffer_.write(value) == sizeof(value);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator << (xint32_t value)
 {
-    data_buffer_.write(value);
+    good_ = data_buffer_.write(value) == sizeof(value);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator << (xint64_t value)
 {
-    data_buffer_.write(value);
+    good_ = data_buffer_.write(value) == sizeof(value);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator << (xuint8_t value)
 {
-    data_buffer_.write(value);
+    good_ = data_buffer_.write(value) == sizeof(value);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator << (xuint16_t value)
 {
-    data_buffer_.write(value);
+    good_ = data_buffer_.write(value) == sizeof(value);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator << (xuint32_t value)
 {
-    data_buffer_.write(value);
+    good_ = data_buffer_.write(value) == sizeof(value);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator << (xuint64_t value)
 {
-    data_buffer_.write(value);
+    good_ = data_buffer_.write(value) == sizeof(value);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator << (const std::string& value)
 {
-    data_buffer_.write(value);
+    good_ = data_buffer_.write(value) == (value.length() + 1) * sizeof(char);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator << (const std::wstring& value)
 {
-    data_buffer_.write(value);
+    good_ = data_buffer_.write(value) == (value.length() + 1) * sizeof(wchar_t);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator >> (xint8_t& value)
 {
-    data_buffer_.read(value);
+    good_ = data_buffer_.read(value) == sizeof(value);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator >> (xint16_t& value)
 {
-    data_buffer_.read(value);
+    good_ = data_buffer_.read(value) == sizeof(value);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator >> (xint32_t& value)
 {
-    data_buffer_.read(value);
+    good_ = data_buffer_.read(value) == sizeof(value);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator >> (xint64_t& value)
 {
-    data_buffer_.read(value);
+    good_ = data_buffer_.read(value) == sizeof(value);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator >> (xuint8_t& value)
 {
-    data_buffer_.read(value);
+    good_ = data_buffer_.read(value) == sizeof(value);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator >> (xuint16_t& value)
 {
-    data_buffer_.read(value);
+    good_ = data_buffer_.read(value) == sizeof(value);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator >> (xuint32_t& value)
 {
-    data_buffer_.read(value);
+    good_ = data_buffer_.read(value) == sizeof(value);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator >> (xuint64_t& value)
 {
-    data_buffer_.read(value);
+    good_ = data_buffer_.read(value) == sizeof(value);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator >> (std::string& value)
 {
-    data_buffer_.read(value);
+    xsize_t consumed_size = data_buffer_.read(value);
+    good_ = consumed_size == (value.length() + 1) * sizeof(char);
     return *this;
 }
 
 xdata_stream& xdata_stream::operator >> (std::wstring& value)
 {
-    data_buffer_.read(value);
+    xsize_t consumed_size = data_buffer_.read(value);
+    good_ = consumed_size == (value.length() + 1) * sizeof(wchar_t);
     return *this;
 }
 

@@ -48,10 +48,14 @@ TEST(xdata_stream_tests, test_init_with_byte_array)
     byte_array.append(str);
 
     xdata_stream stream(byte_array);
+    ASSERT_TRUE(stream.good());
+    ASSERT_FALSE(stream.at_end());
     xint8_t _xi8 = 0;
     xint16_t _xi16 = 0;
     xstring _str;
     stream >> _xi8 >> _xi16 >> _str;
+    ASSERT_TRUE(stream.good());
+    ASSERT_TRUE(stream.at_end());
     ASSERT_EQ(xi8, _xi8);
     ASSERT_EQ(xi16, _xi16);
     ASSERT_EQ(str, _str);

@@ -60,8 +60,8 @@ class xbyte_array
         void append(xuint32_t value) { data_.insert(data_.end(), (xbyte_ptr)&value, (xbyte_ptr)&value + sizeof(value)); }
         void append(xuint64_t value) { data_.insert(data_.end(), (xbyte_ptr)&value, (xbyte_ptr)&value + sizeof(value)); }
         void append(xbyte_ptr data, xsize_t size) { if (data) data_.insert(data_.end(), data, data + size); }
-        void append(const std::string& str) { data_.insert(data_.end(), (xbyte_ptr)str.c_str(), (xbyte_ptr)str.c_str() + str.length() * sizeof(char)); }
-        void append(const std::wstring& str) { data_.insert(data_.end(), (xbyte_ptr)str.c_str(), (xbyte_ptr)str.c_str() + str.length() * sizeof(wchar_t)); }
+        void append(const std::string& str) { data_.insert(data_.end(), (xbyte_ptr)str.c_str(), (xbyte_ptr)str.c_str() + (str.length() + 1) * sizeof(char)); }
+        void append(const std::wstring& str) { data_.insert(data_.end(), (xbyte_ptr)str.c_str(), (xbyte_ptr)str.c_str() + (str.length() + 1) * sizeof(wchar_t)); }
 
         bool replace(xsize_t offset, void* data, xsize_t size);
 
