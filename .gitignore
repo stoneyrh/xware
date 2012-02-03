@@ -1,0 +1,13 @@
+*.pdb
+debug/
+release/
+*.obj
+*.o
+.sconsign.dblite
+*.pyc
+*.swp
+*.lib
+*.exe
+vc90.idb
+*.manifest
+*.ilk

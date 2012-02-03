@@ -1,0 +1,21 @@
+Import('xenv')
+
+xenv = xenv.Clone()
+xenv.UseBoost()
+
+sources = xenv.Glob('*.cpp')
+if xenv.IsWindows():
+    sources += xenv.Glob('win/*.cpp')
+elif xenv.IsLinux():
+    sources += xenv.Glob('lnx/*.cpp')
+elif xenv.IsMac():
+    sources += xenv.Glob('mac/*.cpp')
+
+xenv.Append(CPPPATH = ['.'])
+
+xcommon_lib_name = 'xcommon'
+xcommon_lib = xenv.BuildStaticLibrary(xcommon_lib_name, sources)
+
+SConscript('unit_tests/SConscript', ['xenv'])
+
+Return(['xcommon_lib'])
