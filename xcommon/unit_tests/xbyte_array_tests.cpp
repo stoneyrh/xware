@@ -183,3 +183,19 @@ TEST(xbyte_array_tests, test_invalid_append)
     byte_array.append(p, 0);
     byte_array.append(p, 10);
 }
+
+TEST(xbyte_array_tests, test_function_replace)
+{
+    xbyte_array byte_array;
+    xint16_t xi16 = -16;
+    byte_array.append(xi16);
+    ASSERT_FALSE(byte_array.replace(2 * sizeof(xi16), &xi16, sizeof(xi16)));
+    ASSERT_FALSE(byte_array.replace(sizeof(xi16), &xi16, sizeof(xi16)));
+    ASSERT_FALSE(byte_array.replace(sizeof(xi16) / 2, &xi16, sizeof(xi16)));
+    ASSERT_FALSE(byte_array.replace(0, 0, 10));
+
+    ASSERT_EQ(byte_array.value_at<xint16_t>(0), xi16);
+    xint16_t _xi16 = 16;
+    ASSERT_TRUE(byte_array.replace(0, &_xi16, sizeof(_xi16)));
+    ASSERT_EQ(byte_array.value_at<xint16_t>(0), _xi16);
+}
