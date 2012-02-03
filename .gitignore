@@ -1,6 +1,7 @@
 *.pdb
 debug/
 release/
+*_output/
 *.obj
 *.o
 .sconsign.dblite
