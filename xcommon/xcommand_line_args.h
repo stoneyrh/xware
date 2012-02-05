@@ -46,14 +46,14 @@ struct _str_helper;
 template <>
 struct _str_helper<char>
 {
-    static int length(const char* s) { return strlen(s); }
+    static size_t length(const char* s) { return strlen(s); }
     static void copy(char* t, const char* s) { strcpy(t, s); }
 };
 
 template <>
 struct _str_helper<wchar_t>
 {
-    static int length(const wchar_t* s) { return wcslen(s); }
+    static size_t length(const wchar_t* s) { return wcslen(s); }
     static void copy(wchar_t* t, const wchar_t* s) { wcscpy(t, s); }
 };
 
@@ -89,7 +89,7 @@ class xcommand_line_args
                 argv_ = new Target*[argc];
                 for (int i = 0; i < argc; ++ i)
                 {
-                    int len = _str_helper<Source>::length(argv[i]);
+                    size_t len = _str_helper<Source>::length(argv[i]);
                     argv_[i] = new Target[len + 1];
                     memset((char*)argv_[i], 0, (len + 1) * sizeof(Target));
                     _converter<Target, Source>::apply(argv_[i], argv[i]);
