@@ -47,25 +47,27 @@ xnet_message_ids& xnet_message::net_message_ids()
     return mids;
 }
 
-xnet_message* xnet_message::create_message(xmid_t id)
+xnet_message_ptr xnet_message::create_message(xmid_t id)
 {
     id_to_creator_t& id_2_creator = id_to_creator();
     xnet_message_creator_t creator = id_2_creator[id];
     if (creator)
     {
-        xnet_message* message = (*creator)();
+        xnet_message_ptr message((*creator)());
         if (message)
         {
             message->set_id(id);
             return message;
         }
     }
-    return 0;
+    //
+    static xnet_message_ptr none;
+    return none;
 }
 
-xnet_message* xnet_message::create_message(const xstring& name)
+xnet_message_ptr xnet_message::create_message(const xstring& name)
 {
-    xnet_message_ids& mids = net_message_ids();
+    const xnet_message_ids& mids = net_message_ids();
     return create_message(mids.id_of(name));
 }
 
@@ -118,12 +120,8 @@ xnet_message_set xnet_message::from_byte_array(const xbyte_array& byte_array, xs
             xmid_t id = 0;
             xversion_t version = 0;
             stream >> id >> version;
-            xnet_message* message = create_message(id);
-            if (!message)
-            {
-                xdebug_info(xformat(_X("Failed to create a message with id = %1%.")) % id);
-            }
-            else
+            xnet_message_ptr message = create_message(id);
+            if (message)
             {
                 message->set_version(version);
                 if (message->from_data_stream(stream))
@@ -139,13 +137,13 @@ xnet_message_set xnet_message::from_byte_array(const xbyte_array& byte_array, xs
                     }
                     else
                     {
-                        xdebug_info(xformat(_X("The size of message ( = %1%) does not match that read out from stream ( = %2%).")) % size % stream_offset);
+                        xdebug_info(xformat(_X("The size of message (= %1%) does not match that read out from stream (= %2%).")) % size % stream_offset);
                     }
                 }
-                else
-                {
-                    delete message;
-                }
+            }
+            else
+            {
+                xdebug_info(xformat(_X("Failed to create a message with id = %1%.")) % id);
             }
         }
     }

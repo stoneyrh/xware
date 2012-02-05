@@ -87,29 +87,29 @@ class common_message : public xnet_message
         DECLARE_XNET_MESSAGE(common_message)
 };
 
+typedef xshared_ptr<common_message>::type common_message_ptr;
+
 IMPLEMENT_XNET_MESSAGE(common_message)
 
 TEST(xnet_message_tests, test_create_message_by_name)
 {
-    xnet_message* source = xnet_message::create_message(_X("common_message"));
+    xnet_message_ptr source = xnet_message::create_message(_X("common_message"));
     EXPECT_TRUE(source);
-    delete source;
     source = xnet_message::create_message(_X("bogus"));
     EXPECT_FALSE(source);
 }
 
 TEST(xnet_message_tests, test_create_message_by_id)
 {
-    xnet_message* source = xnet_message::create_message(1000);
+    xnet_message_ptr source = xnet_message::create_message(1000);
     EXPECT_TRUE(source);
-    delete source;
     source = xnet_message::create_message(INVALID_XMID);
     EXPECT_FALSE(source);
 }
 
 TEST(xnet_message_tests, test_serialization)
 {
-    common_message* source = static_cast<common_message*>(xnet_message::create_message(_X("common_message")));
+    common_message_ptr source = xdynamic_pointer_cast<common_message>(xnet_message::create_message(_X("common_message")));
     EXPECT_TRUE(source);
     source->set_path_to_bin(_X("value of path_to_bin"));
     source->set_time(1234);

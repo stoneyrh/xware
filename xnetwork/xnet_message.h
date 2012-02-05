@@ -90,8 +90,8 @@ class xnet_message : public xversionable
         bool to_byte_array(xbyte_array& byte_array);
         static xnet_message_set from_byte_array(const xbyte_array& byte_array, xsize_t* consumed_size = 0);
 
-        static xnet_message* create_message(xmid_t id);
-        static xnet_message* create_message(const xstring& name);
+        static xnet_message_ptr create_message(xmid_t id);
+        static xnet_message_ptr create_message(const xstring& name);
         static xnet_message_ids& net_message_ids();
     protected:
         virtual bool to_data_stream(xdata_stream& stream) = 0;

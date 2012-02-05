@@ -58,6 +58,10 @@ class xscoped_ptr
 template <class T>
 class xenable_shared_from_this : public boost::enable_shared_from_this<T> {};
 
+#define xdynamic_pointer_cast           boost::dynamic_pointer_cast
+#define xconst_pointer_cast             boost::const_pointer_cast
+#define xstatic_pointer_cast            boost::static_pointer_cast
+
 } // namespace xws
 
 #endif
