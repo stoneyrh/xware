@@ -112,6 +112,7 @@ class xbyte_array
         xsize_t capacity() const { return data_.capacity(); }
         void reserve(xsize_t space) { data_.reserve(space); }
         const xbyte_ptr data() const { return (const xbyte_ptr)(&data_[0]); }
+        void clear() { std::vector<xbyte> none; data_.swap(none); }
 
         xbyte_array& operator += (const xbyte_array& rhs);
         xbyte_array operator + (const xbyte_array& rhs) const;

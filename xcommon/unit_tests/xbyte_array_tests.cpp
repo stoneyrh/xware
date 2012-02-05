@@ -208,3 +208,14 @@ TEST(xbyte_array_tests, test_function_replace)
     ASSERT_TRUE(byte_array.replace(0, &_xi16, sizeof(_xi16)));
     ASSERT_EQ(byte_array.value_at<xint16_t>(0), _xi16);
 }
+
+TEST(xbyte_array_tests, test_function_clear)
+{
+    xbyte_array byte_array;
+    ASSERT_TRUE(byte_array.is_empty());
+    xint16_t xi16 = -16;
+    byte_array.append(xi16);
+    ASSERT_FALSE(byte_array.is_empty());
+    byte_array.clear();
+    ASSERT_TRUE(byte_array.is_empty());
+}
