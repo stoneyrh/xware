@@ -52,7 +52,7 @@ class xobject_factory
         xobject_factory() {}
         ~xobject_factory() {}
         //
-        bool register_creator(Key key, const Creator creator)
+        bool register_creator(const Key& key, const Creator creator)
         {
             if (creators_.find(key) == creators_.end())
             {
@@ -62,7 +62,7 @@ class xobject_factory
             xdebug_info(xformat(_X("Creator with key = %1% has a duplicate value.")) % key);
             return false;
         }
-        bool unregister_creator(Key key)
+        bool unregister_creator(const Key& key)
         {
             typename Creators::iterator pos = creators_.find(key);
             if (pos != creators_.end())
@@ -72,14 +72,19 @@ class xobject_factory
             }
             return false;
         }
-        Creator creator_of(Key key)
+        Creator creator_of(const Key& key) const
         {
-            typename Creators::iterator pos = creators_.find(key);
+            typename Creators::const_iterator pos = creators_.find(key);
             if (pos != creators_.end())
             {
                 return pos->second;
             }
             return 0;
+        }
+        bool has_creator(const Key& key) const
+        {
+            typename Creators::const_iterator pos = creators_.find(key);
+            return pos != creators_.end();
         }
     private:
         Creators creators_;
