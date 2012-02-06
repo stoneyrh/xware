@@ -6,9 +6,13 @@ def _is_windows():
     return platform.system() == 'Windows'
 
 def detect_boost_path():
+    if os.environ.has_key('BOOST_DIR'):
+        return os.environ['BOOST_DIR']
     return r'd:\boost_1_48_0'
 
 def detect_gmock_path():
+    if os.environ.has_key('GMOCK_DIR'):
+        return os.environ['GMOCK_DIR']
     return r'd:\codebase\vendor\gmock-1.6.0\fused-src'
 
 vars = SCons.Variables.Variables(None, SCons.Script.ARGUMENTS)
