@@ -43,6 +43,7 @@
 #include "xsafe_queue.h"
 #include "xsignal.h"
 #include "xboolean.h"
+#include "xnet_message_handler_manager.h"
 
 namespace xws
 {
@@ -59,6 +60,8 @@ class xnet_service : public xenable_shared_from_this<xnet_service>
         xnet_service(const xnet_io_object_ptr& io_object);
         ~xnet_service();
 
+        void set_handler_manager(const xnet_message_handler_manager_ptr& handler_manager) { handler_manager_ = handler_manager; }
+
         void start();
         void stop();
 
@@ -70,9 +73,12 @@ class xnet_service : public xenable_shared_from_this<xnet_service>
         void raise_stop_interruption();
         void on_data_read(xnet_io_object_ptr& io_object, const xbyte_array& byte_array);
         void on_error(const xerror_code& error_code);
+        void handle_byte_array(const xbyte_array& byte_array);
     private:
         xboolean is_running_;
         xnet_io_object_ptr io_object_;
+        xnet_message_handler_manager_ptr handler_manager_;
+        xbyte_array unresolved_byte_array_;
         net_command_list net_commands_;
         xnet_service_sig_t net_service_started_sig_;
         xnet_service_sig_t net_service_stopped_sig_;

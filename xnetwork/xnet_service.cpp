@@ -35,6 +35,8 @@
 #include "xnet_service.h"
 #include "xbind.h"
 #include "xlogger.h"
+#include "xassert.h"
+#include "xnet_message.h"
 
 namespace xws
 {
@@ -104,7 +106,7 @@ void xnet_service::raise_stop_interruption()
 
 void xnet_service::on_data_read(xnet_io_object_ptr& io_object, const xbyte_array& byte_array)
 {
-    std::cout << std::string((char*)byte_array.data(), (char*)byte_array.data() + byte_array.size()) << std::endl;
+    net_commands_.put(xbind(&xnet_service::handle_byte_array, shared_from_this(), byte_array));
 }
 
 void xnet_service::on_error(const xerror_code& error_code)
@@ -120,6 +122,38 @@ void xnet_service::on_error(const xerror_code& error_code)
                 break;
             default:
                 break;
+        }
+    }
+}
+
+void xnet_service::handle_byte_array(const xbyte_array& byte_array)
+{
+    // unresolved_byte_array_ saves the data that not resolved last time
+    unresolved_byte_array_ += byte_array;
+    xsize_t recogized_size = 0;
+    xnet_message_set set = xnet_message::from_byte_array(unresolved_byte_array_, &recogized_size);
+    if (set.empty())
+    {
+        xassert(recogized_size == 0);
+        xdebug_info(_X("The data received cannot be recoginzed, they will be abandoned."));
+        unresolved_byte_array_.clear();
+    }
+    else
+    {
+        if (recogized_size == unresolved_byte_array_.size())
+        {
+            xdebug_info(_X("All data are recognized."));
+            unresolved_byte_array_.clear();
+        }
+        else
+        {
+            unresolved_byte_array_ = unresolved_byte_array_.right(unresolved_byte_array_.size() - recogized_size);
+            xdebug_info(xformat(_X("There are still %1% bytes not recognized.")) % unresolved_byte_array_.size());
+        }
+        // Handle all message immediately
+        if (handler_manager_)
+        {
+            handler_manager_->handle_message_set(set);
         }
     }
 }
