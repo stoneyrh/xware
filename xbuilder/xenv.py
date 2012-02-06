@@ -187,6 +187,9 @@ def testee_objects(xenv, sources):
     return built_objects
 
 def run_test(xenv, program):
+    # Do nothing on cleaning
+    if xenv.GetOption('clean'):
+        return
     def running_desc(program):
         column_count = 80
         head_and_tail = '=' * column_count
