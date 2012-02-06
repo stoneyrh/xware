@@ -32,68 +32,27 @@
 * ****************************************************************************
 */
 
-#ifndef _XNET_MESSAGE_HANDLER_H_
-#define _XNET_MESSAGE_HANDLER_H_
+#include <gtest/gtest.h>
+#include "xnet_message_handler.h"
 
-#include "xnet_message.h"
-#include "xsmart_ptr.h"
-#include "xobject_factory.h"
+using namespace xws;
 
-#define DECLARE_XNET_MESSAGE_HANDLER(klass)              \
-private:                                                 \
-    static xnet_message_handler* create##klass()         \
-    {                                                    \
-        return new klass();                              \
-    }                                                    \
-    class klass##_register                               \
-    {                                                    \
-        public:                                          \
-            klass##_register()                           \
-            {                                            \
-                xnet_message_handler::handler_factory(). \
-                    register_creator(_X(#klass),         \
-                        &klass::create##klass);          \
-            }                                            \
-    };                                                   \
-private:                                                 \
-    static klass##_register register_;                   \
-
-//
-#define IMPLEMENT_XNET_MESSAGE_HANDLER(klass)            \
-    klass::klass##_register klass::register_;
-
-namespace xws
-{
-
-class xnet_message_handler_context
+class handler_tester : public xnet_message_handler
 {
     public:
-        xnet_message_handler_context() {}
-        virtual ~xnet_message_handler_context() {}
-};
-
-typedef xshared_ptr<xnet_message_handler_context>::type xnet_message_handler_context_ptr;
-
-class xnet_message_handler;
-typedef xobject_factory<xnet_message_handler, xstring> xnet_message_handler_factory;
-
-class xnet_message_handler
-{
-    public:
-        xnet_message_handler() {}
-        virtual ~xnet_message_handler() {}
-
-        virtual void handle_message(xnet_message_ptr message,
-                        xnet_message_handler_context_ptr context = xnet_message_handler_context_ptr()) = 0;
-        static xnet_message_handler_factory& handler_factory()
+        virtual void handle_message(xnet_message_ptr message, xnet_message_handler_context_ptr context)
         {
-            static xnet_message_handler_factory handler_factory;
-            return handler_factory;
         }
+        DECLARE_XNET_MESSAGE_HANDLER(handler_tester)
 };
 
-typedef xshared_ptr<xnet_message_handler>::type xnet_message_handler_ptr;
+IMPLEMENT_XNET_MESSAGE_HANDLER(handler_tester)
 
-} // namespace xws
-
-#endif
+TEST(xnet_message_handler_tests, test_handler_creation)
+{
+    xnet_message_handler_factory& factory = xnet_message_handler::handler_factory();
+    ASSERT_TRUE(factory.creator_of(_X("handler_tester")) != 0);
+    xnet_message_handler* handler = (factory.creator_of(_X("handler_tester")))();
+    ASSERT_TRUE(handler != 0);
+    delete handler;
+}
