@@ -39,7 +39,8 @@ namespace xws
 
 xnet_message_ids::xnet_message_ids()
 {
-    name_to_id_.insert(name_to_id_t::value_type(_X("xheart_beat"), 1000));
+    name_to_id_.insert(name_to_id_t::value_type(_X("xnet_handshake_message"), 1000));
+    name_to_id_.insert(name_to_id_t::value_type(_X("xnet_heartbeat_message"), 1001));
 }
 
 xnet_message_ids::~xnet_message_ids()
