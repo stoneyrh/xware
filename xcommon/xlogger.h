@@ -77,8 +77,12 @@ void xlog_fatal(const xlog_string &message);
 
 #ifdef DEBUG
 #define xdebug_info(str)        xlog_info(str)
+#define xdebug_warn(str)        xlog_warn(str)
+#define xdebug_error(str)       xlog_error(str)
 #else
 #define xdebug_info(str)
+#define xdebug_warn(str)
+#define xdebug_error(str)
 #endif
 
 } // namespace xws
