@@ -74,12 +74,22 @@ class xnet_service : public xenable_shared_from_this<xnet_service>
         void on_data_read(xnet_io_object_ptr& io_object, const xbyte_array& byte_array);
         void on_error(const xerror_code& error_code);
         void handle_byte_array(const xbyte_array& byte_array);
+        // Start monitoring hand shake message
+        void start_monitor_handshake(xsize_t seconds = 3);
+        // If hand shake success within specified period, then end monitoring 
+        void end_monitor_handshake();
+        void on_handshake_timeout(const xerror_code& error_code);
     private:
-        xboolean is_running_;
+        //
         xnet_io_object_ptr io_object_;
+        // This timer will be first used for monitoring handshake
+        // After handshake success, it will be used for monitoring heartbeat
+        xdeadline_timer deadline_timer_;
+        xboolean is_running_;
         xnet_message_handler_manager_ptr handler_manager_;
         xbyte_array unresolved_byte_array_;
         net_command_list net_commands_;
+        // Signals
         xnet_service_sig_t net_service_started_sig_;
         xnet_service_sig_t net_service_stopped_sig_;
 };

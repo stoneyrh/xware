@@ -37,11 +37,13 @@
 #include "xlogger.h"
 #include "xassert.h"
 #include "xnet_message.h"
+#include "xposix_time.h"
 
 namespace xws
 {
 
-xnet_service::xnet_service(const xnet_io_object_ptr& io_object) : io_object_(io_object)
+xnet_service::xnet_service(const xnet_io_object_ptr& io_object) : io_object_(io_object),
+    deadline_timer_(io_object_->io_service())
 {
     xdebug_info(_X("Creating xnet_service..."));
 }
@@ -64,6 +66,9 @@ void xnet_service::run()
             io_object_->start_async_read();
             // It could be stopped before running any command
             xthis_thread::interruption_point();
+            // Once connected, we start monitoring hand shake message
+            // If there is no hand shake message for some period of time, then the service will exit
+            start_monitor_handshake();
             //
             do
             {
@@ -82,6 +87,18 @@ void xnet_service::run()
         {
         }
     } while (true);
+    try
+    {
+        // Prevent any further operation on io object
+        xdebug_info(_X("Cancelling any awaiting operations..."));
+        // Cancel IO may throw exception, and it may not work on Windows less than XP
+        // Please consult boost documentation for more information
+        io_object_->cancel();
+    }
+    catch (...)
+    {
+    }
+    // Notify service stopped
     net_service_stopped_sig_(shared_from_this());
     xdebug_info(_X("xnet_service stopped."));
 }
@@ -159,6 +176,27 @@ void xnet_service::handle_byte_array(const xbyte_array& byte_array)
         {
             xdebug_warn(_X("There is no handler associated with this service, message won't be handled!"));
         }
+    }
+}
+
+void xnet_service::start_monitor_handshake(xsize_t seconds)
+{
+    deadline_timer_.expires_from_now(xposix_time::seconds(seconds));
+    deadline_timer_.async_wait(xbind(&xnet_service::on_handshake_timeout, this, xplaceholders::error));
+}
+
+void xnet_service::end_monitor_handshake()
+{
+    deadline_timer_.cancel();
+}
+
+void xnet_service::on_handshake_timeout(const xerror_code& error_code)
+{
+    if (error_code != xasio_error::operation_aborted)
+    {
+        // At this point, it fails to handshake with peer side, so stop the service
+        xdebug_info(_X("Failed to handshake with peer side, the service will terminate."));
+        stop();
     }
 }
 
