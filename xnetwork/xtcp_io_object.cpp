@@ -63,7 +63,10 @@ void xtcp_io_object::start_async_read()
     xbyte_ptr buffer = read_buffer();
     socket_.async_read_some(xbuffer(buffer, READ_BUFFER_SIZE),
                 xbind(&xtcp_io_object::on_data_read,
-                       this,
+                       // Make sure use smart pointer
+                       // Because if not, when the net service quit, the IO object may be deleted
+                       // While the asynchrous operation is still in the queue, then it will corrupt
+                       xdynamic_pointer_cast<xtcp_io_object>(shared_from_this()),
                        buffer,
                        xplaceholders::error,
                        xplaceholders::bytes_transferred));

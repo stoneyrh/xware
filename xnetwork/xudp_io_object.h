@@ -46,6 +46,8 @@ class xudp_io_object : public xnet_io_object
         xudp_io_object(xio_service& io_service);
         virtual ~xudp_io_object();
 
+        virtual void shutdown() { socket_.shutdown(xudp_socket::shutdown_both); }
+        virtual void cancel() { socket_.cancel(); }
         virtual xio_service& io_service() { return socket_.get_io_service(); }
 
         virtual void write(const xbyte_array& byte_array);
