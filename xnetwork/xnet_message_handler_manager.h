@@ -43,7 +43,7 @@ namespace xws
 {
 
 #define XNET_MESSAGE(x)         _X(#x)
-#define xNET_MESSAGE_HANDLER(x) _X(#x)
+#define XNET_MESSAGE_HANDLER(x) _X(#x)
 
 class xnet_message_handler_manager
 {

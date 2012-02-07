@@ -5,6 +5,6 @@ xenv.UseGoogleMock()
 xenv.SetupTestEnv();
 xenv.Append(CPPPATH = ['..'])
 sources = xenv.Glob('*.cpp')
-testees = ['../xnet_message_ids.cpp', '../xnet_message.cpp']
+testees = ['../xnet_message_ids.cpp', '../xnet_message.cpp', '../xnet_message_handler_manager.cpp']
 xnetwork_unit_tests_name = 'xnetwork_tests'
 xnetwork_unit_tests = xenv.BuildUnitTest(xnetwork_unit_tests_name, sources + xenv.GoogleMockObjects() + xenv.TesteeObjects(testees))

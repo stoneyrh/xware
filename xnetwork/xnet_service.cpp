@@ -155,6 +155,10 @@ void xnet_service::handle_byte_array(const xbyte_array& byte_array)
         {
             handler_manager_->handle_message_set(set);
         }
+        else
+        {
+            xdebug_warn(_X("There is no handler associated with this service, message won't be handled!"));
+        }
     }
 }
 
