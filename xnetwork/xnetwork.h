@@ -59,6 +59,7 @@ typedef boost::asio::ip::address              xaddress;
 typedef boost::asio::ip::address_v4           xaddress_v4;
 typedef boost::asio::ip::address_v6           xaddress_v6;
 
+typedef boost::asio::deadline_timer           xdeadline_timer;
 typedef boost::asio::mutable_buffer           xmutable_buffer;
 
 typedef boost::asio::streambuf                xnet_streambuf;
