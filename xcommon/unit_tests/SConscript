@@ -6,5 +6,4 @@ xenv.Append(CPPPATH = ['..'])
 sources = xenv.Glob('*.cpp')
 testees = ['../xbyte_array.cpp', '../xdata_buffer.cpp', '../xdata_stream.cpp', '../xlogger.cpp', '../xlog_string.cpp']
 xcommon_unit_tests_name = 'xcommon_tests'
-xcommon_unit_tests = xenv.BuildProgram(xcommon_unit_tests_name, sources + xenv.GoogleMockObjects() + xenv.TesteeObjects(testees))
-xenv.RunTest(xcommon_unit_tests)
+xcommon_unit_tests = xenv.BuildUnitTest(xcommon_unit_tests_name, sources + xenv.GoogleMockObjects() + xenv.TesteeObjects(testees))

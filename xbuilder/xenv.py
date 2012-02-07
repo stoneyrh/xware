@@ -1,6 +1,7 @@
 import os
 import platform
 import SCons
+import xunit_test
 
 def _is_windows():
     return platform.system() == 'Windows'
@@ -177,6 +178,12 @@ def build_shared_library(xenv, *args, **kwargs):
         xenv['PDB'] = pdb_name_of(args[0])
     return xenv.SharedLibrary(*args, **kwargs)
 
+def build_unit_test(xenv, *args, **kwargs):
+    program = xenv.Program(*args, **kwargs)
+    test_result = xenv.RunUnitTest(program)
+    xenv.Clean(program, test_result)
+    return program
+
 def testee_objects(xenv, sources):
     objects = [os.path.basename(source) for source in sources]
     objects = [os.path.splitext(obj)[0] for obj in objects]
@@ -186,23 +193,13 @@ def testee_objects(xenv, sources):
         built_objects += xenv.Object(objects[index], sources[index])
     return built_objects
 
-def run_test(xenv, program):
-    # Do nothing on cleaning
-    if xenv.GetOption('clean'):
-        return
-    def running_desc(program):
-        column_count = 80
-        head_and_tail = '=' * column_count
-        content = 'Running ' + os.path.splitext(os.path.basename(program))[0]
-        lines = [head_and_tail, content, head_and_tail]
-        return '\n'.join(lines)
-    for exe in program:
-        if exe.path.endswith(xenv['PROGSUFFIX']):
-            xenv.AddPostAction(program, SCons.Action.Action(exe.path, running_desc(exe.path)))
+def is_debugging_unit_test(xenv):
+    return False
 
 def setup_test_env(xenv):
     xenv.Append(CPPDEFINES = [])
 
+# Add methods
 xenv.AddMethod(use_boost, 'UseBoost')
 xenv.AddMethod(use_gmock, 'UseGoogleMock')
 xenv.AddMethod(is_windows, 'IsWindows')
@@ -217,6 +214,9 @@ xenv.AddMethod(setup, 'Setup')
 xenv.AddMethod(build_program, 'BuildProgram')
 xenv.AddMethod(build_static_library, 'BuildStaticLibrary')
 xenv.AddMethod(build_shared_library, 'BuildSharedLibrary')
-xenv.AddMethod(run_test, 'RunTest')
+xenv.AddMethod(build_unit_test, 'BuildUnitTest')
 xenv.AddMethod(testee_objects, 'TesteeObjects')
 xenv.AddMethod(setup_test_env, 'SetupTestEnv')
+xenv.AddMethod(is_debugging_unit_test, 'IsDebuggingUnitTest')
+# Add builders
+xenv.Append(BUILDERS = {'RunUnitTest' : xunit_test.RunUnitTest})

@@ -5,5 +5,4 @@ xenv.UseGoogleMock()
 xenv.Append(CPPPATH = ['..'])
 sources = xenv.Glob('*.cpp')
 xagent_unit_tests_name = 'xagent_tests'
-xagent_unit_tests = xenv.BuildProgram(xagent_unit_tests_name, sources + xenv.GoogleMockObjects())
-xenv.RunTest(xagent_unit_tests)
+xagent_unit_tests = xenv.BuildUnitTest(xagent_unit_tests_name, sources + xenv.GoogleMockObjects())
