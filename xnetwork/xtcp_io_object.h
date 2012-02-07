@@ -50,6 +50,7 @@ class xtcp_io_object : public xnet_io_object
         virtual void read(xbyte_array& byte_array);
         virtual void start_async_read();
         virtual void do_async_write(const xbyte_array& byte_array);
+        virtual xio_service& io_service() { return socket_.get_io_service(); }
 
         xtcp_socket& socket() { return socket_; }
         const xtcp_socket& socket() const { return socket_; }
