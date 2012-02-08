@@ -60,7 +60,7 @@ class xnet_service : public xenable_shared_from_this<xnet_service>
         xnet_service(const xnet_io_object_ptr& io_object);
         ~xnet_service();
 
-        void set_handler_manager(const xnet_message_handler_manager_ptr& handler_manager) { handler_manager_ = handler_manager; }
+        void set_message_handler_manager(const xnet_message_handler_manager_ptr& handler_manager) { handler_manager_ = handler_manager; }
 
         void start();
         void stop();
