@@ -45,11 +45,15 @@ namespace xws
 #define XNET_MESSAGE(x)         _X(#x)
 #define XNET_MESSAGE_HANDLER(x) _X(#x)
 
+class xnet_message_handler_manager;
+typedef xshared_ptr<xnet_message_handler_manager>::type xnet_message_handler_manager_ptr;
+
 class xnet_message_handler_manager
 {
     public:
         xnet_message_handler_manager();
         xnet_message_handler_manager(const xnet_message_handler_context_ptr context);
+        xnet_message_handler_manager(const xnet_message_handler_manager& other);
         ~xnet_message_handler_manager();
 
         void set_context(const xnet_message_handler_context_ptr context) { context_ = context; }
@@ -58,13 +62,13 @@ class xnet_message_handler_manager
         bool connect(const xstring& message, const xstring& handler);
         void handle_message_set(const xnet_message_set& set);
         xnet_message_handler_ptr handler_of(xmid_t mid) const;
+
+        xnet_message_handler_manager_ptr clone() const;
     private:
-        xnet_message_handler_context_ptr context_;
         typedef std::map<xmid_t, xnet_message_handler_ptr> message_to_handler_t;
+        xnet_message_handler_context_ptr context_;
         message_to_handler_t message_to_handler_;
 };
-
-typedef xshared_ptr<xnet_message_handler_manager>::type xnet_message_handler_manager_ptr;
 
 } // namespace xws
 

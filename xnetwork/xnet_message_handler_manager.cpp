@@ -48,6 +48,11 @@ xnet_message_handler_manager::xnet_message_handler_manager(const xnet_message_ha
 {
 }
 
+xnet_message_handler_manager::xnet_message_handler_manager(const xnet_message_handler_manager& other) : context_(other.context_),
+    message_to_handler_(other.message_to_handler_)
+{
+}
+
 xnet_message_handler_manager::~xnet_message_handler_manager()
 {
 }
@@ -62,9 +67,18 @@ bool xnet_message_handler_manager::connect(const xstring& message, const xstring
         if (factory.has_creator(handler))
         {
             xnet_message_handler_ptr h((factory.creator_of(handler))());
+            xdebug_info(xformat(_X("Connecting message \"%1%\" with handler \"%2%\"...")) % message % handler);
             message_to_handler_.insert(message_to_handler_t::value_type(mid, h));
             return true;
         }
+        else
+        {
+            xdebug_info(xformat(_X("Handler \"%1%\" is not a registered handler.")) % handler);
+        }
+    }
+    else
+    {
+        xdebug_info(xformat(_X("Message \"%1%\" is not a registered message.")) % message);
     }
     return false;
 }
@@ -95,6 +109,11 @@ xnet_message_handler_ptr xnet_message_handler_manager::handler_of(xmid_t mid) co
     }
     static xnet_message_handler_ptr none;
     return none;
+}
+
+xnet_message_handler_manager_ptr xnet_message_handler_manager::clone() const
+{
+    return xnet_message_handler_manager_ptr(new xnet_message_handler_manager(*this));
 }
 
 } // namespace xws
