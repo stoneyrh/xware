@@ -115,7 +115,10 @@ xsize_t xdata_buffer::read(std::string& str)
     char* e = p;
     while (*e != '\0' && str_size < rest_of_bytes) ++ e, str_size += sizeof(char);
     str = std::string(p, e);
-    xsize_t consumed = str_size + (*e == '\0' ? sizeof(char) : 0);
+    xsize_t consumed = str_size +
+                       ((str_size < rest_of_bytes) ?
+                            (*e == '\0' ? sizeof(char) : 0) :
+                            0);
     current_offset_ += consumed;
     return consumed;
 }
@@ -138,7 +141,10 @@ xsize_t xdata_buffer::read(std::wstring& str)
     wchar_t* e = p;
     while (*e != L'\0' && str_size < rest_of_bytes) ++ e, str_size += sizeof(wchar_t);
     str = std::wstring(p, e);
-    xsize_t consumed = str_size + (*e == L'\0' ? sizeof(wchar_t) : 0);
+    xsize_t consumed = str_size +
+                       ((str_size < rest_of_bytes) ?
+                            (*e == L'\0' ? sizeof(wchar_t) : 0) :
+                            0);
     current_offset_ += consumed;
     return consumed;
 }
