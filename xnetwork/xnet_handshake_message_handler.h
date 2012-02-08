@@ -36,6 +36,7 @@
 #define _XNET_HANDSHAKE_MESSAGE_HANDLER_H_
 
 #include "xnet_message_handler.h"
+#include "xuuid.h"
 
 namespace xws
 {
@@ -46,7 +47,15 @@ class xnet_handshake_message_handler : public xnet_message_handler
         xnet_handshake_message_handler();
         virtual ~xnet_handshake_message_handler();
 
+        void append_uuid(const xstring& uuid)
+        {
+            xuuid_string_generator uuid_str_gen;
+            acceptable_uuids_.insert(uuid_str_gen(uuid));
+        }
+
         virtual void handle_message(xnet_message_ptr message, xnet_message_handler_context_ptr context = xnet_message_handler_context_ptr());
+    private:
+        xuuid_set acceptable_uuids_;
         DECLARE_XNET_MESSAGE_HANDLER(xnet_handshake_message_handler)
 };
 

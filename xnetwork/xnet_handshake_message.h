@@ -36,6 +36,7 @@
 #define _XNET_HANDSHAKE_MESSAGE_H_
 
 #include "xnet_message.h"
+#include "xuuid.h"
 
 namespace xws
 {
@@ -45,17 +46,40 @@ class xnet_handshake_message : public xnet_message
     public:
         xnet_handshake_message();
         virtual ~xnet_handshake_message();
+
+        const xuuid& uuid() const { return uuid_; }
+        // Create UUID from a string
+        void set_uuid(const xstring& uuid)
+        {
+            xuuid_string_generator uuid_str_gen;
+            uuid_ = uuid_str_gen(uuid);
+        }
     protected:
         virtual bool to_data_stream(xdata_stream& stream)
         {
+            stream.write(&uuid_, sizeof(uuid_));
             return stream.good();
         }
         virtual bool from_data_stream(xdata_stream& stream)
         {
+            switch (version())
+            {
+                case 1:
+                    stream.read(&uuid_, sizeof(uuid_));
+                    break;
+                default:
+                    break;
+            }
             return stream.good();
         }
+    private:
+        // Each application should contains a UUID for unique identifying this application
+        // The client could only communicates with approvate server with the same UUID
+        xuuid uuid_;
         DECLARE_XNET_MESSAGE(xnet_handshake_message)
 };
+
+typedef xshared_ptr<xnet_handshake_message>::type xnet_handshake_message_ptr;
 
 } // namespace xws
 
