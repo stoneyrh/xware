@@ -36,7 +36,9 @@
 #define _XUUID_H_
 
 #include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/uuid_generators.hpp>
+#include <set>
 
 namespace xws
 {
@@ -45,6 +47,18 @@ typedef xuuids::nil_generator       xuuid_nil_generator;
 typedef xuuids::name_generator      xuuid_name_generator;
 typedef xuuids::string_generator    xuuid_string_generator;
 typedef xuuids::random_generator    xuuid_random_generator;
+typedef xuuids::uuid                xuuid;
+typedef std::set<xuuid>             xuuid_set;
+
+#define xuuid_to_string             xuuids::to_string
+#define xuuid_to_wstring            xuuids::to_wstring
+
+#ifdef UNICODE
+#define xuuid_to_xstring            xuuid_to_wstring
+#else
+#define xuuid_to_xstring            xuuid_to_string
+#endif
+
 } // namespace xws
 
 #endif
