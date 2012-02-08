@@ -39,9 +39,14 @@
 
 namespace xws
 {
-xagent::xagent() : io_service_(xthread::hardware_concurrency()), tcp_server_(io_service_)
+xagent::xagent() : io_service_(xthread::hardware_concurrency()), tcp_server_(io_service_),
+    tcp_service_handler_manager_(new xnet_message_handler_manager())
 {
     xdebug_info(_X("Creating xagent..."));
+    //
+    tcp_service_handler_manager_->connect(XNET_MESSAGE(xnet_handshake_message), XNET_MESSAGE_HANDLER(xnet_handshake_message_handler));
+    tcp_service_handler_manager_->connect(XNET_MESSAGE(xnet_heartbeat_message), XNET_MESSAGE_HANDLER(xnet_heartbeat_message_handler));
+    //
     tcp_server_.connection_established_sig().connect(xbind(&xagent::on_connection_established, this, _1));
 }
 
@@ -64,6 +69,8 @@ void xagent::on_connection_established(xtcp_io_object_ptr& io_object)
     xnet_service_ptr net_service(new xnet_service(io_object));
     net_service_manager_.add_service(net_service);
     net_service->net_service_stopped_sig().connect(xbind(&xnet_service_manager::remove_service, &net_service_manager_, _1));
+    xnet_message_handler_manager_ptr message_handler_manager = tcp_service_handler_manager_->clone();
+    net_service->set_message_handler_manager(message_handler_manager);
     net_service->start();
 }
 

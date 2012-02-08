@@ -39,6 +39,7 @@
 #include "xtcp_server.h"
 #include "xtcp_io_object.h"
 #include "xnet_service_manager.h"
+#include "xnet_message_handler_manager.h"
 #include "xconsole_event_listener.h"
 
 namespace xws
@@ -67,6 +68,7 @@ class xagent : public xconsole_event_listener
     private:
         xio_service io_service_;
         xtcp_server tcp_server_;
+        xnet_message_handler_manager_ptr tcp_service_handler_manager_;
         xnet_service_manager net_service_manager_;
 };
 
