@@ -34,6 +34,7 @@
 
 #include <gtest/gtest.h>
 #include "xdata_stream.h"
+#include "xuuid.h"
 
 using namespace xws;
 
@@ -59,4 +60,25 @@ TEST(xdata_stream_tests, test_init_with_byte_array)
     ASSERT_EQ(xi8, _xi8);
     ASSERT_EQ(xi16, _xi16);
     ASSERT_EQ(str, _str);
+}
+
+TEST(xdata_stream_tests, test_function_read_write)
+{
+    xdata_stream stream;
+    xuuid_random_generator uuid_generator;
+    xuuid uuid(uuid_generator());
+    ASSERT_EQ(stream.write(&uuid, sizeof(uuid)), sizeof(uuid));
+    ASSERT_TRUE(stream.good());
+    stream.seek(0);
+    xuuid uuid_read_from_stream;
+    ASSERT_EQ(stream.read(&uuid_read_from_stream, sizeof(uuid_read_from_stream)),
+              sizeof(uuid_read_from_stream));
+    ASSERT_TRUE(stream.good());
+    ASSERT_EQ(uuid, uuid_read_from_stream);
+    ASSERT_EQ(stream.read(&uuid, sizeof(uuid)), 0);
+    ASSERT_FALSE(stream.good());
+    // Output the UUID in string
+    std::cout << xuuid_to_string(uuid) << std::endl;
+    std::wcout << xuuid_to_wstring(uuid) << std::endl;
+    xcout << xuuid_to_xstring(uuid) << std::endl;
 }

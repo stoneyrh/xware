@@ -176,4 +176,18 @@ xdata_stream& xdata_stream::operator >> (std::wstring& value)
     return *this;
 }
 
+xsize_t xdata_stream::write(void* data, xsize_t size)
+{
+    xsize_t size_written = data_buffer_.write(data, size);
+    good_ = size_written == size;
+    return size_written;
+}
+
+xsize_t xdata_stream::read(void* data, xsize_t size)
+{
+    xsize_t size_read = data_buffer_.read(data, size);
+    good_ = size_read ==  size;
+    return size_read;
+}
+
 } // namespace xws
