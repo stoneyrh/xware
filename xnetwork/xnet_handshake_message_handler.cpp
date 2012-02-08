@@ -55,7 +55,7 @@ void xnet_handshake_message_handler::handle_message(xnet_message_ptr message, xn
     xassert(context);
     xnet_handshake_message_ptr handshake_message = xdynamic_pointer_cast<xnet_handshake_message>(message);
     // If the UUID in the handshake message in the acceptable UUID set, then handshake accepted
-    context->handle_handshake(acceptable_uuids_.find(handshake_message->uuid()) != acceptable_uuids_.end());
+    context->handle_handshake_result(acceptable_uuids_.find(handshake_message->uuid()) != acceptable_uuids_.end());
 }
 
 }

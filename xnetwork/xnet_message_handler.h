@@ -74,8 +74,8 @@ class xnet_message_handler_context
         /*
          * If accepted is true, then handshake success
          */
-        virtual void handle_handshake(bool accepted) = 0;
-        virtual void handle_heartbeat() = 0;
+        virtual void handle_handshake_result(bool accepted) = 0;
+        virtual void handle_heartbeat_result() = 0;
 };
 
 typedef xshared_ptr<xnet_message_handler_context>::type xnet_message_handler_context_ptr;
