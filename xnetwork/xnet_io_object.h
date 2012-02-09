@@ -61,6 +61,7 @@ class xnet_io_object : public xenable_shared_from_this<xnet_io_object>
         virtual void do_async_write(const xbyte_array& byte_array) = 0;
         virtual void shutdown() = 0;
         virtual void cancel() = 0;
+        virtual void close() = 0;
         virtual xio_service& io_service() = 0;
 
         data_read_sig_t& data_read_sig() { return data_read_sig_; }

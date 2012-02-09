@@ -52,6 +52,7 @@ class xtcp_io_object : public xnet_io_object
         virtual void do_async_write(const xbyte_array& byte_array);
         virtual void shutdown() { socket_.shutdown(xtcp_socket::shutdown_both); }
         virtual void cancel() { socket_.cancel(); }
+        virtual void close() { socket_.close(); }
         virtual xio_service& io_service() { return socket_.get_io_service(); }
 
         xtcp_socket& socket() { return socket_; }
