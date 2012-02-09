@@ -32,15 +32,8 @@
 * ****************************************************************************
 */
 
-#include "xnet_handshake_message.h"
-#include "xnet_heartbeat_message.h"
-#include "xnet_handshake_message_handler.h"
-#include "xnet_heartbeat_message_handler.h"
-
-using namespace xws;
-
-namespace xws_secret
-{
+#ifndef _XNET_CLASS_INIT_H_
+#define _XNET_CLASS_INIT_H_
 
 /*
  * Why we need this?
@@ -57,19 +50,22 @@ namespace xws_secret
  * binary, no need to list them, but it is not harmful even they are
  * listed.
  */
-class __xagent_initializer__
-{
-    public:
-        __xagent_initializer__()
-        {
-            xnet_handshake_message();
-            xnet_heartbeat_message();
 
-            xnet_handshake_message_handler();
-            xnet_heartbeat_message_handler();
-        }
-};
+#define BEGIN_XNET_CLASS_INIT(name)                                             \
+namespace __##name##_hidden__                                                   \
+{                                                                               \
+    class __xnet_class_initializer__                                            \
+    {                                                                           \
+        public:                                                                 \
+            __xnet_class_initializer__()                                        \
+            {
 
-static __xagent_initializer__ init_xagent;
+#define END_XNET_CLASS_INIT()                                                   \
+            }                                                                   \
+    };                                                                          \
+static __xnet_class_initializer__ __xci__;                                      \
+} // namespace
 
-} // namespace xws_secret
+#define INIT_XNET_CLASS(name) name()
+
+#endif
