@@ -38,12 +38,12 @@
 #include "xassert.h"
 #include "xnet_message.h"
 #include "xposix_time.h"
+#include "xfinal_command.h"
 
 namespace xws
 {
 
-xnet_service::xnet_service(const xnet_io_object_ptr& io_object) : io_object_(io_object),
-    deadline_timer_(io_object_->io_service())
+xnet_service::xnet_service(const xnet_io_object_ptr& io_object) : xnet_terminal(io_object)
 {
     xdebug_info(_X("Creating xnet_service..."));
 }
@@ -56,63 +56,73 @@ xnet_service::~xnet_service()
 void xnet_service::run()
 {
     xdebug_info(_X("xnet_service started."));
-    net_service_started_sig_(shared_from_this());
-    do
+    net_service_started_sig_(xdynamic_pointer_cast<xnet_service>(shared_from_this()));
+    // A scope block
     {
-        try
+        init_asynchrous_read();
+        xfinal_command deinit_asynchrous_read(xbind(&xnet_service::deinit_asynchrous_read, this));
+        io_object_->start_async_read();
+        do
         {
-            io_object_->data_read_sig().connect(xbind(&xnet_service::on_data_read, this, _1, _2));
-            io_object_->error_sig().connect(xbind(&xnet_service::on_error, this, _1));
-            io_object_->start_async_read();
-            // It could be stopped before running any command
-            xthis_thread::interruption_point();
-            // Once connected, we start monitoring hand shake message
-            // If there is no hand shake message for some period of time, then the service will exit
-            start_monitor_handshake();
-            //
-            do
+            try
             {
-                net_command command = net_commands_.get();
-                // Check interruption before and after running a command
+                // It could be stopped before running any command
                 xthis_thread::interruption_point();
-                command();
-                xthis_thread::interruption_point();
-            } while(true);
-        }
-        catch (xthread_interrupted&)
-        {
-            break;
-        }
-        catch (...)
-        {
-        }
-    } while (true);
+                // Once connected, we start monitoring hand shake message
+                // If there is no hand shake message for some period of time, then the service will exit
+                start_monitor_handshake();
+                //
+                do
+                {
+                    net_command command = net_commands_.get();
+                    // Check interruption before and after running a command
+                    xthis_thread::interruption_point();
+                    command();
+                    xthis_thread::interruption_point();
+                } while(true);
+            }
+            catch (xthread_interrupted&)
+            {
+                break;
+            }
+            catch (...)
+            {
+                // TODO: Check what exception here, if not a serious one, just go on
+                // A series exception will result in service termination
+            }
+        } while (true);
+        // Remove all commands in the queue
+        net_commands_.clear();
+    }
     try
     {
-        // Prevent any further operation on io object
-        xdebug_info(_X("Cancelling any awaiting operations..."));
+        xdebug_info(_X("Terminating the IO object..."));
+        // Use final command to make sure io_object is terminated properly
+        // This is because io_object_->cancel might throw exception, in that case, shutdown and close won't be run
+        xfinal_command close_io_object(xbind(&xnet_io_object::close, io_object_));
+        xfinal_command shutdown_io_object(xbind(&xnet_io_object::shutdown, io_object_));
         // Cancel IO may throw exception, and it may not work on Windows less than XP
         // Please consult boost documentation for more information
-        io_object_->cancel();
+        xfinal_command cancel_io_object(xbind(&xnet_io_object::cancel, io_object_));
     }
     catch (...)
     {
     }
     // Notify service stopped
-    net_service_stopped_sig_(shared_from_this());
+    net_service_stopped_sig_(xdynamic_pointer_cast<xnet_service>(shared_from_this()));
     xdebug_info(_X("xnet_service stopped."));
 }
 
 void xnet_service::start()
 {
     xdebug_info(_X("Starting xnet_service..."));
-    xthread service_runner(xbind(&xnet_service::run, shared_from_this()));
+    xthread service_runner(xbind(&xnet_service::run, xdynamic_pointer_cast<xnet_service>(shared_from_this())));
 }
 
 void xnet_service::stop()
 {
     xdebug_info(_X("Stopping xnet_service..."));
-    net_commands_.put(xbind(&xnet_service::raise_stop_interruption, shared_from_this()));
+    net_commands_.put(xbind(&xnet_service::raise_stop_interruption, xdynamic_pointer_cast<xnet_service>(shared_from_this())));
 }
 
 void xnet_service::raise_stop_interruption()
@@ -123,10 +133,11 @@ void xnet_service::raise_stop_interruption()
 
 void xnet_service::on_data_read(xnet_io_object_ptr& io_object, const xbyte_array& byte_array)
 {
-    net_commands_.put(xbind(&xnet_service::handle_byte_array, shared_from_this(), byte_array));
+    // We handle the data in service thread for not blocking the read thread
+    net_commands_.put(xbind(&xnet_service::handle_byte_array, xdynamic_pointer_cast<xnet_service>(shared_from_this()), byte_array));
 }
 
-void xnet_service::on_error(const xerror_code& error_code)
+void xnet_service::on_data_read_error(const xerror_code& error_code)
 {
     xdebug_info(xformat(_X("xnet_service encounters error with category = %1%, code = %2%.")) % error_code.category().name() % error_code.value());
     // misc_errors
@@ -143,55 +154,9 @@ void xnet_service::on_error(const xerror_code& error_code)
     }
 }
 
-void xnet_service::handle_byte_array(const xbyte_array& byte_array)
-{
-    // unresolved_byte_array_ saves the data that not resolved last time
-    unresolved_byte_array_ += byte_array;
-    xsize_t recogized_size = 0;
-    xnet_message_set set = xnet_message::from_byte_array(unresolved_byte_array_, &recogized_size);
-    if (set.empty())
-    {
-        xassert(recogized_size == 0);
-        xdebug_info(_X("The data received cannot be recoginzed, they will be abandoned."));
-        unresolved_byte_array_.clear();
-    }
-    else
-    {
-        if (recogized_size == unresolved_byte_array_.size())
-        {
-            xdebug_info(_X("All data are recognized."));
-            unresolved_byte_array_.clear();
-        }
-        else
-        {
-            unresolved_byte_array_ = unresolved_byte_array_.right(unresolved_byte_array_.size() - recogized_size);
-            xdebug_info(xformat(_X("There are still %1% bytes not recognized.")) % unresolved_byte_array_.size());
-        }
-        // Handle all message immediately
-        if (handler_manager_)
-        {
-            handler_manager_->handle_message_set(set);
-        }
-        else
-        {
-            xdebug_warn(_X("There is no handler associated with this service, message won't be handled!"));
-        }
-    }
-}
-
-void xnet_service::start_monitor_handshake(xsize_t seconds)
-{
-    deadline_timer_.expires_from_now(xposix_time::seconds(seconds));
-    deadline_timer_.async_wait(xbind(&xnet_service::on_handshake_timeout, this, xplaceholders::error));
-}
-
-void xnet_service::end_monitor_handshake()
-{
-    deadline_timer_.cancel();
-}
-
 void xnet_service::on_handshake_timeout(const xerror_code& error_code)
 {
+    // If the operatio is aborted, then no need to stop
     if (error_code != xasio_error::operation_aborted)
     {
         // At this point, it fails to handshake with peer side, so stop the service

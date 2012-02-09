@@ -43,7 +43,7 @@
 #include "xsafe_queue.h"
 #include "xsignal.h"
 #include "xboolean.h"
-#include "xnet_message_handler_manager.h"
+#include "xnet_terminal.h"
 
 namespace xws
 {
@@ -51,7 +51,7 @@ namespace xws
 typedef xfunction<void ()> net_command;
 typedef xsafe_queue<net_command> net_command_list;
 
-class xnet_service : public xenable_shared_from_this<xnet_service>
+class xnet_service : public xnet_terminal
 {
     public:
         typedef xshared_ptr<xnet_service>::type ptr_t;
@@ -60,34 +60,26 @@ class xnet_service : public xenable_shared_from_this<xnet_service>
         xnet_service(const xnet_io_object_ptr& io_object);
         ~xnet_service();
 
-        void set_message_handler_manager(const xnet_message_handler_manager_ptr& handler_manager) { handler_manager_ = handler_manager; }
+        virtual void handshake_accepted() { end_monitor_handshake(); }
+        virtual void handshake_rejected() { stop(); }
 
-        void start();
-        void stop();
-
+        virtual void start();
+        virtual void stop();
+        /*
+         * Signal export
+         */
         xnet_service_sig_t& net_service_started_sig() { return net_service_started_sig_; }
         xnet_service_sig_t& net_service_stopped_sig() { return net_service_stopped_sig_; }
 
+    protected:
+        virtual void on_handshake_timeout(const xerror_code& error_code);
+        virtual void on_data_read(xnet_io_object_ptr& io_object, const xbyte_array& byte_array);
+        virtual void on_data_read_error(const xerror_code& error_code);
     private:
         void run();
         void raise_stop_interruption();
-        void on_data_read(xnet_io_object_ptr& io_object, const xbyte_array& byte_array);
-        void on_error(const xerror_code& error_code);
-        void handle_byte_array(const xbyte_array& byte_array);
-        // Start monitoring hand shake message
-        void start_monitor_handshake(xsize_t seconds = 3);
-        // If hand shake success within specified period, then end monitoring 
-        void end_monitor_handshake();
-        void on_handshake_timeout(const xerror_code& error_code);
     private:
-        //
-        xnet_io_object_ptr io_object_;
-        // This timer will be first used for monitoring handshake
-        // After handshake success, it will be used for monitoring heartbeat
-        xdeadline_timer deadline_timer_;
         xboolean is_running_;
-        xnet_message_handler_manager_ptr handler_manager_;
-        xbyte_array unresolved_byte_array_;
         net_command_list net_commands_;
         // Signals
         xnet_service_sig_t net_service_started_sig_;
