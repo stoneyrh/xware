@@ -36,6 +36,7 @@
 #include "xthread.h"
 #include "xbind.h"
 #include "xlogger.h"
+#include "xnet_service_message_handler_context.h"
 
 namespace xws
 {
@@ -69,7 +70,12 @@ void xagent::on_connection_established(xtcp_io_object_ptr& io_object)
     xnet_service_ptr net_service(new xnet_service(io_object));
     net_service_manager_.add_service(net_service);
     net_service->net_service_stopped_sig().connect(xbind(&xnet_service_manager::remove_service, &net_service_manager_, _1));
+    //
     xnet_message_handler_manager_ptr message_handler_manager = tcp_service_handler_manager_->clone();
+    //
+    xnet_service_message_handler_context_ptr context(new xnet_service_message_handler_context(net_service));
+    message_handler_manager->set_context(context);
+    //
     net_service->set_message_handler_manager(message_handler_manager);
     net_service->start();
 }
