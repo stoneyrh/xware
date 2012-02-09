@@ -156,6 +156,7 @@ xnet_message_set xnet_message::from_byte_array(const xbyte_array& byte_array, xs
 
 void xnet_message::register_creator(const xstring& klass, xnet_message_creator_t creator)
 {
+    xdebug_info(xformat(_X("Registering creator for message \"%1%\"...")) % klass);
     xnet_message_ids& mids = net_message_ids();
     xmid_t id = mids.id_of(klass);
     xassert(id != INVALID_XMID);
