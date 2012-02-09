@@ -39,8 +39,12 @@
 
 namespace xws
 {
+
 template <class T>
 class xsignal : public boost::signals2::signal<T> {};
+
+typedef boost::signals2::connection         xsig_connection;
+
 } // namespace xws
 
 #endif
