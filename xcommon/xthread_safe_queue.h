@@ -32,8 +32,8 @@
 * ****************************************************************************
 */
 
-#ifndef _X_SAFE_QUEUE_H_
-#define _X_SAFE_QUEUE_H_
+#ifndef _X_THREAD_SAFE_QUEUE_H_
+#define _X_THREAD_SAFE_QUEUE_H_
 
 #include <queue>
 #include "xmutex.h"
@@ -43,11 +43,11 @@ namespace xws
 {
 
 template <class T>
-class xsafe_queue
+class xthread_safe_queue
 {
     public:
-        xsafe_queue() {}
-        ~xsafe_queue() {}
+        xthread_safe_queue() {}
+        ~xthread_safe_queue() {}
 
         // Get object with wait
         T get()

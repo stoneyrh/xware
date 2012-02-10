@@ -40,7 +40,7 @@
 #include "xthread.h"
 #include "xnet_io_object.h"
 #include "xfunction.h"
-#include "xsafe_queue.h"
+#include "xthread_safe_queue.h"
 #include "xsignal.h"
 #include "xboolean.h"
 #include "xnet_terminal.h"
@@ -49,7 +49,7 @@ namespace xws
 {
 
 typedef xfunction<void ()> net_command;
-typedef xsafe_queue<net_command> net_command_list;
+typedef xthread_safe_queue<net_command> net_command_list;
 
 class xnet_service : public xnet_terminal
 {
