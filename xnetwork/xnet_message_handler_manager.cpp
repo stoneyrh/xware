@@ -91,6 +91,7 @@ void xnet_message_handler_manager::handle_message_set(const xnet_message_set& se
         xnet_message_handler_ptr handler = handler_of((*iter)->id());
         if (handler)
         {
+            xdebug_info(xformat(_X("Handling message with id = %1%.")) % (*iter)->id());
             handler->handle_message(*iter, context());
         }
         else
