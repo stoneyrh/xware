@@ -36,6 +36,7 @@
 #define _X_BYTE_ARRAY_H_
 
 #include "xglobal.h"
+#include "xsmart_ptr.h"
 #include <vector>
 
 namespace xws
@@ -122,6 +123,8 @@ class xbyte_array
     private:
         std::vector<xbyte> data_;
 };
+
+typedef xshared_ptr<xbyte_array>::type xbyte_array_ptr;
 
 }
 
