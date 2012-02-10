@@ -58,18 +58,24 @@ xnet_terminal::~xnet_terminal()
     xdebug_info(_X("Deleting xnet_terminal..."));
 }
 
-void xnet_terminal::init_asynchrous_read()
+void xnet_terminal::init_asynchrous_operation()
 {
-    xdebug_info(_X("Initializing asynchrous read operation..."));
+    xdebug_info(_X("Initializing asynchrous operation..."));
+    // Note the order of connection
+    data_read_error_conn_ = io_object_->data_read_error_sig().connect(xbind(&xnet_terminal::on_data_read_error, this, _1));
     data_read_conn_ = io_object_->data_read_sig().connect(xbind(&xnet_terminal::on_data_read, this, _1, _2));
-    data_read_error_conn_ = io_object_->error_sig().connect(xbind(&xnet_terminal::on_data_read_error, this, _1));
+    data_write_error_conn_ = io_object_->data_write_error_sig().connect(xbind(&xnet_terminal::on_data_write_error, this, _1));
+    data_write_conn_ = io_object_->data_write_sig().connect(xbind(&xnet_terminal::on_data_write, this, _1));
 }
 
-void xnet_terminal::deinit_asynchrous_read()
+void xnet_terminal::deinit_asynchrous_operation()
 {
-    xdebug_info(_X("Deinitializing asynchrous read operation..."));
-    data_read_error_conn_.disconnect();
+    xdebug_info(_X("Deinitializing asynchrous operation..."));
+    // Reverse order as it is connected
+    data_write_conn_.disconnect();
+    data_write_error_conn_.disconnect();
     data_read_conn_.disconnect();
+    data_read_error_conn_.disconnect();
 }
 
 void xnet_terminal::handle_byte_array(const xbyte_array& byte_array)
@@ -123,14 +129,40 @@ void xnet_terminal::send_heartbeat()
 {
     // We only need to create one, then later reuse it
     static xnet_message_ptr heartbeat_message = xnet_message::create_message(_X("xnet_heartbeat_message"));
-    aync_send(heartbeat_message);
-}
-
-void xnet_terminal::aync_send(const xnet_message_ptr& message)
-{
+    send(heartbeat_message);
 }
 
 void xnet_terminal::send(const xnet_message_ptr& message)
+{
+    xassert(message);
+    xbyte_array_ptr byte_array(new xbyte_array());
+    if (message->to_byte_array(*byte_array.get()))
+    {
+        send(byte_array);
+    }
+    else
+    {
+        xdebug_info(_X("Failed to convert the message into byte array."));
+    }
+}
+
+void xnet_terminal::send(const xbyte_array& byte_array)
+{
+    xassert(io_object_);
+    io_object_->write(xbyte_array_ptr(new xbyte_array(byte_array)));
+}
+
+void xnet_terminal::send(const xbyte_array_ptr& byte_array)
+{
+    xassert(byte_array);
+    io_object_->write(byte_array);
+}
+
+void xnet_terminal::on_data_write(xnet_io_object_ptr& io_object)
+{
+}
+
+void xnet_terminal::on_data_write_error(const xerror_code& error_code)
 {
 }
 

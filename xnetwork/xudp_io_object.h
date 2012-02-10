@@ -51,7 +51,7 @@ class xudp_io_object : public xnet_io_object
         virtual void close() { socket_.close(); }
         virtual xio_service& io_service() { return socket_.get_io_service(); }
 
-        virtual void write(const xbyte_array& byte_array);
+        virtual void write(const xbyte_array_ptr& byte_array);
         virtual void read(xbyte_array& byte_array);
         xudp_socket& socket() { return socket_; }
         const xudp_socket& socket() const { return socket_; }

@@ -51,11 +51,11 @@ class xnet_io_object : public xenable_shared_from_this<xnet_io_object>
     public:
         typedef xshared_ptr<xnet_io_object>::type ptr_t;
         typedef xsignal<void (ptr_t&, const xbyte_array&)> data_read_sig_t;
-        //typedef xsignal< xfunction<void (const xbyte_array&> > data_wrote_sig_t;
+        typedef xsignal<void (ptr_t&)> data_write_sig_t;
         typedef xsignal<void (const xerror_code&)> error_sig_t;
         xnet_io_object();
         virtual ~xnet_io_object();
-        virtual void write(const xbyte_array& byte_array) = 0;
+        virtual void write(const xbyte_array_ptr& byte_array) = 0;
         virtual void read(xbyte_array& byte_array) = 0;
         virtual void start_async_read() = 0;
         virtual void do_async_write(const xbyte_array& byte_array) = 0;
@@ -65,18 +65,22 @@ class xnet_io_object : public xenable_shared_from_this<xnet_io_object>
         virtual xio_service& io_service() = 0;
 
         data_read_sig_t& data_read_sig() { return data_read_sig_; }
-        error_sig_t& error_sig() { return error_sig_; }
+        data_write_sig_t& data_write_sig() { return data_write_sig_; }
+        error_sig_t& data_read_error_sig() { return data_read_error_sig_; }
+        error_sig_t& data_write_error_sig() { return data_write_error_sig_; }
 
     protected:
         xbyte_ptr read_buffer() { return read_buffer_; }
 
     protected:
-        virtual void on_data_read(xbyte_ptr data, const xerror_code& error_code, std::size_t bytes_transfered) = 0;
-        virtual void on_data_write(const xerror_code& error_code) = 0;
+        virtual void on_data_read(xbyte_ptr data, const xerror_code& error_code, xsize_t bytes_transfered) = 0;
+        virtual void on_data_write(const xbyte_array_ptr& byte_array, const xerror_code& error_code, xsize_t bytes_transfered) = 0;
     private:
         xbyte_ptr read_buffer_;
         data_read_sig_t data_read_sig_;
-        error_sig_t error_sig_;
+        data_write_sig_t data_write_sig_;
+        error_sig_t data_read_error_sig_;
+        error_sig_t data_write_error_sig_;
 };
 
 typedef xnet_io_object::ptr_t xnet_io_object_ptr;

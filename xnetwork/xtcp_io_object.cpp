@@ -35,6 +35,7 @@
 #include "xtcp_io_object.h"
 #include "xlogger.h"
 #include "xbind.h"
+#include "xassert.h"
 
 namespace xws
 {
@@ -49,8 +50,15 @@ xtcp_io_object::~xtcp_io_object()
     xdebug_info(_X("Deleting xtcp_io_object..."));
 }
 
-void xtcp_io_object::write(const xbyte_array& byte_array)
+void xtcp_io_object::write(const xbyte_array_ptr& byte_array)
 {
+    xassert(byte_array);
+    socket_.async_send(xbuffer(byte_array->data(), byte_array->size()),
+                xbind(&xtcp_io_object::on_data_write,
+                       xdynamic_pointer_cast<xtcp_io_object>(shared_from_this()),
+                       byte_array,
+                       xplaceholders::error,
+                       xplaceholders::bytes_transferred));
 }
 
 void xtcp_io_object::read(xbyte_array& byte_array)
@@ -76,13 +84,13 @@ void xtcp_io_object::do_async_write(const xbyte_array& byte_array)
 {
 }
 
-void xtcp_io_object::on_data_read(xbyte_ptr buffer, const xerror_code& error_code, std::size_t bytes_transferred)
+void xtcp_io_object::on_data_read(xbyte_ptr buffer, const xerror_code& error_code, xsize_t bytes_transferred)
 {
     if (error_code)
     {
         xdebug_info((xformat(_X("Failed to read data from xtcp_io_object with error \"%1%\".")) %
                     match_str<xstring, std::string>::apply(error_code.message())));
-        error_sig()(error_code);
+        data_read_error_sig()(error_code);
         return;
     }
     xdebug_info((xformat(_X("%1% bytes read from xtcp_io_object.")) % bytes_transferred));
@@ -94,8 +102,22 @@ void xtcp_io_object::on_data_read(xbyte_ptr buffer, const xerror_code& error_cod
     data_read_sig()(shared_from_this(), byte_array);
 }
 
-void xtcp_io_object::on_data_write(const xerror_code& error_code)
+void xtcp_io_object::on_data_write(const xbyte_array_ptr& byte_array, const xerror_code& error_code, xsize_t bytes_transferred)
 {
+    if (error_code)
+    {
+        xdebug_info((xformat(_X("Failed to erite data to xtcp_io_object with error \"%1%\".")) %
+                    match_str<xstring, std::string>::apply(error_code.message())));
+        data_write_error_sig()(error_code);
+        return;
+    }
+    xdebug_info((xformat(_X("%1% bytes written to xtcp_io_object.")) % bytes_transferred));
+    //
+    if (bytes_transferred != byte_array->size())
+    {
+        xdebug_error(xformat(_X("Not all bytes are transferred, expected = %1%, actual = %2%.")) % byte_array->size() % bytes_transferred);
+    }
+    data_write_sig()(shared_from_this());
 }
 
 }

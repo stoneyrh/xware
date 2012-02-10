@@ -59,8 +59,8 @@ void xnet_service::run()
     net_service_started_sig_(xdynamic_pointer_cast<xnet_service>(shared_from_this()));
     // A scope block
     {
-        init_asynchrous_read();
-        xfinal_command deinit_asynchrous_read(xbind(&xnet_service::deinit_asynchrous_read, this));
+        init_asynchrous_operation();
+        xfinal_command deinit_asynchrous_operation(xbind(&xnet_service::deinit_asynchrous_operation, this));
         io_object_->start_async_read();
         do
         {

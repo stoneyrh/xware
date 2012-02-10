@@ -46,7 +46,7 @@ class xtcp_io_object : public xnet_io_object
         xtcp_io_object(xio_service& io_service);
         virtual ~xtcp_io_object();
 
-        virtual void write(const xbyte_array& byte_array);
+        virtual void write(const xbyte_array_ptr& byte_array);
         virtual void read(xbyte_array& byte_array);
         virtual void start_async_read();
         virtual void do_async_write(const xbyte_array& byte_array);
@@ -59,8 +59,8 @@ class xtcp_io_object : public xnet_io_object
         const xtcp_socket& socket() const { return socket_; }
         xtcp_endpoint peer_endpoint() const { return socket_.remote_endpoint(); }
     protected:
-        virtual void on_data_read(xbyte_ptr data, const xerror_code& error_code, std::size_t xbytes_transferred);
-        virtual void on_data_write(const xerror_code& error_code);
+        virtual void on_data_read(xbyte_ptr data, const xerror_code& error_code, xsize_t bytes_transferred);
+        virtual void on_data_write(const xbyte_array_ptr& byte_array, const xerror_code& error_code, xsize_t bytes_transferred);
     private:
         xtcp_socket socket_;
 };

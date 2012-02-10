@@ -48,7 +48,7 @@ xudp_io_object::~xudp_io_object()
     xdebug_info(_X("Deleting xudp_io_object..."));
 }
 
-void xudp_io_object::write(const xbyte_array& byte_array)
+void xudp_io_object::write(const xbyte_array_ptr& byte_array)
 {
 }
 

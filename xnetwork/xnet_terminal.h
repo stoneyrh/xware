@@ -65,10 +65,13 @@ class xnet_terminal : public xenable_shared_from_this<xnet_terminal>
         virtual void handshake_accepted() = 0;
         virtual void handshake_rejected() = 0;
         virtual void send_heartbeat();
-        
+        //
+        virtual void send(const xnet_message_ptr& message);
+        virtual void send(const xbyte_array_ptr& byte_array);
+        virtual void send(const xbyte_array& byte_array);
     protected:
-        void init_asynchrous_read();
-        void deinit_asynchrous_read();
+        void init_asynchrous_operation();
+        void deinit_asynchrous_operation();
         //
         virtual void handle_byte_array(const xbyte_array& byte_array);
         // Start monitoring hand shake message
@@ -79,9 +82,8 @@ class xnet_terminal : public xenable_shared_from_this<xnet_terminal>
         //
         virtual void on_data_read(xnet_io_object_ptr& io_object, const xbyte_array& byte_array) = 0;
         virtual void on_data_read_error(const xerror_code& error_code) = 0;
-        //
-        virtual void aync_send(const xnet_message_ptr& message);
-        virtual void send(const xnet_message_ptr& message);
+        virtual void on_data_write(xnet_io_object_ptr& io_object);
+        virtual void on_data_write_error(const xerror_code& error_code);
     protected:
         xnet_io_object_ptr io_object_;
         // This timer will be first used for monitoring handshake
@@ -93,6 +95,8 @@ class xnet_terminal : public xenable_shared_from_this<xnet_terminal>
         // Signal connections
         xsig_connection data_read_conn_;
         xsig_connection data_read_error_conn_;
+        xsig_connection data_write_conn_;
+        xsig_connection data_write_error_conn_;
 };
 
 typedef xshared_ptr<xnet_terminal>::type xnet_terminal_ptr;
