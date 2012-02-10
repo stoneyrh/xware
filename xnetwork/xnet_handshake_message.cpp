@@ -33,18 +33,32 @@
 */
 
 #include "xnet_handshake_message.h"
+#include "xlogger.h"
 
 namespace xws
 {
 
 IMPLEMENT_XNET_MESSAGE(xnet_handshake_message)
 
-xnet_handshake_message::xnet_handshake_message()
+xnet_handshake_message::xnet_handshake_message() : heartbeat_interval_(1), heartbeat_threshold_(3)
 {
 }
 
 xnet_handshake_message::~xnet_handshake_message()
 {
+}
+
+void xnet_handshake_message::set_uuid(const xstring& uuid)
+{
+    try
+    {
+        xuuid_string_generator uuid_str_gen;
+        uuid_ = uuid_str_gen(uuid);
+    }
+    catch (...)
+    {
+        xdebug_info(xformat(_X("Failed to create UUID from string \"%1%\".")) % uuid);
+    }
 }
 
 } // namespace xws

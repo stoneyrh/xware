@@ -48,15 +48,16 @@ class xnet_handshake_message : public xnet_message
         virtual ~xnet_handshake_message();
 
         const xuuid& uuid() const { return uuid_; }
+        xsize_t heartbeat_interval() const { return heartbeat_interval_; }
+        xsize_t heartbeat_threshold() const { return heartbeat_threshold_; }
         // Create UUID from a string
-        void set_uuid(const xstring& uuid)
-        {
-            xuuid_string_generator uuid_str_gen;
-            uuid_ = uuid_str_gen(uuid);
-        }
+        void set_uuid(const xstring& uuid);
+        void set_heartbeat_interval(xsize_t heartbeat_interval) { heartbeat_interval_ = heartbeat_interval; }
+        void set_heartbeat_threshold(xsize_t heartbeat_threshold) { heartbeat_threshold_ = heartbeat_threshold; }
     protected:
         virtual bool to_data_stream(xdata_stream& stream)
         {
+            stream << heartbeat_interval_ << heartbeat_threshold_;
             stream.write(&uuid_, sizeof(uuid_));
             return stream.good();
         }
@@ -65,6 +66,7 @@ class xnet_handshake_message : public xnet_message
             switch (version())
             {
                 case 1:
+                    stream >> heartbeat_interval_ >> heartbeat_threshold_;
                     stream.read(&uuid_, sizeof(uuid_));
                     break;
                 default:
@@ -73,6 +75,14 @@ class xnet_handshake_message : public xnet_message
             return stream.good();
         }
     private:
+        // Specifying how frequent the heartbeat will occur
+        // A positive value is a valid number of seconds
+        // 0 means heartbeat disabled
+        xsize_t heartbeat_interval_;
+        // Specifying how long it could bear if there is no heartbeat
+        // This value must be satisfied heartbeat_threshold_ >= heartbeat_interval_
+        // If heartbeat_interval_ is 0, this value is meaningless
+        xsize_t heartbeat_threshold_;
         // Each application should contains a UUID for unique identifying this application
         // The client could only communicates with approvate server with the same UUID
         xuuid uuid_;
