@@ -35,11 +35,26 @@
 #include "xnet_handshake_message_handler.h"
 #include "xnet_handshake_message.h"
 #include "xassert.h"
+#include "xlogger.h"
 
 namespace xws
 {
 
 IMPLEMENT_XNET_MESSAGE_HANDLER(xnet_handshake_message_handler)
+
+void xnet_handshake_message_handler::append_uuid(const xstring& uuid)
+{
+    try
+    {
+        xuuid_string_generator uuid_str_gen;
+        xdebug_info(xformat(_X("Adding UUID \"%1%\" to acceptable UUID list.")) % uuid);
+        acceptable_uuids().insert(uuid_str_gen(uuid));
+    }
+    catch (...)
+    {
+        xdebug_info(xformat(_X("Failed to add \"%1%\" to acceptable UUID list.")) % uuid);
+    }
+}
 
 xnet_handshake_message_handler::xnet_handshake_message_handler()
 {
@@ -53,9 +68,11 @@ void xnet_handshake_message_handler::handle_message(xnet_message_ptr message, xn
 {
     xassert(message);
     xassert(context);
+    // Call this only once since this should not change once initialized on startup
+    static const xuuid_set& acceptable_uuids = xnet_handshake_message_handler::acceptable_uuids();
     xnet_handshake_message_ptr handshake_message = xdynamic_pointer_cast<xnet_handshake_message>(message);
     // If the UUID in the handshake message in the acceptable UUID set, then handshake accepted
-    context->handle_handshake_result(acceptable_uuids_.find(handshake_message->uuid()) != acceptable_uuids_.end());
+    context->handle_handshake_result(acceptable_uuids.find(handshake_message->uuid()) != acceptable_uuids.end());
 }
 
 }

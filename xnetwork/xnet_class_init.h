@@ -66,6 +66,8 @@ namespace __##name##_hidden__                                                   
 static __xnet_class_initializer__ __xci__;                                      \
 } // namespace
 
-#define INIT_XNET_CLASS(name) name()
+#define INIT_XNET_CLASS(name)                                               name()
+// In order to use this macro, the user must include xnet_handshake_message_handler.h
+#define ADD_ACCEPTABLE_UUID(uuid)                                           xws::xnet_handshake_message_handler::append_uuid(uuid)
 
 #endif
