@@ -32,18 +32,42 @@
 * ****************************************************************************
 */
 
-#include "xnet_handshake_message.h"
-#include "xnet_heartbeat_message.h"
-#include "xnet_handshake_message_handler.h"
-#include "xnet_heartbeat_message_handler.h"
-#include "xnet_class_init.h"
+#ifndef _XNET_VAR_INIT_H_
+#define _XNET_VAR_INIT_H_
 
-#define XAGENT_UUID _X("{BE2CE488-9D52-4414-87FB-E4A8C2DAD1A8}")
+/*
+ * Why we need this?
+ * 
+ * Because net message and handler will be created by a string, and 
+ * the point is, the definition of those messages and handlers are in
+ * xnetwork library, in that case, if we never use those symbols,
+ * they won't be imported by linker, then the message and handler
+ * registration mechanism won't work. So in order to import those
+ * symbols, we need to at lease use those symbols once.
+ *
+ * NOTE: Only those messages not built in this binary are necessary
+ * to be listed here. If the message and handler are part of this
+ * binary, no need to list them, but it is not harmful even they are
+ * listed.
+ */
 
-BEGIN_XNET_CLASS_INIT(xagent)
-    INIT_XNET_CLASS(xws::xnet_handshake_message);
-    INIT_XNET_CLASS(xws::xnet_heartbeat_message);
-    INIT_XNET_CLASS(xws::xnet_handshake_message_handler);
-    INIT_XNET_CLASS(xws::xnet_heartbeat_message_handler);
-    ADD_ACCEPTABLE_UUID(XAGENT_UUID);
-END_XNET_CLASS_INIT()
+#define BEGIN_XNET_VAR_INIT(name)                                               \
+namespace __##name##_hidden__                                                   \
+{                                                                               \
+    class __xnet_class_initializer__                                            \
+    {                                                                           \
+        public:                                                                 \
+            __xnet_class_initializer__()                                        \
+            {
+
+#define END_XNET_VAR_INIT()                                                     \
+            }                                                                   \
+    };                                                                          \
+static __xnet_class_initializer__ __xci__;                                      \
+} // namespace
+
+#define INIT_XNET_CLASS(name)                                               name()
+// In order to use this macro, the user must include xnet_handshake_message_handler.h
+#define ADD_ACCEPTABLE_UUID(uuid)                                           xws::xnet_handshake_message_handler::append_uuid(uuid)
+
+#endif
