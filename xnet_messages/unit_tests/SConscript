@@ -1,9 +1,0 @@
-Import('xenv')
-
-xenv = xenv.Clone()
-xenv.UseGoogleMock()
-xenv.Append(CPPPATH = ['..'])
-sources = xenv.Glob('*.cpp')
-xnet_messages_unit_tests_name = 'xnet_messages_tests'
-xnet_messages_unit_tests = xenv.BuildProgram(xnet_messages_unit_tests_name, sources + xenv.GoogleMockObjects())
-xenv.RunTest(xnet_messages_unit_tests)
