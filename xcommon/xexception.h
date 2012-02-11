@@ -46,7 +46,7 @@ class xexception : public std::exception
     public:
         xexception();
         xexception(const xstring& what);
-        virtual ~xexception();
+        virtual ~xexception() throw();
 };
 
 } // namespace xws

@@ -87,9 +87,9 @@ class xnet_terminal : public xenable_shared_from_this<xnet_terminal>
         virtual void end_monitor_handshake();
         virtual void on_handshake_timeout(const xerror_code& error_code) = 0;
         //
-        virtual void on_data_read(xnet_io_object_ptr& io_object, const xbyte_array& byte_array) = 0;
+        virtual void on_data_read(const xbyte_array& byte_array) = 0;
         virtual void on_data_read_error(const xerror_code& error_code) = 0;
-        virtual void on_data_write(xnet_io_object_ptr& io_object);
+        virtual void on_data_write();
         virtual void on_data_write_error(const xerror_code& error_code);
     protected:
         xsize_t heartbeat_interval_;

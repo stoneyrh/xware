@@ -42,11 +42,18 @@ xexception::xexception() : std::exception()
 {
 }
 
+#ifndef LINUX
 xexception::xexception(const xstring& what) : std::exception(match_str<std::string, xstring>::apply(what).c_str())
 {
 }
+#else
+xexception::xexception(const xstring& what) : std::exception()
+{
+    //match_str<std::string, xstring>::apply(what).c_str()
+}
+#endif
 
-xexception::~xexception()
+xexception::~xexception() throw()
 {
 }
 

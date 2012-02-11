@@ -74,9 +74,9 @@ void xnet_terminal::init_asynchrous_operation()
     xdebug_info(_X("Initializing asynchrous operation..."));
     // Note the order of connection
     data_read_error_conn_ = io_object_->data_read_error_sig().connect(xbind(&xnet_terminal::on_data_read_error, this, _1));
-    data_read_conn_ = io_object_->data_read_sig().connect(xbind(&xnet_terminal::on_data_read, this, _1, _2));
+    data_read_conn_ = io_object_->data_read_sig().connect(xbind(&xnet_terminal::on_data_read, this, _1));
     data_write_error_conn_ = io_object_->data_write_error_sig().connect(xbind(&xnet_terminal::on_data_write_error, this, _1));
-    data_write_conn_ = io_object_->data_write_sig().connect(xbind(&xnet_terminal::on_data_write, this, _1));
+    data_write_conn_ = io_object_->data_write_sig().connect(xbind(&xnet_terminal::on_data_write, this));
 }
 
 void xnet_terminal::deinit_asynchrous_operation()
@@ -189,7 +189,7 @@ void xnet_terminal::send(const xbyte_array_ptr& byte_array)
     io_object_->write(byte_array);
 }
 
-void xnet_terminal::on_data_write(xnet_io_object_ptr& io_object)
+void xnet_terminal::on_data_write()
 {
 }
 

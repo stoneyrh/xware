@@ -33,6 +33,7 @@
 */
 
 #include "xdata_buffer.h"
+#include <string.h> // for memcpy
 
 namespace xws
 {

@@ -8,6 +8,5 @@ libs = SConscript(dirs = os.path.join(build_output, 'xcommon'), exports = ['xenv
 libs = xenv.Flatten(libs)
 libs += SConscript(dirs = os.path.join(build_output, 'xnetwork'), exports = ['xenv', 'libs'])
 libs = xenv.Flatten(libs)
-#libs += SConscript(dirs = os.path.join(build_output, 'xnet_messages'), exports = ['xenv', 'libs'])
-#libs = xenv.Flatten(libs)
+libs.reverse()
 SConscript(dirs = os.path.join(build_output, 'xclient'), exports = ['xenv', 'libs'])

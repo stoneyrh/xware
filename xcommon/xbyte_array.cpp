@@ -33,6 +33,7 @@
 */
 
 #include "xbyte_array.h"
+#include <string.h> // for memcpy
 
 namespace xws
 {

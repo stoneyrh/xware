@@ -37,6 +37,7 @@
 
 #include "xconsole_event_listener.h"
 #include "xlogger.h"
+#include <string.h> // for strerror
 #include <errno.h>
 #include <signal.h>
 
@@ -66,7 +67,7 @@ class xconsole_ctrl_handler_lnx
                 {
                     xlog_error((xformat(_X("Installing action for signal = %1% (index = %2%) with error = \"%3%\".")) %
                                 signal % index %
-                                match_str<xstring, std::string>::apply(strerr(errno))));
+                                match_str<xstring, std::string>::apply(strerror(errno))));
                 }
             }
 
@@ -90,6 +91,6 @@ class xconsole_ctrl_handler_lnx
         static xconsole_ctrl_handler_lnx* handler_;
 };
 
-}
+} // namespace xws
 
 #endif

@@ -99,7 +99,7 @@ void xtcp_io_object::on_data_read(xbyte_ptr buffer, const xerror_code& error_cod
     //
     start_async_read();
     // Signal outside
-    data_read_sig()(shared_from_this(), byte_array);
+    data_read_sig()(byte_array);
 }
 
 void xtcp_io_object::on_data_write(const xbyte_array_ptr& byte_array, const xerror_code& error_code, xsize_t bytes_transferred)
@@ -117,7 +117,7 @@ void xtcp_io_object::on_data_write(const xbyte_array_ptr& byte_array, const xerr
     {
         xdebug_error(xformat(_X("Not all bytes are transferred, expected = %1%, actual = %2%.")) % byte_array->size() % bytes_transferred);
     }
-    data_write_sig()(shared_from_this());
+    data_write_sig()();
 }
 
 }

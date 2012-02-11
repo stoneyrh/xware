@@ -50,8 +50,8 @@ class xnet_io_object : public xenable_shared_from_this<xnet_io_object>
 {
     public:
         typedef xshared_ptr<xnet_io_object>::type ptr_t;
-        typedef xsignal<void (ptr_t&, const xbyte_array&)> data_read_sig_t;
-        typedef xsignal<void (ptr_t&)> data_write_sig_t;
+        typedef xsignal<void (const xbyte_array&)> data_read_sig_t;
+        typedef xsignal<void ()> data_write_sig_t;
         typedef xsignal<void (const xerror_code&)> error_sig_t;
         xnet_io_object();
         virtual ~xnet_io_object();

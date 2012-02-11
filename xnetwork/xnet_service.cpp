@@ -131,7 +131,7 @@ void xnet_service::raise_stop_interruption()
     throw xthread_interrupted();
 }
 
-void xnet_service::on_data_read(xnet_io_object_ptr& io_object, const xbyte_array& byte_array)
+void xnet_service::on_data_read(const xbyte_array& byte_array)
 {
     // We handle the data in service thread for not blocking the read thread
     net_commands_.put(xbind(&xnet_service::handle_byte_array, xdynamic_pointer_cast<xnet_service>(shared_from_this()), byte_array));

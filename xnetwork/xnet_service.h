@@ -73,7 +73,7 @@ class xnet_service : public xnet_terminal
 
     protected:
         virtual void on_handshake_timeout(const xerror_code& error_code);
-        virtual void on_data_read(xnet_io_object_ptr& io_object, const xbyte_array& byte_array);
+        virtual void on_data_read(const xbyte_array& byte_array);
         virtual void on_data_read_error(const xerror_code& error_code);
     private:
         void run();
