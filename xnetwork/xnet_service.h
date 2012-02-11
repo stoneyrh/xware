@@ -55,7 +55,7 @@ class xnet_service : public xnet_terminal
 {
     public:
         typedef xshared_ptr<xnet_service>::type ptr_t;
-        typedef xsignal<void (ptr_t&)> xnet_service_sig_t;
+        typedef xsignal<void (const ptr_t&)> xnet_service_sig_t;
         //
         xnet_service(const xnet_io_object_ptr& io_object);
         ~xnet_service();

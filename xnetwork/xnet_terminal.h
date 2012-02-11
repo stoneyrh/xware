@@ -58,6 +58,11 @@ class xnet_terminal : public xenable_shared_from_this<xnet_terminal>
         virtual ~xnet_terminal();
 
         void set_message_handler_manager(const xnet_message_handler_manager_ptr& handler_manager) { handler_manager_ = handler_manager; }
+        //
+        void set_heartbeat_interval(xsize_t heartbeat_interval) { heartbeat_interval_ = heartbeat_interval; }
+        void set_heartbeat_threshold(xsize_t heartbeat_threshold) { heartbeat_threshold_ = heartbeat_threshold; }
+        xsize_t heartbeat_interval() const { return heartbeat_interval_; }
+        xsize_t heartbeat_threshold() const { return heartbeat_threshold_; }
 
         /*
          * These functions are for message_handler_context
@@ -66,6 +71,7 @@ class xnet_terminal : public xenable_shared_from_this<xnet_terminal>
         virtual void handshake_rejected() = 0;
         virtual void accept_heartbeat_params(xsize_t interval, xsize_t threshold);
         virtual void send_heartbeat();
+        virtual void send_handshake(const xstring& uuid);
         //
         virtual void send(const xnet_message_ptr& message);
         virtual void send(const xbyte_array_ptr& byte_array);

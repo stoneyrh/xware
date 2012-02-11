@@ -37,6 +37,7 @@
 #include "xassert.h"
 #include "xbind.h"
 #include "xposix_time.h"
+#include "xnet_handshake_message.h"
 
 #define HEARTBEAT_INTERVAL          1
 #define HEARTBEAT_THRESHOLD         3
@@ -90,6 +91,7 @@ void xnet_terminal::deinit_asynchrous_operation()
 
 void xnet_terminal::handle_byte_array(const xbyte_array& byte_array)
 {
+    xdebug_info(xformat(_X("Handling byte array with size = %1%...")) % byte_array.size());
     // unresolved_byte_array_ saves the data that not resolved last time
     unresolved_byte_array_ += byte_array;
     xsize_t recogized_size = 0;
@@ -146,6 +148,19 @@ void xnet_terminal::send_heartbeat()
     // We only need to create one, then later reuse it
     static xnet_message_ptr heartbeat_message = xnet_message::create_message(_X("xnet_heartbeat_message"));
     send(heartbeat_message);
+}
+
+void xnet_terminal::send_handshake(const xstring& uuid)
+{
+    xnet_handshake_message_ptr handshake_message =
+        xdynamic_pointer_cast<xnet_handshake_message>(
+                xnet_message::create_message(_X("xnet_handshake_message")));
+    //
+    handshake_message->set_uuid(uuid);
+    handshake_message->set_heartbeat_interval(heartbeat_interval_);
+    handshake_message->set_heartbeat_threshold(heartbeat_threshold_);
+    //
+    send(handshake_message);
 }
 
 void xnet_terminal::send(const xnet_message_ptr& message)
