@@ -185,7 +185,7 @@ def build_unit_test(xenv, *args, **kwargs):
     return program
 
 def testee_objects(xenv, sources):
-    objects = [os.path.basename(source) for source in sources]
+    objects = [os.path.basename(str(source)) for source in sources]
     objects = [os.path.splitext(obj)[0] for obj in objects]
     objects = [obj + xenv['OBJSUFFIX'] for obj in objects]
     built_objects = []
