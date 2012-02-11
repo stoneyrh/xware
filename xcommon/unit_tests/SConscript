@@ -4,6 +4,14 @@ xenv = xenv.Clone()
 xenv.UseGoogleMock()
 xenv.Append(CPPPATH = ['..'])
 sources = xenv.Glob('*.cpp')
-testees = ['../xbyte_array.cpp', '../xdata_buffer.cpp', '../xdata_stream.cpp', '../xlogger.cpp', '../xlog_string.cpp']
+testees = ['../xbyte_array.cpp', '../xdata_buffer.cpp',
+           '../xdata_stream.cpp', '../xlogger.cpp', '../xlog_string.cpp',
+           '../xdump_file_provider.cpp']
+if xenv.IsWindows():
+    testees += xenv.Glob('../win/*.cpp')
+elif xenv.IsLinux():
+    testees += xenv.Glob('../lnx/*.cpp')
+elif xenv.IsMac():
+    testees += xenv.Glob('../mac/*.cpp')
 xcommon_unit_tests_name = 'xcommon_tests'
 xcommon_unit_tests = xenv.BuildUnitTest(xcommon_unit_tests_name, sources + xenv.GoogleMockObjects() + xenv.TesteeObjects(testees))
