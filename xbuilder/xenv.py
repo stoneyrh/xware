@@ -130,7 +130,7 @@ def setup(xenv, component = 'build'):
     if is_windows(xenv):
         xenv.Replace(WINDOWS_EMBED_MANIFEST = True, WINDOWS_INSERT_DEF = True)
         # /W3 - warning level
-        xenv.Append(CCFLAGS = ['/EHsc', '/Gd', '/W3'])
+        xenv.Append(CCFLAGS = ['/EHsc', '/Gd', '/W3', '/wd4819'])
         # /P - generate preprocessor file with line number
         # /EP /P - generate preprocessor file without line number
         if with_preprocessed_file(xenv):
