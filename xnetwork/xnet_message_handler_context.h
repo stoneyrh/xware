@@ -35,6 +35,7 @@
 #ifndef _XNET_MESSAGE_HANDLER_CONTEXT_H_
 #define _XNET_MESSAGE_HANDLER_CONTEXT_H_
 
+#include "xglobal.h"
 #include "xsmart_ptr.h"
 
 namespace xws
@@ -51,6 +52,7 @@ class xnet_message_handler_context
          */
         virtual void handle_handshake_result(bool accepted) = 0;
         virtual void handle_heartbeat_result() = 0;
+        virtual void accept_heartbeat_params(xsize_t interval, xsize_t threshold) = 0;
 };
 
 typedef xshared_ptr<xnet_message_handler_context>::type xnet_message_handler_context_ptr;

@@ -64,4 +64,9 @@ void xnet_service_message_handler_context::handle_heartbeat_result()
     net_service_->send_heartbeat();
 }
 
+void xnet_service_message_handler_context::accept_heartbeat_params(xsize_t interval, xsize_t threshold)
+{
+    net_service_->accept_heartbeat_params(interval, threshold);
+}
+
 } // namespace xws

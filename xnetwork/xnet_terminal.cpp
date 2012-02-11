@@ -38,17 +38,27 @@
 #include "xbind.h"
 #include "xposix_time.h"
 
+#define HEARTBEAT_INTERVAL          1
+#define HEARTBEAT_THRESHOLD         3
+
 namespace xws
 {
 
-xnet_terminal::xnet_terminal(const xnet_io_object_ptr& io_object) : io_object_(io_object), deadline_timer_(io_object->io_service())
+xnet_terminal::xnet_terminal(const xnet_io_object_ptr& io_object) :
+    heartbeat_interval_(HEARTBEAT_INTERVAL),
+    heartbeat_threshold_(HEARTBEAT_THRESHOLD),
+    io_object_(io_object), deadline_timer_(io_object->io_service())
 {
     xdebug_info(_X("Creating xnet_terminal..."));
 }
 
-xnet_terminal::xnet_terminal(const xnet_io_object_ptr& io_object, const xnet_message_handler_manager_ptr& handler_manager) : io_object_(io_object),
-    deadline_timer_(io_object->io_service()),
-    handler_manager_(handler_manager)
+xnet_terminal::xnet_terminal(const xnet_io_object_ptr& io_object,
+        const xnet_message_handler_manager_ptr& handler_manager) :
+            heartbeat_interval_(HEARTBEAT_INTERVAL),
+            heartbeat_threshold_(HEARTBEAT_THRESHOLD),
+            io_object_(io_object),
+            deadline_timer_(io_object->io_service()),
+            handler_manager_(handler_manager)
 {
     xdebug_info(_X("Creating xnet_terminal..."));
 }
@@ -123,6 +133,12 @@ void xnet_terminal::start_monitor_handshake(xsize_t seconds)
 void xnet_terminal::end_monitor_handshake()
 {
     deadline_timer_.cancel();
+}
+
+void xnet_terminal::accept_heartbeat_params(xsize_t interval, xsize_t threshold)
+{
+    heartbeat_interval_ = interval;
+    heartbeat_threshold_ = threshold;
 }
 
 void xnet_terminal::send_heartbeat()

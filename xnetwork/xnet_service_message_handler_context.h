@@ -49,6 +49,7 @@ class xnet_service_message_handler_context : public xnet_message_handler_context
 
         virtual void handle_handshake_result(bool accpeted);
         virtual void handle_heartbeat_result();
+        virtual void accept_heartbeat_params(xsize_t interval, xsize_t threshold);
     private:
         xnet_service_ptr net_service_;
 };

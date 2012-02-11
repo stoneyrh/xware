@@ -64,6 +64,7 @@ class xnet_terminal : public xenable_shared_from_this<xnet_terminal>
          */
         virtual void handshake_accepted() = 0;
         virtual void handshake_rejected() = 0;
+        virtual void accept_heartbeat_params(xsize_t interval, xsize_t threshold);
         virtual void send_heartbeat();
         //
         virtual void send(const xnet_message_ptr& message);
@@ -85,6 +86,8 @@ class xnet_terminal : public xenable_shared_from_this<xnet_terminal>
         virtual void on_data_write(xnet_io_object_ptr& io_object);
         virtual void on_data_write_error(const xerror_code& error_code);
     protected:
+        xsize_t heartbeat_interval_;
+        xsize_t heartbeat_threshold_;
         xnet_io_object_ptr io_object_;
         // This timer will be first used for monitoring handshake
         // After handshake success, it will be used for monitoring heartbeat

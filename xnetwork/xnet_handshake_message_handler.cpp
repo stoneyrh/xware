@@ -71,8 +71,15 @@ void xnet_handshake_message_handler::handle_message(xnet_message_ptr message, xn
     // Call this only once since this should not change once initialized on startup
     static const xuuid_set& acceptable_uuids = xnet_handshake_message_handler::acceptable_uuids();
     xnet_handshake_message_ptr handshake_message = xdynamic_pointer_cast<xnet_handshake_message>(message);
+    xassert(handshake_message);
     // If the UUID in the handshake message in the acceptable UUID set, then handshake accepted
-    context->handle_handshake_result(acceptable_uuids.find(handshake_message->uuid()) != acceptable_uuids.end());
+    bool accepted = acceptable_uuids.find(handshake_message->uuid()) != acceptable_uuids.end();
+    context->handle_handshake_result(accepted);
+    if (accepted)
+    {
+        context->accept_heartbeat_params(handshake_message->heartbeat_interval(),
+                                         handshake_message->heartbeat_threshold());
+    }
 }
 
 }
