@@ -66,6 +66,8 @@ def use_boost(xenv):
     boost_dir = xenv['BOOST_DIR']
     boost_lib_dir = os.path.join(boost_dir, 'stage', 'lib')
     xenv.Append(CPPPATH = [boost_dir], LIBPATH = [boost_lib_dir])
+    if is_linux(xenv):
+        xenv.Append(LIBS = ['boost_system', 'boost_thread'])
 
 def use_gmock(xenv):
     gmock_dir = xenv['GMOCK_DIR']
@@ -89,7 +91,7 @@ def is_windows(xenv):
     return platform.system() == 'Windows'
 
 def is_linux(xenv):
-    return platform.system() == 'linux'
+    return platform.system() == 'Linux'
 
 def is_mac(xenv):
     return platform.system() == 'darwin'
@@ -151,10 +153,14 @@ def setup(xenv, component = 'build'):
         else:
             xenv.Append(CCFLAGS = ['/O2', '/Oi', '/Ot', '/Gy', '/MD', '/GL'], LINKFLAGS = ['/LTCG', '/OPT:REF', '/OPT:ICF'], ARFLAGS = ['/LTCG'])
     elif is_linux(xenv):
-        xenv.Append(CPPDEFINES = ['LINUX', '__LINUX__'])
+        xenv.Append(CPPDEFINES = ['LINUX', '__LINUX__'], LIBS = ['pthread'])
     elif is_mac(xenv):
         xenv.Append(CPPDEFINES = ['MACOSX', '__MACOSX__'])
     #
+    elif is_linux(xenv):
+        xenv.Append(CPPDEFINES = ['LINUX', '__LINUX__'])
+    elif is_mac(xenv):
+        xenv.Append(CPPDEFINES = ['MACOSX', '__MACOSX__'])
     xenv.VariantDir(build_output, '.', duplicate = False)
     return build_output
 
