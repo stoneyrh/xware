@@ -307,6 +307,6 @@ TEST(xdata_buffer_tests, test_seek)
     ASSERT_EQ(buffer.current_offset(), 0);
     buffer.seek(0, seek_end);
     ASSERT_EQ(buffer.current_offset(), sizeof(value));
-    buffer.seek(-sizeof(value), seek_end);
+    buffer.seek((xint32_t)-sizeof(value), seek_end);
     ASSERT_EQ(buffer.current_offset(), 0);
 }
