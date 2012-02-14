@@ -111,11 +111,13 @@ def with_preprocessed_file(xenv):
 def setup(xenv, component = 'build'):
     configuration = 'debug' if is_debug(xenv) else 'release'
     configuration += '_unicode' if is_unicode(xenv) else '_ansi'
+    system = platform.system().lower()
     arch = xenv['TARGET_ARCH']
+    # arch might be None
     if arch:
-        build_output = os.path.join('%s_output' % component, arch, configuration)
+        build_output = os.path.join('%s_output' % component, system, arch, configuration)
     else:
-        build_output = os.path.join('%s_output' % component, configuration)
+        build_output = os.path.join('%s_output' % component, system, configuration)
     # Setup paths
     xenv['BOOST_DIR'] = xenv['boost']
     xenv['GMOCK_DIR'] = xenv['gmock']
