@@ -66,6 +66,7 @@ xnet_handshake_message_handler::~xnet_handshake_message_handler()
 
 void xnet_handshake_message_handler::handle_message(xnet_message_ptr message, xnet_message_handler_context_ptr context)
 {
+    xdebug_info(_X("Handling handshake message..."));
     xassert(message);
     xassert(context);
     // Call this only once since this should not change once initialized on startup

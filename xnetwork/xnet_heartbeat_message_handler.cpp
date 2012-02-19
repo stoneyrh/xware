@@ -34,6 +34,7 @@
 
 #include "xnet_heartbeat_message_handler.h"
 #include "xassert.h"
+#include "xlogger.h"
 
 namespace xws
 {
@@ -50,6 +51,7 @@ xnet_heartbeat_message_handler::~xnet_heartbeat_message_handler()
 
 void xnet_heartbeat_message_handler::handle_message(xnet_message_ptr message, xnet_message_handler_context_ptr context)
 {
+    xdebug_info(_X("Handling heartbeat message..."));
     xassert(message);
     xassert(context);
     context->handle_heartbeat_result();
