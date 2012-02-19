@@ -52,12 +52,14 @@ class xnet_io_object : public xenable_shared_from_this<xnet_io_object>
         typedef xshared_ptr<xnet_io_object>::type ptr_t;
         typedef xsignal<void (const xbyte_array&)> data_read_sig_t;
         typedef xsignal<void ()> data_write_sig_t;
+        typedef xsignal<void ()> connected_sig_t;
         typedef xsignal<void (const xerror_code&)> error_sig_t;
         xnet_io_object();
         virtual ~xnet_io_object();
         virtual void write(const xbyte_array_ptr& byte_array) = 0;
         virtual void read(xbyte_array& byte_array) = 0;
         virtual void start_async_read() = 0;
+        virtual void connect_to(const xstring& host, xport_t port) = 0;
         virtual void do_async_write(const xbyte_array& byte_array) = 0;
         virtual void shutdown() = 0;
         virtual void cancel() = 0;
@@ -66,8 +68,10 @@ class xnet_io_object : public xenable_shared_from_this<xnet_io_object>
 
         data_read_sig_t& data_read_sig() { return data_read_sig_; }
         data_write_sig_t& data_write_sig() { return data_write_sig_; }
+        connected_sig_t& connected_sig() { return connected_sig_; }
         error_sig_t& data_read_error_sig() { return data_read_error_sig_; }
         error_sig_t& data_write_error_sig() { return data_write_error_sig_; }
+        error_sig_t& connect_error_sig()  { return connect_error_sig_; }
 
     protected:
         xbyte_ptr read_buffer() { return read_buffer_; }
@@ -79,8 +83,10 @@ class xnet_io_object : public xenable_shared_from_this<xnet_io_object>
         xbyte_ptr read_buffer_;
         data_read_sig_t data_read_sig_;
         data_write_sig_t data_write_sig_;
+        connected_sig_t connected_sig_;
         error_sig_t data_read_error_sig_;
         error_sig_t data_write_error_sig_;
+        error_sig_t connect_error_sig_;
 };
 
 typedef xnet_io_object::ptr_t xnet_io_object_ptr;

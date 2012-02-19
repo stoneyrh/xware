@@ -6,7 +6,7 @@
 * * Redistribution and use in source and binary forms, with or without       *
 * * modification, are permitted provided that the following conditions are   *
 * * met:                                                                     *
-* *    * Redistributions of source code must retain the above copyright     *
+* *    * Redistributions of source code must retain the above copyright      *
 * * notice, this list of conditions and the following disclaimer.            *
 * *    * Redistributions in binary form must reproduce the above             *
 * * copyright notice, this list of conditions and the following disclaimer   *
@@ -15,7 +15,7 @@
 * *    * Neither the name of xWorkshop Inc. nor the names of its             *
 * * contributors may be used to endorse or promote products derived from     *
 * * this software without specific prior written permission.                 *
-* * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS     *
+* * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS      *
 * * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT        *
 * * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR    *
 * * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT     *
@@ -32,43 +32,31 @@
 * ****************************************************************************
 */
 
-#ifndef _X_TCP_IO_OBJECT_H_
-#define _X_TCP_IO_OBJECT_H_
+#ifndef _XNET_TCP_CLIENT_H_
+#define _XNET_TCP_CLIENT_H_
 
-#include "xnet_io_object.h"
+#include "xnetwork.h"
+#include "xnet_client.h"
 
 namespace xws
 {
 
-class xtcp_io_object : public xnet_io_object
+class xnet_tcp_client : public xnet_client
 {
     public:
-        xtcp_io_object(xio_service& io_service);
-        virtual ~xtcp_io_object();
+        xnet_tcp_client(xio_service& io_service);
+        virtual ~xnet_tcp_client();
 
-        virtual void write(const xbyte_array_ptr& byte_array);
-        virtual void read(xbyte_array& byte_array);
-        virtual void start_async_read();
-        virtual void connect_to(const xstring& host, xport_t port);
-        virtual void do_async_write(const xbyte_array& byte_array);
-        virtual void shutdown() { socket_.shutdown(xtcp_socket::shutdown_both); }
-        virtual void cancel() { socket_.cancel(); }
-        virtual void close() { socket_.close(); }
-        virtual xio_service& io_service() { return socket_.get_io_service(); }
+        void set_uuid(const xstring& uuid) { uuid_ = uuid; }
+        xstring uuid() const { return uuid_; }
 
-        xtcp_socket& socket() { return socket_; }
-        const xtcp_socket& socket() const { return socket_; }
-        xtcp_endpoint peer_endpoint() const { return socket_.remote_endpoint(); }
-    protected:
-        virtual void on_data_read(xbyte_ptr data, const xerror_code& error_code, xsize_t bytes_transferred);
-        virtual void on_data_write(const xbyte_array_ptr& byte_array, const xerror_code& error_code, xsize_t bytes_transferred);
-        virtual void on_connected(const xerror_code& error_code);
+        void connect_to(const xstring& host, xport_t port);
+        void on_connection_established();
+        void on_connect_error(const xerror_code& error_code);
     private:
-        xtcp_socket socket_;
+        xstring uuid_;
 };
 
-typedef xshared_ptr<xtcp_io_object>::type xtcp_io_object_ptr;
-
-}
+} // namespace xws
 
 #endif

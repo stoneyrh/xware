@@ -120,4 +120,23 @@ void xtcp_io_object::on_data_write(const xbyte_array_ptr& byte_array, const xerr
     data_write_sig()();
 }
 
+void xtcp_io_object::connect_to(const xstring& host, xport_t port)
+{
+    xaddress address = xaddress::from_string(match_str<std::string, xstring>::apply(host));
+    xtcp_endpoint peer(address, port);
+    socket_.async_connect(peer, xbind(&xtcp_io_object::on_connected,
+                xdynamic_pointer_cast<xtcp_io_object>(shared_from_this()),
+                xplaceholders::error));
+}
+
+void xtcp_io_object::on_connected(const xerror_code& error_code)
+{
+    if (error_code)
+    {
+        connect_error_sig()(error_code);
+        return;
+    }
+    connected_sig()();
+}
+
 }
