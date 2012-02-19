@@ -64,6 +64,8 @@ typedef boost::asio::mutable_buffer           xmutable_buffer;
 
 typedef boost::asio::streambuf                xnet_streambuf;
 
+typedef boost::uint16_t                       xport_t;
+
 #define xbuffer                               boost::asio::buffer
 #define xbuffer_size                          boost::asio::buffer_size
 #define xbuffer_cast                          boost::asio::buffer_cast
