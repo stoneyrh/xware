@@ -35,6 +35,7 @@
 #include "xapplication.h"
 #include "xcommand_line_args.h"
 #include "xclient.h"
+#include "xthread.h"
 #include "xconsole_ctrl_handler.h"
 
 using namespace xws;
@@ -42,7 +43,8 @@ using namespace xws;
 int main(int argc, char* argv[])
 {
     xapplication(argc, xargs<xchar>(argc, argv));
-    xclient client;
+    xio_service io_service(xthread::hardware_concurrency());
+    xclient client(io_service);
     //xconsole_ctrl_handler::create_console_handler(&agent);
     return 0;
 }

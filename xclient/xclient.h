@@ -35,14 +35,20 @@
 #ifndef _XCLIENT_H_
 #define _XCLIENT_H_
 
+#include "xnetwork.h"
+
 namespace xws
 {
 
 class xclient
 {
     public:
-        xclient();
+        xclient(xio_service& io_service);
         virtual ~xclient();
+
+        xio_service& io_service() { return io_service_; }
+    private:
+        xio_service& io_service_;
 };
 
 } // namespace xws

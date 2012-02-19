@@ -37,7 +37,7 @@
 namespace xws
 {
 
-xclient::xclient()
+xclient::xclient(xio_service& io_service) : io_service_(io_service)
 {
 }
 
