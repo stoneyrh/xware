@@ -75,6 +75,10 @@ void xnet_handshake_message_handler::handle_message(xnet_message_ptr message, xn
     xassert(handshake_message);
     // If the UUID in the handshake message in the acceptable UUID set, then handshake accepted
     bool accepted = acceptable_uuids.find(handshake_message->uuid()) != acceptable_uuids.end();
+    xdebug_info((xformat(_X("The UUID received from peer side is \"%1%\", which is %2%.")) %
+                    xuuid_to_xstring(handshake_message->uuid()) %
+                    (accepted ? _X("acceptable") : _X("not acceptable"))
+                        ));
     // If accept this handshake, first accept the heartbeat parameters
     if (accepted)
     {
