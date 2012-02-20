@@ -36,6 +36,7 @@
 #define _XCLIENT_H_
 
 #include "xnetwork.h"
+#include "xnet_tcp_client.h"
 
 namespace xws
 {
@@ -47,6 +48,8 @@ class xclient
         virtual ~xclient();
 
         xio_service& io_service() { return io_service_; }
+
+        xnet_tcp_client_ptr connect_to(const xstring& host, xport_t port);
     private:
         xio_service& io_service_;
 };

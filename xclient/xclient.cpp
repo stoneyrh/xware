@@ -45,4 +45,13 @@ xclient::~xclient()
 {
 }
 
+xnet_tcp_client_ptr xclient::connect_to(const xstring& host, xport_t port)
+{
+    xnet_tcp_client_ptr tcp_client(new xnet_tcp_client(io_service()));
+    tcp_client->set_uuid(_X("{30201EA2-7AD5-46e8-91D6-7D3E878C8DC4}"));
+    //tcp_client->set_handler_manager();
+    tcp_client->connect_to(host, port);
+    return tcp_client;
+}
+
 }
