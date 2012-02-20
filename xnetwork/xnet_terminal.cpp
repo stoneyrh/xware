@@ -155,6 +155,7 @@ void xnet_terminal::accept_heartbeat_params(xsize_t interval, xsize_t threshold)
 
 void xnet_terminal::send_heartbeat()
 {
+    xdebug_info(_X("Sending heartbeat..."));
     // We only need to create one, then later reuse it
     static xnet_message_ptr heartbeat_message = xnet_message::create_message(_X("xnet_heartbeat_message"));
     send(heartbeat_message);
@@ -162,6 +163,7 @@ void xnet_terminal::send_heartbeat()
 
 void xnet_terminal::send_handshake(const xstring& uuid)
 {
+    xdebug_info(_X("Sending handshake..."));
     xnet_handshake_message_ptr handshake_message =
         xdynamic_pointer_cast<xnet_handshake_message>(
                 xnet_message::create_message(_X("xnet_handshake_message")));

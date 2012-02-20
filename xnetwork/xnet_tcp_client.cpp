@@ -35,6 +35,7 @@
 #include "xnet_tcp_client.h"
 #include "xtcp_io_object.h"
 #include "xbind.h"
+#include "xlogger.h"
 
 namespace xws
 {
@@ -51,6 +52,7 @@ xnet_tcp_client::~xnet_tcp_client()
 
 void xnet_tcp_client::connect_to(const xstring& host, xport_t port)
 {
+    xdebug_info(xformat(_X("Connecting to %1%:%2%...")) % host % port);
     io_object_->connect_to(host, port);
 }
 
