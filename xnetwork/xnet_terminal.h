@@ -86,6 +86,9 @@ class xnet_terminal : public xenable_shared_from_this<xnet_terminal>
         // If hand shake success within specified period, then end monitoring 
         virtual void end_monitor_handshake();
         virtual void on_handshake_timeout(const xerror_code& error_code) = 0;
+        virtual void start_monitor_heartbeat(xsize_t seconds = 3);
+        virtual void end_monitor_heartbeat();
+        virtual void on_heartbeat_timeout(const xerror_code& error_code) = 0;
         //
         virtual void on_data_read(const xbyte_array& byte_array) = 0;
         virtual void on_data_read_error(const xerror_code& error_code) = 0;

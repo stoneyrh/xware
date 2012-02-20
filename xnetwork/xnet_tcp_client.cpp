@@ -58,9 +58,36 @@ void xnet_tcp_client::on_connection_established()
 {
     // Once connection established, send handshake immediately
     send_handshake(uuid());
+    start_monitor_handshake();
 }
 
 void xnet_tcp_client::on_connect_error(const xerror_code& error_code)
+{
+}
+
+void xnet_tcp_client::handshake_accepted()
+{
+    send_heartbeat();
+    start_monitor_heartbeat();
+}
+
+void xnet_tcp_client::handshake_rejected()
+{
+}
+
+void xnet_tcp_client::on_handshake_timeout(const xerror_code& error_code)
+{
+}
+
+void xnet_tcp_client::on_heartbeat_timeout(const xerror_code& error_code)
+{
+}
+
+void xnet_tcp_client::on_data_read(const xbyte_array& byte_array)
+{
+}
+
+void xnet_tcp_client::on_data_read_error(const xerror_code& error_code)
 {
 }
 

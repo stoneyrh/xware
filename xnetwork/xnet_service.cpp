@@ -165,4 +165,8 @@ void xnet_service::on_handshake_timeout(const xerror_code& error_code)
     }
 }
 
+void xnet_service::on_heartbeat_timeout(const xerror_code& error_code)
+{
+}
+
 } // namespace xws

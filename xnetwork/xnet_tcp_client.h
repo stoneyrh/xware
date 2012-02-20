@@ -37,6 +37,7 @@
 
 #include "xnetwork.h"
 #include "xnet_client.h"
+#include "xsmart_ptr.h"
 
 namespace xws
 {
@@ -51,11 +52,20 @@ class xnet_tcp_client : public xnet_client
         xstring uuid() const { return uuid_; }
 
         void connect_to(const xstring& host, xport_t port);
-        void on_connection_established();
-        void on_connect_error(const xerror_code& error_code);
+    protected:
+        virtual void on_connection_established();
+        virtual void on_connect_error(const xerror_code& error_code);
+        virtual void handshake_accepted();
+        virtual void handshake_rejected();
+        virtual void on_handshake_timeout(const xerror_code& error_code);
+        virtual void on_heartbeat_timeout(const xerror_code& error_code);
+        virtual void on_data_read(const xbyte_array& byte_array);
+        virtual void on_data_read_error(const xerror_code& error_code);
     private:
         xstring uuid_;
 };
+
+typedef xshared_ptr<xnet_tcp_client>::type xnet_tcp_client_ptr;
 
 } // namespace xws
 

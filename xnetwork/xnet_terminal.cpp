@@ -137,6 +137,16 @@ void xnet_terminal::end_monitor_handshake()
     deadline_timer_.cancel();
 }
 
+void xnet_terminal::start_monitor_heartbeat(xsize_t seconds)
+{
+    deadline_timer_.expires_from_now(xposix_time::seconds(seconds));
+    deadline_timer_.async_wait(xbind(&xnet_terminal::on_heartbeat_timeout, this, xplaceholders::error));
+}
+
+void xnet_terminal::end_monitor_heartbeat()
+{
+}
+
 void xnet_terminal::accept_heartbeat_params(xsize_t interval, xsize_t threshold)
 {
     heartbeat_interval_ = interval;
