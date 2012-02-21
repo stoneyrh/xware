@@ -38,12 +38,12 @@
 #include "xnet_heartbeat_message_handler.h"
 #include "xnet_var_init.h"
 
-#define XAGENT_UUID _X("{BE2CE488-9D52-4414-87FB-E4A8C2DAD1A8}")
+#define XCLIENT_UUID _X("{30201EA2-7AD5-46e8-91D6-7D3E878C8DC4}")
 
 BEGIN_XNET_VAR_INIT(xagent)
     INIT_XNET_CLASS(xws::xnet_handshake_message);
     INIT_XNET_CLASS(xws::xnet_heartbeat_message);
     INIT_XNET_CLASS(xws::xnet_handshake_message_handler);
     INIT_XNET_CLASS(xws::xnet_heartbeat_message_handler);
-    ADD_ACCEPTABLE_UUID(XAGENT_UUID);
+    ADD_ACCEPTABLE_UUID(XCLIENT_UUID);
 END_XNET_VAR_INIT()
