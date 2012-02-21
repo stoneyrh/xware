@@ -45,7 +45,7 @@ namespace xws
 
 xenvironment::variables xenvironment::current_env()
 {
-    xenvironment::variables env;
+    xenvironment::variables vars;
 #if defined (WINDOWS)
     xchar* block = GetEnvironmentStrings();
     if (block)
@@ -59,16 +59,16 @@ xenvironment::variables xenvironment::current_env()
             }
             xchar* start = end;
             while (*end != _X('\0')) ++ end;
-            xenvironment::parse_pair(start, end, env);
+            xenvironment::parse_pair(start, end, vars);
             ++ end;
         } while (true);
         FreeEnvironmentStrings(block);
     }
 #endif
-    return env;
+    return vars;
 }
 
-void xenvironment::parse_pair(xchar* start, xchar* end, xenvironment::variables& env)
+void xenvironment::parse_pair(xchar* start, xchar* end, xenvironment::variables& vars)
 {
     xassert(start);
     xassert(end);
@@ -77,7 +77,7 @@ void xenvironment::parse_pair(xchar* start, xchar* end, xenvironment::variables&
     // Skip the first character, it might be '=' or ' '
     xchar* p = start + 1;
     while (*p != _X('=') && p < end) ++ p;
-    env.insert(xenvironment::variables::value_type(xstring(start, p), xstring(p + 1, end)));
+    vars.insert(xenvironment::variables::value_type(xstring(start, p), xstring(p + 1, end)));
 }
 
 xenvironment::xenvironment()
