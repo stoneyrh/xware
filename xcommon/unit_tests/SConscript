@@ -6,7 +6,8 @@ xenv.Append(CPPPATH = ['..'])
 sources = xenv.Glob('*.cpp')
 testees = ['../xbyte_array.cpp', '../xdata_buffer.cpp',
            '../xdata_stream.cpp', '../xlogger.cpp', '../xlog_string.cpp',
-           '../xdump_file_provider.cpp']
+           '../xdump_file_provider.cpp', '../xenvironment.cpp',
+           '../xexception.cpp']
 if xenv.IsWindows():
     testees += xenv.Glob('../win/*.cpp')
 elif xenv.IsLinux():

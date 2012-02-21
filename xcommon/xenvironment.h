@@ -42,6 +42,12 @@
 namespace xws
 {
 
+/*
+ * To programmatically add or modify system environment variables,
+ * add them to the HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment
+ * registry key, then broadcast a WM_SETTINGCHANGE message with lParam set to the string "Environment".
+ * This allows applications, such as the shell, to pick up your updates.
+ */
 class xenvironment
 {
     public:
@@ -52,8 +58,11 @@ class xenvironment
         xstring operator [](const xstring &key);
         xstring get(const xstring &key);
         bool has(const xstring &key);
+        //
+        static variables current_env();
     private:
         xstring get_from_system(const xstring &key);
+        static void parse_pair(xchar* start, xchar* end, variables& env);
     private:
         variables variables_;
 };

@@ -33,14 +33,52 @@
 */
 
 #include "xenvironment.h"
+#include "xassert.h"
+#include "xlogger.h"
 #include <cstdlib>
-#include <boost/scoped_array.hpp>
 #ifdef WINDOWS
 #include <windows.h>
 #endif
 
 namespace xws
 {
+
+xenvironment::variables xenvironment::current_env()
+{
+    xenvironment::variables env;
+#if defined (WINDOWS)
+    xchar* block = GetEnvironmentStrings();
+    if (block)
+    {
+        xchar* end = block;
+        do
+        {
+            if (*end == _X('\0'))
+            {
+                break;
+            }
+            xchar* start = end;
+            while (*end != _X('\0')) ++ end;
+            xenvironment::parse_pair(start, end, env);
+            ++ end;
+        } while (true);
+        FreeEnvironmentStrings(block);
+    }
+#endif
+    return env;
+}
+
+void xenvironment::parse_pair(xchar* start, xchar* end, xenvironment::variables& env)
+{
+    xassert(start);
+    xassert(end);
+    xassert(start < end);
+    xdebug_info(xformat(_X("Parsing \"%1%\"...")) % xstring(start, end));
+    // Skip the first character, it might be '=' or ' '
+    xchar* p = start + 1;
+    while (*p != _X('=') && p < end) ++ p;
+    env.insert(xenvironment::variables::value_type(xstring(start, p), xstring(p + 1, end)));
+}
 
 xenvironment::xenvironment()
 {
@@ -94,9 +132,29 @@ xstring xenvironment::get_from_system(const xstring &key)
     xstring value;
 #ifdef WINDOWS
     xchar buffer[MAX_PATH] = _X("\0");
-    if (GetEnvironmentVariable(key.c_str(), buffer, MAX_PATH))
+    DWORD size_required = 0;
+    if (size_required = GetEnvironmentVariable(key.c_str(), buffer, MAX_PATH))
     {
-        value.assign(buffer);
+        /*
+         * If lpBuffer is not large enough to hold the data,
+         * the return value is the buffer size, in characters,
+         * required to hold the string and its terminating
+         * null character and the contents of lpBuffer are undefined.
+         */
+        if (size_required > MAX_PATH)
+        {
+            xchar* large_buffer = new xchar[size_required];
+            ZeroMemory(large_buffer, size_required);
+            if (GetEnvironmentVariable(key.c_str(), large_buffer, size_required))
+            {
+                value.assign(large_buffer);
+            }
+            delete []large_buffer;
+        }
+        else
+        {
+            value.assign(buffer);
+        }
     }
     else
     {

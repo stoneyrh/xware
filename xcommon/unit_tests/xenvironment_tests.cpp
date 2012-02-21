@@ -34,9 +34,24 @@
 
 #include <gtest/gtest.h>
 #include "xenvironment.h"
+#include "xglobal.h"
 
 using namespace xws;
 
 TEST(xenvironment_tests, test_initialization)
 {
+}
+
+TEST(xenvironment_tests, test_current_env)
+{
+    xenvironment::variables vars = xenvironment::current_env();
+    xenvironment env;
+    for (xenvironment::variables::iterator iter = vars.begin(), end = vars.end();
+            iter !=  end; ++ iter)
+    {
+        //xcout << iter->first << _X(" = ") << iter->second << std::endl;
+        // Key cannot be empty
+        EXPECT_FALSE(iter->first.empty()) << _X("Key is empty with value:\"") << iter->second << _X("\"");
+        EXPECT_EQ(env.get(iter->first), iter->second) << _X("Key is:\"") << iter->first << _X("\"");
+    }
 }
