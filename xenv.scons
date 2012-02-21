@@ -1,0 +1,10 @@
+import os
+
+from xbuilder.xenv import xenv
+xenv.Append(CPPPATH = ['#xglobal'])
+build_output = xenv.Setup('xenv')
+
+libs = SConscript(dirs = os.path.join(build_output, 'xcommon'), exports = ['xenv'])
+libs = xenv.Flatten(libs)
+libs.reverse()
+SConscript(dirs = os.path.join(build_output, 'xutil', 'xenv'), exports = ['xenv', 'libs'])
