@@ -76,7 +76,7 @@ void xenvironment::parse_pair(xchar* start, xchar* end, xenvironment::variables&
     xdebug_info(xformat(_X("Parsing \"%1%\"...")) % xstring(start, end));
     // Skip the first character, it might be '=' or ' '
     xchar* p = start + 1;
-    while (*p != _X('=') && p < end) ++ p;
+    while (p < end && *p != _X('=')) ++ p;
     vars.insert(xenvironment::variables::value_type(xstring(start, p), xstring(p + 1, end)));
 }
 
