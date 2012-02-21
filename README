@@ -3,6 +3,27 @@ About xware
 x means any, xware stands for x-software, which means a framework for easing creating any application based on C++.
 Under development of xWorkshop, it also contains applications developed based on the framework.
 
-Feel free to contact us if you have any requirements or if you want to know more about us.
+How to build
 
+In order to build the components of xware, you need to install Python(http://www.python.org) and SCons(http://www.scons.org).
+You will also need boost(http://www.boost.org) and GMock(http://code.google.com/p/googlemock) library before you can build.
+Once you have Python and SCons, and all libraries setup, locate to the root folder of xware, then type:
+
+    scons -f <component>.scons
+
+This command will build the component with default options. The output will be in the <component>_output folder, which is also under the root of xware.
+The build commaond accepts the following options:
+    unicode=<yes|no> - Build the component with wide charset, default to yes
+    release=<yes|no> - Build the component without debug information, default to no
+    arch=<x86|i386|amd64|emt64|x86_64|ia64> - Build the component for specific architecture, default the current archtecture
+    windows=<win2k3|win7|win2k|winvista|winxp> - For Windows only, used for define WINNT macro, default to current system value
+    boost=<path_to_boost> - The path for where to find boost
+    gmock=<path_to_gmock> - The path for where to find gmock, note this should be pointing to gmock fused source folder
+You could run the following command for getting detail option information:
+
+    scons -f <component>.scons -h
+
+The script named build_<compoent>_all.py under xware root folder is a handy way for build cooresponding compoent with mixed configurations.
+
+Feel free to contact us if you have any requirements or if you want to know more about us.
 Please mail to : stoneyrh@163.com
