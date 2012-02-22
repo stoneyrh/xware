@@ -47,5 +47,7 @@ int main(int argc, char* argv[])
     xclient client(io_service);
     //xconsole_ctrl_handler::create_console_handler(&agent);
     xnet_tcp_client_ptr tcp_client = client.connect_to(_X("127.0.0.1"), 8693);
-    return io_service.run();
+    xio_service::work work(io_service);
+    io_service.run();
+    return 0;
 }

@@ -32,23 +32,29 @@
 * ****************************************************************************
 */
 
-#ifndef _XNET_CLIENT_H_
-#define _XNET_CLIENT_H_
+#ifndef _XNET_CLIENT_MESSAGE_HANDLER_CONTEXT_H_
+#define _XNET_CLIENT_MESSAGE_HANDLER_CONTEXT_H_
 
-#include "xnet_terminal.h"
-#include "xsmart_ptr.h"
+#include "xnet_message_handler_context.h"
+#include "xnet_client.h"
 
 namespace xws
 {
 
-class xnet_client : public xnet_terminal
+class xnet_client_message_handler_context : public xnet_message_handler_context
 {
     public:
-        xnet_client(const xnet_io_object_ptr& io_object);
-        virtual ~xnet_client();
+        xnet_client_message_handler_context(const xnet_client_ptr& net_client);
+        virtual ~xnet_client_message_handler_context();
+
+        virtual void handle_handshake_result(bool accpeted);
+        virtual void handle_heartbeat_result();
+        virtual void accept_heartbeat_params(xsize_t interval, xsize_t threshold);
+    private:
+        xnet_client_ptr net_client_;
 };
 
-typedef xshared_ptr<xnet_client>::type xnet_client_ptr;
+typedef xshared_ptr<xnet_client_message_handler_context>::type xnet_client_message_handler_context_ptr;
 
 } // namespace xws
 

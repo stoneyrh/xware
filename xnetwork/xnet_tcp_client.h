@@ -48,9 +48,6 @@ class xnet_tcp_client : public xnet_client
         xnet_tcp_client(xio_service& io_service);
         virtual ~xnet_tcp_client();
 
-        void set_uuid(const xstring& uuid) { uuid_ = uuid; }
-        xstring uuid() const { return uuid_; }
-
         void connect_to(const xstring& host, xport_t port);
     protected:
         virtual void on_connection_established();
@@ -61,8 +58,6 @@ class xnet_tcp_client : public xnet_client
         virtual void on_heartbeat_timeout(const xerror_code& error_code);
         virtual void on_data_read(const xbyte_array& byte_array);
         virtual void on_data_read_error(const xerror_code& error_code);
-    private:
-        xstring uuid_;
 };
 
 typedef xshared_ptr<xnet_tcp_client>::type xnet_tcp_client_ptr;

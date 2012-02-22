@@ -63,6 +63,9 @@ class xnet_terminal : public xenable_shared_from_this<xnet_terminal>
         void set_heartbeat_threshold(xsize_t heartbeat_threshold) { heartbeat_threshold_ = heartbeat_threshold; }
         xsize_t heartbeat_interval() const { return heartbeat_interval_; }
         xsize_t heartbeat_threshold() const { return heartbeat_threshold_; }
+        //
+        void set_uuid(const xstring& uuid) { uuid_ = uuid; }
+        xstring uuid() const { return uuid_; }
 
         /*
          * These functions are for message_handler_context
@@ -72,6 +75,8 @@ class xnet_terminal : public xenable_shared_from_this<xnet_terminal>
         virtual void accept_heartbeat_params(xsize_t interval, xsize_t threshold);
         virtual void send_heartbeat();
         virtual void send_handshake(const xstring& uuid);
+        virtual void send_handshake() { send_handshake(uuid()); }
+        virtual void update_heartbeat();
         //
         virtual void send(const xnet_message_ptr& message);
         virtual void send(const xbyte_array_ptr& byte_array);
@@ -102,6 +107,8 @@ class xnet_terminal : public xenable_shared_from_this<xnet_terminal>
         // After handshake success, it will be used for monitoring heartbeat
         xdeadline_timer deadline_timer_;
         xnet_message_handler_manager_ptr handler_manager_;
+        //
+        xstring uuid_;
         // Save the data that not been recognized yet
         xbyte_array unresolved_byte_array_;
         // Signal connections

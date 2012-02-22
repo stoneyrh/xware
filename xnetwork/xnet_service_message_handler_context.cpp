@@ -61,6 +61,7 @@ void xnet_service_message_handler_context::handle_handshake_result(bool accepted
 
 void xnet_service_message_handler_context::handle_heartbeat_result()
 {
+    net_service_->update_heartbeat();
     net_service_->send_heartbeat();
 }
 

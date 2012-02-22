@@ -128,27 +128,33 @@ void xnet_terminal::handle_byte_array(const xbyte_array& byte_array)
 
 void xnet_terminal::start_monitor_handshake(xsize_t seconds)
 {
+    xdebug_info(_X("Start monitoring handshake..."));
     deadline_timer_.expires_from_now(xposix_time::seconds(seconds));
     deadline_timer_.async_wait(xbind(&xnet_terminal::on_handshake_timeout, this, xplaceholders::error));
 }
 
 void xnet_terminal::end_monitor_handshake()
 {
+    xdebug_info(_X("Cancel monitoring handshake..."));
     deadline_timer_.cancel();
 }
 
 void xnet_terminal::start_monitor_heartbeat(xsize_t seconds)
 {
+    xdebug_info(_X("Start monitoring heartbeat..."));
     deadline_timer_.expires_from_now(xposix_time::seconds(seconds));
     deadline_timer_.async_wait(xbind(&xnet_terminal::on_heartbeat_timeout, this, xplaceholders::error));
 }
 
 void xnet_terminal::end_monitor_heartbeat()
 {
+    xdebug_info(_X("Cancel monitoring heartbeat..."));
+    deadline_timer_.cancel();
 }
 
 void xnet_terminal::accept_heartbeat_params(xsize_t interval, xsize_t threshold)
 {
+    xdebug_info(xformat(_X("Accepting heartbeat parameters (interval = %1%, threshold = %2%)...")) % interval % threshold);
     heartbeat_interval_ = interval;
     heartbeat_threshold_ = threshold;
 }
@@ -207,6 +213,14 @@ void xnet_terminal::on_data_write()
 
 void xnet_terminal::on_data_write_error(const xerror_code& error_code)
 {
+}
+
+void xnet_terminal::update_heartbeat()
+{
+    // Cancel the current handler, so that it won't expire
+    end_monitor_heartbeat();
+    // Start monitor heartbeat for next round
+    start_monitor_heartbeat();
 }
 
 } // namespace xws

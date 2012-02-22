@@ -156,6 +156,7 @@ void xnet_service::on_data_read_error(const xerror_code& error_code)
 
 void xnet_service::on_handshake_timeout(const xerror_code& error_code)
 {
+    xdebug_info((xformat(_X("Handshake timeout with error = \"%1%\".")) % match_str<xstring, std::string>::apply(error_code.message())));
     // If the operatio is aborted, then no need to stop
     if (error_code != xasio_error::operation_aborted)
     {
@@ -167,6 +168,13 @@ void xnet_service::on_handshake_timeout(const xerror_code& error_code)
 
 void xnet_service::on_heartbeat_timeout(const xerror_code& error_code)
 {
+    xdebug_info((xformat(_X("Heartbeat timeout with error = \"%1%\".")) % match_str<xstring, std::string>::apply(error_code.message())));
+    // If the operatio is aborted, then no need to stop
+    if (error_code != xasio_error::operation_aborted)
+    {
+        xdebug_info(_X("Failed to receive heartbeat from peer side, the service will terminate."));
+        stop();
+    }
 }
 
 } // namespace xws

@@ -60,7 +60,7 @@ class xnet_service : public xnet_terminal
         xnet_service(const xnet_io_object_ptr& io_object);
         ~xnet_service();
 
-        virtual void handshake_accepted() { end_monitor_handshake(); start_monitor_heartbeat(); }
+        virtual void handshake_accepted() { send_handshake(); end_monitor_handshake(); start_monitor_heartbeat(); }
         virtual void handshake_rejected() { stop(); }
 
         virtual void start();
