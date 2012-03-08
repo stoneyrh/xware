@@ -50,11 +50,14 @@ class xapplication_interface
         virtual ~xapplication_interface();
 
         virtual xstring name() const = 0;
+        virtual int exec() { return 0; }
+        //
         const xversion& version() const { return version_; }
         void set_version(xversion_t major_value, xversion_t minor_value, xversion_t release_value, xversion_t build_value)
         {
             version_.set(major_value, minor_value, release_value, build_value);
         }
+        bool has_option(const xstring& name) const;
     private:
         xversion version_;
         xprogram_options::variables_map options_vars_;

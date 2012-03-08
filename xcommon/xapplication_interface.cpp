@@ -52,4 +52,9 @@ xapplication_interface::~xapplication_interface()
 {
 }
 
+bool xapplication_interface::has_option(const xstring& name) const
+{
+    return options_vars_.count(match_str<std::string, xstring>::apply(name)) > 0;
+}
+
 } // namespace xws
