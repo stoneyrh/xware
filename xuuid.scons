@@ -4,7 +4,7 @@ from xbuilder.xenv import xenv
 xenv.Append(CPPPATH = ['#xglobal'])
 build_output = xenv.Setup('xuuid')
 
-#libs = SConscript(dirs = os.path.join(build_output, 'xcommon'), exports = ['xenv'])
-#libs = xenv.Flatten(libs)
-#libs.reverse()
-SConscript(dirs = os.path.join(build_output, 'xutil', 'xuuid'), exports = ['xenv'])
+libs = SConscript(dirs = os.path.join(build_output, 'xcommon'), exports = ['xenv'])
+libs = xenv.Flatten(libs)
+libs.reverse()
+SConscript(dirs = os.path.join(build_output, 'xutil', 'xuuid'), exports = ['xenv', 'libs'])

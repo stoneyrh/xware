@@ -34,12 +34,35 @@
 
 #include "xglobal.h"
 #include "xuuid.h"
+#include "xapplication.h"
+#include "xcommand_line_args.h"
 
 using namespace xws;
 
 int main(int argc, char* argv[])
 {
-    xuuid_random_generator uuid_random_generator;
-    xuuid uuid(uuid_random_generator());
-    xcout << xuuid_to_xstring(uuid) << std::endl;
+    xprogram_options::options_description options_description(_A("xuuid <options>"));
+    options_description.add_options()
+            (_A("help,h"),    _A("produce this message"))
+            (_A("version,v"), _A("print out program version"))
+            (_A("number,n"),  xprogram_options::value<int>()->default_value(1), _A("number of UUIDs will be created"))
+            (_A("upper,u"),   xprogram_options::value<bool>()->default_value(true), _A("output UUID in upper case"))
+            ;
+    //
+    xapplication app(argc, xargs<xchar>(argc, argv), options_description);
+    app.set_name(_X("xuuid"));
+    if (app.has_option(_X("help")))
+    {
+        acout << options_description;
+    }
+    else if (app.has_option(_X("version")))
+    {
+    }
+    else
+    {
+        xuuid_random_generator uuid_random_generator;
+        xuuid uuid(uuid_random_generator());
+        xcout << xuuid_to_xstring(uuid) << std::endl;
+    }
+    return app.exec();
 }
