@@ -87,6 +87,11 @@ typedef std::stringstream   xstringstream;
 #define xcerr               std::cerr
 #endif
 
+// Always apply ansi string
+#define _A(x)               x
+// Always apply unicode string
+#define _U(x)               L##u
+
 template <class Target, class Source>
 struct match_str
 {
