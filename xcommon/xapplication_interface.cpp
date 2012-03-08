@@ -41,6 +41,13 @@ xapplication_interface::xapplication_interface(int argc, xchar* argv[])
 {
 }
 
+xapplication_interface::xapplication_interface(int argc, xchar* argv[], const xprogram_options::options_description& options_description)
+{
+    xprogram_options::store(
+            xprogram_options::parse_command_line(argc, argv, options_description),
+                                                    options_vars_);
+}
+
 xapplication_interface::~xapplication_interface()
 {
 }

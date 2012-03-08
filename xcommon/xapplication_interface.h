@@ -37,6 +37,7 @@
 
 #include "xglobal.h"
 #include "xversion.h"
+#include "xprogram_options.h"
 
 namespace xws
 {
@@ -45,6 +46,7 @@ class xapplication_interface
 {
     public:
         xapplication_interface(int argc, xchar* argv[]);
+        xapplication_interface(int argc, xchar* argv[], const xprogram_options::options_description& options_description);
         virtual ~xapplication_interface();
 
         virtual xstring name() const = 0;
@@ -55,6 +57,7 @@ class xapplication_interface
         }
     private:
         xversion version_;
+        xprogram_options::variables_map options_vars_;
 };
 
 } // namespace xws

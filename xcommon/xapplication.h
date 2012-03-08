@@ -43,6 +43,7 @@ class xapplication : public xapplication_interface
 {
     public:
         xapplication(int argc, xchar* argv[]);
+        xapplication(int argc, xchar* argv[], const xprogram_options::options_description& options_description);
         virtual ~xapplication();
 
         xstring name() const { return name_; }

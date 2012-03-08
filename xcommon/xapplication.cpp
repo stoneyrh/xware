@@ -40,6 +40,10 @@ xapplication::xapplication(int argc, xchar* argv[]) : xapplication_interface(arg
 {
 }
 
+xapplication::xapplication(int argc, xchar* argv[], const xprogram_options::options_description& options_description) : xapplication_interface(argc, argv, options_description)
+{
+}
+
 xapplication::~xapplication()
 {
 }
