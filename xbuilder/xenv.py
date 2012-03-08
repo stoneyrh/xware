@@ -134,7 +134,10 @@ def setup(xenv, component = 'build'):
     if is_windows(xenv):
         xenv.Replace(WINDOWS_EMBED_MANIFEST = True, WINDOWS_INSERT_DEF = True)
         # /W3 - warning level
+        # /wd4819 - disable warning with number 4819, which is about a file containing unicode chars, but the file was not saved as unicode
         xenv.Append(CCFLAGS = ['/EHsc', '/Gd', '/W3', '/wd4819'])
+        # /Zc:wchar_t- - do not treat wchar_t as builtin type, if this option applied, wchar_t will be treated as unsigned int
+        # xenv.Append(CCFLAGS = ['/Zc:wchar_t-'])
         # /P - generate preprocessor file with line number
         # /EP /P - generate preprocessor file without line number
         if with_preprocessed_file(xenv):
