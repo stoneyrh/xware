@@ -36,6 +36,7 @@
 #include "xuuid.h"
 #include "xapplication.h"
 #include "xcommand_line_args.h"
+#include "xstring_algorithm.h"
 
 using namespace xws;
 
@@ -66,7 +67,12 @@ int main(int argc, char* argv[])
         for (int i = 0; i < number; ++ i)
         {
             xuuid uuid(uuid_random_generator());
-            xcout << xuuid_to_xstring(uuid) << std::endl;
+            xstring uuid_string(xuuid_to_xstring(uuid));
+            if (upper)
+            {
+                xupper(uuid_string);
+            }
+            xcout << uuid_string << std::endl;
         }
     }
     return app.exec();
