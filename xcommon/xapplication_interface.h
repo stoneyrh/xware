@@ -57,7 +57,20 @@ class xapplication_interface
         {
             version_.set(major_value, minor_value, release_value, build_value);
         }
-        bool has_option(const xstring& name) const;
+        bool has_option(const astring& name) const;
+        template <class T>
+        T option_value(const astring& name, bool* defaulted = 0)
+        {
+            if (options_vars_.count(name))
+            {
+                if (defaulted)
+                {
+                    *defaulted = options_vars_[name].defaulted();
+                }
+                return options_vars_[name].as<T>();
+            }
+            return T();
+        }
     private:
         xversion version_;
         xprogram_options::variables_map options_vars_;
