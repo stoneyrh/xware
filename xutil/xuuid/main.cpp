@@ -51,18 +51,23 @@ int main(int argc, char* argv[])
     //
     xapplication app(argc, xargs<xchar>(argc, argv), options_description);
     app.set_name(_X("xuuid"));
-    if (app.has_option(_X("help")))
+    if (app.has_option(_A("help")))
     {
         acout << options_description;
     }
-    else if (app.has_option(_X("version")))
+    else if (app.has_option(_A("version")))
     {
     }
     else
     {
+        int number = app.option_value<int>(_A("number"));
+        bool upper = app.option_value<bool>(_A("upper"));
         xuuid_random_generator uuid_random_generator;
-        xuuid uuid(uuid_random_generator());
-        xcout << xuuid_to_xstring(uuid) << std::endl;
+        for (int i = 0; i < number; ++ i)
+        {
+            xuuid uuid(uuid_random_generator());
+            xcout << xuuid_to_xstring(uuid) << std::endl;
+        }
     }
     return app.exec();
 }
