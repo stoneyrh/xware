@@ -92,11 +92,15 @@ typedef std::stringstream   xstringstream;
 #define acout               std::cout
 #define acin                std::cin
 #define acerr               std::cerr
+typedef std::string         astring;
+typedef std::stringstream   astringstream;
 // Always apply unicode string
 #define _U(x)               L##u
 #define ucout               std::wcout
 #define ucin                std::wcin
 #define ucerr               std::wcerr
+typedef std::wstring        ustring;
+typedef std::wstringstream  ustringstream;
 
 template <class Target, class Source>
 struct match_str
