@@ -39,6 +39,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 #ifdef WINDOWS
 #ifndef WIN32_LEAN_AND_MEAN
@@ -101,6 +102,11 @@ typedef std::stringstream   astringstream;
 #define ucerr               std::wcerr
 typedef std::wstring        ustring;
 typedef std::wstringstream  ustringstream;
+
+//
+typedef std::vector<xstring>        xstring_list;
+typedef std::vector<astring>        astring_list;
+typedef std::vector<ustring>        ustring_list;
 
 template <class Target, class Source>
 struct match_str
