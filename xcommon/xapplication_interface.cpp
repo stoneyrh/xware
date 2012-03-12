@@ -72,7 +72,7 @@ xstring xapplication_interface::legal_statement() const
 
 xstring xapplication_interface::bug_statement() const
 {
-    return _X("Report bug to stoneyrh@gmail.com.");
+    return _X("Report bug to stoneyrh@163.com.");
 }
 
 } // namespace xws
