@@ -66,7 +66,7 @@ xstring xapplication_interface::version_str() const
 
 xstring xapplication_interface::legal_statement() const
 {
-    return _X("Copyright (C) xWorkshop.\n")
+    return _X("Copyright (c) xWorkshop.\n")
            _X("You could use and distribute this utility freely without any limitation.");
 }
 
