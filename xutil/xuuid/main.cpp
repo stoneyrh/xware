@@ -54,10 +54,17 @@ int main(int argc, char* argv[])
     app.set_name(_X("xuuid"));
     if (app.has_option(_A("help")))
     {
-        acout << options_description;
+        xcout << app.version_str() << std::endl << std::endl;
+        acout << _A("Usage:") << std::endl;
+        acout << options_description << std::endl;
+        xcout << app.legal_statement() << std::endl;
+        xcout << app.bug_statement() << std::endl;
     }
     else if (app.has_option(_A("version")))
     {
+        xcout << app.version_str() << std::endl;
+        xcout << app.legal_statement() << std::endl;
+        xcout << app.bug_statement() << std::endl;
     }
     else
     {
