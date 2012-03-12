@@ -51,7 +51,7 @@ class xversion
 
         bool operator == (const xversion& rhs) const;
 
-        xstring version_str() const;
+        xstring x_str() const;
         xversion_t major_value() const { return major_value_; }
         xversion_t minor_value() const { return minor_value_; }
         xversion_t release_value() const { return release_value_; }

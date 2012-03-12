@@ -33,6 +33,7 @@
 */
 
 #include "xversion.h"
+#include "xformat.h"
 
 namespace xws
 {
@@ -71,9 +72,11 @@ bool xversion::operator == (const xversion& rhs) const
            build_value_ == rhs.build_value_;
 }
 
-xstring xversion::version_str() const
+xstring xversion::x_str() const
 {
-    return xstring();
+    xformat format(xformat(_X("%1%.%2%.%3%.%4%")) % major_value() %
+           minor_value() % release_value() % build_value());
+    return format.str();
 }
 
 } // namespace xws
