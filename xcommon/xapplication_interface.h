@@ -72,7 +72,9 @@ class xapplication_interface
                 }
                 return options_vars_[name].as<T>();
             }
-            return T();
+            // Use staic in case v won't have default constructor, like int
+            static T value;
+            return value;
         }
     private:
         xversion version_;
