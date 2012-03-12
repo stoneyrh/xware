@@ -32,54 +32,12 @@
 * ****************************************************************************
 */
 
-#include "xglobal.h"
-#include "xuuid.h"
-#include "xuuid_application.h"
-#include "xcommand_line_args.h"
-#include "xstring_algorithm.h"
+#ifndef _VERSION_H_
+#define _VERSION_H_
 
-using namespace xws;
+#define MAJOR_VALUE     0
+#define MINOR_VALUE     1
+#define RELEASE_VALUE   0
+#define BUILD_VALUE     0
 
-int main(int argc, char* argv[])
-{
-    xprogram_options::options_description options_description(_A("xuuid <options>"));
-    options_description.add_options()
-            (_A("help,h"),    _A("produce this message"))
-            (_A("version,v"), _A("print out program version"))
-            (_A("number,n"),  xprogram_options::value<int>()->default_value(1), _A("number of UUIDs will be created"))
-            (_A("upper,u"),   xprogram_options::value<bool>()->default_value(true), _A("output UUID in upper case"))
-            ;
-    //
-    xuuid_application app(argc, xargs<xchar>(argc, argv), options_description);
-    if (app.has_option(_A("help")))
-    {
-        xcout << app.version_str() << std::endl << std::endl;
-        acout << _A("Usage:") << std::endl;
-        acout << options_description << std::endl;
-        xcout << app.legal_statement() << std::endl;
-        xcout << app.bug_statement() << std::endl;
-    }
-    else if (app.has_option(_A("version")))
-    {
-        xcout << app.version_str() << std::endl;
-        xcout << app.legal_statement() << std::endl;
-        xcout << app.bug_statement() << std::endl;
-    }
-    else
-    {
-        int number = app.option_value<int>(_A("number"));
-        bool upper = app.option_value<bool>(_A("upper"));
-        xuuid_random_generator uuid_random_generator;
-        for (int i = 0; i < number; ++ i)
-        {
-            xuuid uuid(uuid_random_generator());
-            xstring uuid_string(xuuid_to_xstring(uuid));
-            if (upper)
-            {
-                xupper(uuid_string);
-            }
-            xcout << uuid_string << std::endl;
-        }
-    }
-    return app.exec();
-}
+#endif
