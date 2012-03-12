@@ -51,6 +51,9 @@ class xapplication_interface
 
         virtual xstring name() const = 0;
         virtual int exec() { return 0; }
+        virtual xstring version_str() const;
+        virtual xstring legal_statement() const;
+        virtual xstring bug_statement() const;
         //
         const xversion& version() const { return version_; }
         void set_version(xversion_t major_value, xversion_t minor_value, xversion_t release_value, xversion_t build_value)

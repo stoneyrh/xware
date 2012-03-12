@@ -33,6 +33,7 @@
 */
 
 #include "xapplication_interface.h"
+#include "xformat.h"
 
 namespace xws
 {
@@ -55,6 +56,23 @@ xapplication_interface::~xapplication_interface()
 bool xapplication_interface::has_option(const astring& name) const
 {
     return options_vars_.count(name) > 0;
+}
+
+xstring xapplication_interface::version_str() const
+{
+    xformat format(xformat(_X("%1% version %2%")) % name() % version().x_str());
+    return format.str();
+}
+
+xstring xapplication_interface::legal_statement() const
+{
+    return _X("Copyright (C) xWorkshop.\n")
+           _X("You could use and distribute this utility freely without any limitation.");
+}
+
+xstring xapplication_interface::bug_statement() const
+{
+    return _X("Report bug to stoneyrh@gmail.com.");
 }
 
 } // namespace xws
