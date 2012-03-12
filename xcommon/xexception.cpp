@@ -38,23 +38,13 @@
 namespace xws
 {
 
-xexception::xexception() : std::exception()
+astring xexception_str(const xexception& exception)
 {
-}
-
-#ifndef LINUX
-xexception::xexception(const xstring& what) : std::exception(match_str<std::string, xstring>::apply(what).c_str())
-{
-}
-#else
-xexception::xexception(const xstring& what) : std::exception()
-{
-    //match_str<std::string, xstring>::apply(what).c_str()
-}
-#endif
-
-xexception::~xexception() throw()
-{
+    if (std::exception const* e = dynamic_cast<std::exception const*>(&exception))
+    {
+        return e->what();
+    }
+    return boost::diagnostic_information(exception);
 }
 
 } // namespace xws

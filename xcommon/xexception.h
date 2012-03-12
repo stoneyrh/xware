@@ -36,18 +36,13 @@
 #define _X_EXCEPTION_H_
 
 #include "xglobal.h"
-#include <exception>
+#include <boost/exception/all.hpp>
 
 namespace xws
 {
 
-class xexception : public std::exception
-{
-    public:
-        xexception();
-        xexception(const xstring& what);
-        virtual ~xexception() throw();
-};
+typedef boost::exception xexception;
+astring xexception_str(const xexception& exception);
 
 } // namespace xws
 
