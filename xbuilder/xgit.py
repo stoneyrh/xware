@@ -16,6 +16,10 @@ def push():
     command = u'%s push' % git
     return os.system(command) == 0
 
+def pull():
+    command = u'%s pull' % git
+    return os.system(command) == 0
+
 def main():
     if len(sys.argv) < 2:
         print 'Usage: xgit.py <file> [<message>]'
