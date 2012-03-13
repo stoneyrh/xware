@@ -5,7 +5,7 @@ import os
 import re
 import sys
 
-def increase_build_number(file_name):
+def increase_build_number(file_name, delta = 1):
     if os.path.exists(file_name):
         file = open(file_name, 'r')
         contents = file.read()
@@ -14,7 +14,7 @@ def increase_build_number(file_name):
         if m:
             name, space, value = m.groups()
             value = int(value)
-            value = value + 1
+            value = value + delta
             definition = '#define %s%s%d' % (name, space, value)
             lines = contents.split('\n')
             contents = []
