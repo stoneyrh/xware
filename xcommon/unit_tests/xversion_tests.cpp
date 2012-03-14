@@ -39,4 +39,31 @@ using namespace xws;
 
 TEST(xversion_tests, test_initialization)
 {
+    {
+        xversion version;
+        EXPECT_EQ(version.major_value(), 1);
+        EXPECT_EQ(version.minor_value(), 0);
+        EXPECT_EQ(version.release_value(), 0);
+        EXPECT_EQ(version.build_value(), 0);
+    }
+    {
+        xversion version(1, 2, 3);
+        EXPECT_EQ(version.major_value(), 1);
+        EXPECT_EQ(version.minor_value(), 2);
+        EXPECT_EQ(version.release_value(), 3);
+        EXPECT_EQ(version.build_value(), 0);
+    }
+    {
+        xversion version(4, 2, 3, 200);
+        EXPECT_EQ(version.major_value(), 4);
+        EXPECT_EQ(version.minor_value(), 2);
+        EXPECT_EQ(version.release_value(), 3);
+        EXPECT_EQ(version.build_value(), 200);
+    }
+}
+
+TEST(xversion_tests, test_string_conversion)
+{
+    xversion version;
+    EXPECT_EQ(version.x_str(), _X("1.0.0.0"));
 }

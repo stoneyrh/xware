@@ -32,3 +32,12 @@
 * ****************************************************************************
 */
 
+#include <gtest/gtest.h>
+#include "xexception.h"
+
+using namespace xws;
+
+TEST(xexception_tests, test_nothing)
+{
+    // No need to test??
+}
