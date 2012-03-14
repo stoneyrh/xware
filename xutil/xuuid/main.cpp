@@ -49,8 +49,8 @@ int main(int argc, char* argv[])
         options_description.add_options()
             (_A("help,h"),    _A("produce this message"))
             (_A("version,v"), _A("print out program version"))
+            (_A("lower,l"),   _A("output UUID in lower case"))
             (_A("number,n"),  xprogram_options::value<int>()->default_value(1), _A("number of UUIDs will be created"))
-            (_A("upper,u"),   xprogram_options::value<bool>()->default_value(true), _A("output UUID in upper case"))
             ;
         //
         xuuid_application app(argc, xargs<xchar>(argc, argv), options_description);
@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
         else
         {
             int number = app.option_value<int>(_A("number"));
-            bool upper = app.option_value<bool>(_A("upper"));
+            bool upper = !app.has_option(_A("lower"));
             xuuid_random_generator uuid_random_generator;
             for (int i = 0; i < number; ++ i)
             {
