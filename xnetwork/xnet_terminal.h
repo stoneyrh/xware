@@ -63,6 +63,8 @@ class xnet_terminal : public xenable_shared_from_this<xnet_terminal>
         void set_heartbeat_threshold(xsize_t heartbeat_threshold) { heartbeat_threshold_ = heartbeat_threshold; }
         xsize_t heartbeat_interval() const { return heartbeat_interval_; }
         xsize_t heartbeat_threshold() const { return heartbeat_threshold_; }
+        // Only enable heartbeat when heartbeat interval > 0 and heartbeat threshold > heartbeat interval
+        bool is_heartbeat_enabled() const { return heartbeat_interval_ > 0 && heartbeat_threshold_ > heartbeat_interval_; }
         //
         void set_uuid(const xstring& uuid) { uuid_ = uuid; }
         xstring uuid() const { return uuid_; }
