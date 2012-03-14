@@ -46,6 +46,7 @@ TEST(xapplication_tests, test_version_setter_getter)
     };
     int argc = sizeof(argv);
     xapplication app(argc, argv);
+    app.set_name(_X("app"));
     EXPECT_EQ(app.version().major_value(), 1);
     EXPECT_EQ(app.version().minor_value(), 0);
     EXPECT_EQ(app.version().release_value(), 0);
@@ -55,7 +56,7 @@ TEST(xapplication_tests, test_version_setter_getter)
     EXPECT_EQ(app.version().minor_value(), 2);
     EXPECT_EQ(app.version().release_value(), 3);
     EXPECT_EQ(app.version().build_value(), 4);
-    EXPECT_EQ(app.version().x_str(), _X("1.2.3.4"));
+    EXPECT_EQ(app.version_str(), _X("app version 1.2.3.4"));
 }
 
 TEST(xapplication_tests, test_option_operations)
