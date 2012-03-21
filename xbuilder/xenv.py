@@ -67,7 +67,7 @@ def use_boost(xenv):
     boost_lib_dir = os.path.join(boost_dir, 'stage', 'lib')
     xenv.Append(CPPPATH = [boost_dir], LIBPATH = [boost_lib_dir])
     if is_linux(xenv):
-        xenv.Append(LIBS = ['boost_system', 'boost_thread'])
+        xenv.Append(LIBS = ['boost_system', 'boost_thread', 'boost_program_options'])
 
 def use_gmock(xenv):
     gmock_dir = xenv['GMOCK_DIR']
