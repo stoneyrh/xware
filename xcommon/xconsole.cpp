@@ -34,8 +34,10 @@
 
 #include "xconsole.h"
 #include "xstring_algorithm.h"
-#include <conio.h>
 
+#ifdef WINDOWS
+////////////////////
+#include <conio.h>
 #ifdef UNICODE
 #define _gettch		_getwch
 #define _puttch		_putwch
@@ -44,7 +46,22 @@
 #define _gettch		_getch
 #define _puttch		_putch
 #define istprint    isprint
-#endif
+#endif // UNICODE
+////////////////////
+#else
+#include <stdio.h>
+#ifdef UNICODE
+#include <wctype.h>
+#define _gettch		getwchar
+#define _puttch		putwchar
+#define istprint    iswprint
+#else
+#include <ctype.h>
+#define _gettch		getchar
+#define _puttch		putchar
+#define istprint    isprint
+#endif // UNICODE
+#endif // WINDOWS
 
 #define ISTAB(c)      ((c) == _X('\t'))
 #define ISENTER(c)    ((c) == _X('\r') || (c) == _X('\n'))
@@ -96,7 +113,7 @@ xstring xconsole::input(const xstring& prompt)
         if (ISBREAK(c))
         {
             // Keyboard interrupt
-            throw std::exception("Keyboard Interrupt");
+            throw std::runtime_error("Keyboard Interrupt");
         }
         // Backspace
         if (ISBKSPC(c))
@@ -141,7 +158,7 @@ xstring xconsole::input_password(const xstring& prompt)
         if (ISBREAK(c))
         {
             // Keyboard interrupt
-            throw std::exception("Keyboard Interrupt");
+            throw std::runtime_error("Keyboard Interrupt");
         }
         // Backspace
         if (ISBKSPC(c))
@@ -195,7 +212,7 @@ handle_next_char:
         if (ISBREAK(c))
         {
             // Keyboard interrupt
-            throw std::exception("Keyboard Interrupt");
+            throw std::runtime_error("Keyboard Interrupt");
         }
         // Backspace
         if (ISBKSPC(c))
