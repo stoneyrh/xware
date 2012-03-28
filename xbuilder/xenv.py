@@ -227,6 +227,7 @@ xenv.AddMethod(build_static_library, 'BuildStaticLibrary')
 xenv.AddMethod(build_shared_library, 'BuildSharedLibrary')
 xenv.AddMethod(build_unit_test, 'BuildUnitTest')
 xenv.AddMethod(testee_objects, 'TesteeObjects')
+xenv.AddMethod(testee_objects, 'LocalObjects')
 xenv.AddMethod(setup_test_env, 'SetupTestEnv')
 xenv.AddMethod(is_debugging_unit_test, 'IsDebuggingUnitTest')
 # Add builders
