@@ -46,7 +46,7 @@ def insertCopyRight(name):
     file.close()
 
 def walk(walkOnly, dirname, fnames):
-    if dirname.find('GeneratedFiles') >= 0:
+    if dirname.find('GeneratedFiles') >= 0 or dirname.find('vendor') >= 0:
         return
     careExts = ['.cpp', '.cc', '.h', '.mm', '.m']
     for fname in fnames:
