@@ -1,0 +1,12 @@
+import os
+
+from xbuilder.xenv import xenv
+xenv.Append(CPPPATH = ['#xglobal'])
+build_output = xenv.Setup('xchat_server')
+
+libs = SConscript(dirs = os.path.join(build_output, 'xcommon'), exports = ['xenv'])
+libs = xenv.Flatten(libs)
+libs += SConscript(dirs = os.path.join(build_output, 'xnetwork'), exports = ['xenv', 'libs'])
+libs = xenv.Flatten(libs)
+libs.reverse()
+SConscript(dirs = os.path.join(build_output, 'xchat', 'server'), exports = ['xenv', 'libs'])

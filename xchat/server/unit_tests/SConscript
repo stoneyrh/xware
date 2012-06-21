@@ -1,0 +1,8 @@
+Import('xenv')
+
+xenv = xenv.Clone()
+xenv.UseGoogleMock()
+xenv.Append(CPPPATH = ['..'])
+sources = xenv.Glob('*.cpp')
+xchat_server_unit_tests_name = 'xchat_server_tests'
+xchat_server_unit_tests = xenv.BuildUnitTest(xchat_server_unit_tests_name, sources + xenv.GoogleMockObjects())
