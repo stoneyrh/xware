@@ -3,24 +3,27 @@ import platform
 import SCons
 import xunit_test
 
+thisDir = os.path.dirname(__file__)
+parentDir = os.path.abspath(os.path.join(thisDir, os.path.pardir))
+
 def _is_windows():
     return platform.system() == 'Windows'
 
 def detect_boost_path():
     if os.environ.has_key('BOOST_DIR'):
         return os.environ['BOOST_DIR']
-    return r'd:\boost_1_48_0'
+    return os.path.join(parentDir, 'vendor', 'boost_1_49_0')
 
 def detect_gmock_path():
-    if os.environ.has_key('GMOCK_DIR'):
-        return os.environ['GMOCK_DIR']
-    return r'd:\codebase\vendor\gmock-1.6.0\fused-src'
+    if os.environ.has_key('GOOGLE_DIR'):
+        return os.environ['GOOGLE_DIR']
+    return os.path.join(parentDir, 'vendor', 'google')
 
 vars = SCons.Variables.Variables(None, SCons.Script.ARGUMENTS)
 vars.Add(SCons.Variables.BoolVariable('unicode', 'Use unicode string', True))
 vars.Add(SCons.Variables.BoolVariable('release', 'Build without debug information', False))
 vars.Add(SCons.Variables.PathVariable('boost', 'Include directory for boost', detect_boost_path()))
-vars.Add(SCons.Variables.PathVariable('gmock', 'Include directory for google mock framework', detect_gmock_path()))
+vars.Add(SCons.Variables.PathVariable('google', 'Include directory for google mock framework', detect_gmock_path()))
 
 if _is_windows():
     #
@@ -70,13 +73,13 @@ def use_boost(xenv):
         xenv.Append(LIBS = ['boost_system', 'boost_thread', 'boost_program_options'])
 
 def use_gmock(xenv):
-    gmock_dir = xenv['GMOCK_DIR']
-    xenv.Append(CPPPATH = [gmock_dir])
+    google_dir = xenv['GOOGLE_DIR']
+    xenv.Append(CPPPATH = [google_dir])
 
 def gmock_sources(xenv):
-    gmock_dir = xenv['GMOCK_DIR']
+    google_dir = xenv['GOOGLE_DIR']
     sources = ['gmock_main.cc', 'gmock-gtest-all.cc']
-    return [os.path.join(gmock_dir, source) for source in sources]
+    return [os.path.join(google_dir, source) for source in sources]
 
 def gmock_objects(xenv):
     sources = gmock_sources(xenv)
@@ -120,7 +123,7 @@ def setup(xenv, component = 'build'):
         build_output = os.path.join('%s_output' % component, system, configuration)
     # Setup paths
     xenv['BOOST_DIR'] = xenv['boost']
-    xenv['GMOCK_DIR'] = xenv['gmock']
+    xenv['GOOGLE_DIR'] = xenv['google']
 
     if is_unicode(xenv):
         xenv.Append(CPPDEFINES = ['UNICODE', '_UNICODE'])
