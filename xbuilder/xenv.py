@@ -65,12 +65,14 @@ if SCons.Script.ARGUMENTS.has_key('arch'):
 xenv = SCons.Defaults.DefaultEnvironment(ENV = os.environ, variables = vars, **kwargs)
 xenv.Help(vars.GenerateHelpText(xenv))
 
-def use_boost(xenv):
+def use_boost(xenv, *libs):
     boost_dir = xenv['BOOST_DIR']
     boost_lib_dir = os.path.join(boost_dir, 'stage', 'lib')
     xenv.Append(CPPPATH = [boost_dir], LIBPATH = [boost_lib_dir])
     if is_linux(xenv):
-        xenv.Append(LIBS = ['boost_system', 'boost_thread', 'boost_program_options'])
+        libs = ('boost_system', 'boost_thread', 'boost_program_options')
+    if libs:
+        xenv.Append(LIBS = [lib for lib in libs])
 
 def use_gmock(xenv):
     google_dir = xenv['GOOGLE_DIR']
