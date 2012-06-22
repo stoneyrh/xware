@@ -40,39 +40,40 @@
 namespace xws
 {
 
-typedef boost::asio::io_service               xio_service;
-//
-typedef boost::asio::ip::tcp::socket          xtcp_socket;
-typedef boost::asio::ip::tcp::acceptor        xtcp_acceptor;
-typedef boost::asio::ip::tcp::endpoint        xtcp_endpoint;
-typedef boost::asio::ip::tcp::resolver        xtcp_resolver;
-//
-typedef boost::asio::ip::udp::socket          xudp_socket;
-typedef boost::asio::ip::udp::endpoint        xudp_endpoint;
-typedef boost::asio::ip::udp::resolver        xudp_resolver;
-//
-typedef boost::asio::ip::icmp::socket         xicmp_socket;
-typedef boost::asio::ip::icmp::endpoint       xicmp_endpoint;
-typedef boost::asio::ip::icmp::resolver       xicmp_resolver;
-//
-typedef boost::asio::ip::address              xaddress;
-typedef boost::asio::ip::address_v4           xaddress_v4;
-typedef boost::asio::ip::address_v6           xaddress_v6;
+namespace xasio = boost::asio;
+namespace xplaceholders = xasio::placeholders;
 
-typedef boost::asio::deadline_timer           xdeadline_timer;
-typedef boost::asio::mutable_buffer           xmutable_buffer;
+typedef xasio::io_service               xio_service;
+//
+typedef xasio::ip::tcp::socket          xtcp_socket;
+typedef xasio::ip::tcp::acceptor        xtcp_acceptor;
+typedef xasio::ip::tcp::endpoint        xtcp_endpoint;
+typedef xasio::ip::tcp::resolver        xtcp_resolver;
+//
+typedef xasio::ip::udp::socket          xudp_socket;
+typedef xasio::ip::udp::endpoint        xudp_endpoint;
+typedef xasio::ip::udp::resolver        xudp_resolver;
+//
+typedef xasio::ip::icmp::socket         xicmp_socket;
+typedef xasio::ip::icmp::endpoint       xicmp_endpoint;
+typedef xasio::ip::icmp::resolver       xicmp_resolver;
+//
+typedef xasio::ip::address              xaddress;
+typedef xasio::ip::address_v4           xaddress_v4;
+typedef xasio::ip::address_v6           xaddress_v6;
 
-typedef boost::asio::streambuf                xnet_streambuf;
+typedef xasio::deadline_timer           xdeadline_timer;
+typedef xasio::mutable_buffer           xmutable_buffer;
+
+typedef xasio::streambuf                xnet_streambuf;
 
 typedef boost::uint16_t                       xport_t;
 
-#define xbuffer                               boost::asio::buffer
-#define xbuffer_size                          boost::asio::buffer_size
-#define xbuffer_cast                          boost::asio::buffer_cast
+#define xbuffer                               xasio::buffer
+#define xbuffer_size                          xasio::buffer_size
+#define xbuffer_cast                          xasio::buffer_cast
 
-#define MAX_CONNECTIONS                       (boost::asio::socket_base::max_connections)
-
-namespace xplaceholders = boost::asio::placeholders;
+#define MAX_CONNECTIONS                       (xasio::socket_base::max_connections)
 
 } // namespace xws
 
