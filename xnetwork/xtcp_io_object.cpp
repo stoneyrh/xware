@@ -36,6 +36,7 @@
 #include "xlogger.h"
 #include "xbind.h"
 #include "xassert.h"
+#include "xlocale.h"
 
 namespace xws
 {
@@ -88,12 +89,13 @@ void xtcp_io_object::on_data_read(xbyte_ptr buffer, const xerror_code& error_cod
 {
     if (error_code)
     {
-        xdebug_info((xformat(_X("Failed to read data from xtcp_io_object with error \"%1%\".")) %
+        xdebug_info((xchar_format(xtr(_X("Failed to read data from xtcp_io_object with error \"{1}\"."))) %
                     match_str<xstring, std::string>::apply(error_code.message())));
         data_read_error_sig()(error_code);
         return;
     }
-    xdebug_info((xformat(_X("%1% bytes read from xtcp_io_object.")) % bytes_transferred));
+    xdebug_info((xchar_format(xtr(_X("{1} byte read from xtcp_io_object."), _X("{1} bytes read from xtcp_io_object."), bytes_transferred))
+                % bytes_transferred));
     // Copy the buffer into byte array
     xbyte_array byte_array(buffer, bytes_transferred);
     //
@@ -106,16 +108,17 @@ void xtcp_io_object::on_data_write(const xbyte_array_ptr& byte_array, const xerr
 {
     if (error_code)
     {
-        xdebug_info((xformat(_X("Failed to erite data to xtcp_io_object with error \"%1%\".")) %
+        xdebug_info((xchar_format(xtr(_X("Failed to erite data to xtcp_io_object with error \"{1}\"."))) %
                     match_str<xstring, std::string>::apply(error_code.message())));
         data_write_error_sig()(error_code);
         return;
     }
-    xdebug_info((xformat(_X("%1% bytes written to xtcp_io_object.")) % bytes_transferred));
+    xdebug_info((xchar_format(xtr(_X("{1} byte written to xtcp_io_object."), _X("{1} bytes written to xtcp_io_object."), bytes_transferred))
+                % bytes_transferred));
     //
     if (bytes_transferred != byte_array->size())
     {
-        xdebug_error(xformat(_X("Not all bytes are transferred, expected = %1%, actual = %2%.")) % byte_array->size() % bytes_transferred);
+        xdebug_error(xchar_format(xtr(_X("Not all bytes are transferred, expected = {1}, actual = {2}."))) % byte_array->size() % bytes_transferred);
     }
     data_write_sig()();
 }

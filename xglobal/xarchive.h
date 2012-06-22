@@ -48,19 +48,20 @@
 
 namespace xws
 {
+namespace xarchive = boost::archive;
 #ifdef UNICODE
-typedef boost::archive::text_woarchive  xtext_oarchive;
-typedef boost::archive::text_wiarchive  xtext_iarchive;
-typedef boost::archive::xml_woarchive   xxml_oarchive;
-typedef boost::archive::xml_wiarchive   xxml_iarchive;
+typedef xarchive::text_woarchive  xtext_oarchive;
+typedef xarchive::text_wiarchive  xtext_iarchive;
+typedef xarchive::xml_woarchive   xxml_oarchive;
+typedef xarchive::xml_wiarchive   xxml_iarchive;
 #else
-typedef boost::archive::text_oarchive   xtext_oarchive;
-typedef boost::archive::text_iarchive   xtext_iarchive;
-typedef boost::archive::xml_oarchive    xxml_oarchive;
-typedef boost::archive::xml_iarchive    xxml_iarchive;
+typedef xarchive::text_oarchive   xtext_oarchive;
+typedef xarchive::text_iarchive   xtext_iarchive;
+typedef xarchive::xml_oarchive    xxml_oarchive;
+typedef xarchive::xml_iarchive    xxml_iarchive;
 #endif
-typedef boost::archive::binary_oarchive xbinary_oarchive;
-typedef boost::archive::binary_iarchive xbinary_iarchive;
+typedef xarchive::binary_oarchive xbinary_oarchive;
+typedef xarchive::binary_iarchive xbinary_iarchive;
 } // namespace xws
 
 #endif

@@ -37,6 +37,7 @@
 
 #include "xglobal.h"
 #include "xformat.h"
+#include "xlocale.h"
 
 namespace xws
 {
@@ -60,6 +61,10 @@ class xlog_string
          * Construct from a xformat object
          */
         xlog_string(const xformat& format);
+        /*
+         * Construct from a xchar_format object
+         */
+        xlog_string(const xchar_format& format);
         /*
          * Copy constructor
          */

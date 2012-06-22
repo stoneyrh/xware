@@ -53,6 +53,10 @@ xlog_string::xlog_string(const xformat& format) : message_(format.str())
 {
 }
 
+xlog_string::xlog_string(const xchar_format& format) : message_(format.str())
+{
+}
+
 xlog_string::xlog_string(const xlog_string &other) : message_(other.message_)
 {
 }
