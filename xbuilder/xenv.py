@@ -19,6 +19,9 @@ def detect_gmock_path():
         return os.environ['GOOGLE_DIR']
     return os.path.join(parentDir, 'vendor', 'google')
 
+def display(message):
+    print 'scons: ' + message
+
 vars = SCons.Variables.Variables(None, SCons.Script.ARGUMENTS)
 vars.Add(SCons.Variables.BoolVariable('unicode', 'Use unicode string', True))
 vars.Add(SCons.Variables.BoolVariable('release', 'Build without debug information', False))
@@ -49,6 +52,10 @@ if _is_windows():
         return 'win2k'
     #
     vars.Add(SCons.Variables.EnumVariable('windows', 'Specify target platform', current_windows_name(), windows_name_to_nt_value.keys()))
+    from SCons.Tool.MSCommon.vc import get_installed_vcs
+    supported_msvc_list = get_installed_vcs()
+    # Use the first one as the default version
+    vars.Add(SCons.Variables.EnumVariable('msvc', 'Specify Visual Studio version', supported_msvc_list[0], supported_msvc_list))
 
 architectures = [ 'x86', 'i386', 'amd64', 'emt64', 'x86_64', 'ia64' ]
 
@@ -61,6 +68,12 @@ kwargs = {}
 
 if SCons.Script.ARGUMENTS.has_key('arch'):
     kwargs['TARGET_ARCH'] = SCons.Script.ARGUMENTS['arch']
+
+# Currently, we prefer Visual Studio 2008
+if _is_windows() and SCons.Script.ARGUMENTS.has_key('msvc'):
+    msvc_version = SCons.Script.ARGUMENTS['msvc']
+    if msvc_version in supported_msvc_list:
+        kwargs['MSVC_VERSION'] = msvc_version
 
 xenv = SCons.Defaults.DefaultEnvironment(ENV = os.environ, variables = vars, **kwargs)
 xenv.Help(vars.GenerateHelpText(xenv))
@@ -137,6 +150,7 @@ def setup(xenv, component = 'build'):
             xenv.Append(CCFLAGS = ['-g'])
     #
     if is_windows(xenv):
+        display("Building the application by MSVC %s" % xenv["MSVC_VERSION"])
         xenv.Replace(WINDOWS_EMBED_MANIFEST = True, WINDOWS_INSERT_DEF = True)
         # /W3 - warning level
         # /wd4819 - disable warning with number 4819, which is about a file containing unicode chars, but the file was not saved as unicode
