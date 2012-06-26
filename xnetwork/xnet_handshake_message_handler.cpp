@@ -36,6 +36,7 @@
 #include "xnet_handshake_message.h"
 #include "xassert.h"
 #include "xlogger.h"
+#include "xlocale.h"
 
 namespace xws
 {
@@ -47,12 +48,12 @@ void xnet_handshake_message_handler::append_uuid(const xstring& uuid)
     try
     {
         xuuid_string_generator uuid_str_gen;
-        xdebug_info(xformat(_X("Adding UUID \"%1%\" to acceptable UUID list.")) % uuid);
+        xdebug_info(xchar_format(xtr(_X("Adding UUID \"{1}\" to acceptable UUID list."))) % uuid);
         acceptable_uuids().insert(uuid_str_gen(uuid));
     }
     catch (...)
     {
-        xdebug_info(xformat(_X("Failed to add \"%1%\" to acceptable UUID list.")) % uuid);
+        xdebug_info(xchar_format(xtr(_X("Failed to add \"{1}\" to acceptable UUID list."))) % uuid);
     }
 }
 
@@ -75,7 +76,7 @@ void xnet_handshake_message_handler::handle_message(xnet_message_ptr message, xn
     xassert(handshake_message);
     // If the UUID in the handshake message in the acceptable UUID set, then handshake accepted
     bool accepted = acceptable_uuids.find(handshake_message->uuid()) != acceptable_uuids.end();
-    xdebug_info((xformat(_X("The UUID received from peer side is \"%1%\", which is %2%.")) %
+    xdebug_info((xchar_format(xtr(_X("The UUID received from peer side is \"{1}\", which is {2}."))) %
                     xuuid_to_xstring(handshake_message->uuid()) %
                     (accepted ? _X("acceptable") : _X("not acceptable"))
                         ));

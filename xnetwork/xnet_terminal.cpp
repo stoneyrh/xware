@@ -38,6 +38,7 @@
 #include "xbind.h"
 #include "xposix_time.h"
 #include "xnet_handshake_message.h"
+#include "xlocale.h"
 
 #define HEARTBEAT_INTERVAL          1
 #define HEARTBEAT_THRESHOLD         3
@@ -91,7 +92,7 @@ void xnet_terminal::deinit_asynchrous_operation()
 
 void xnet_terminal::handle_byte_array(const xbyte_array& byte_array)
 {
-    xdebug_info(xformat(_X("Handling byte array with size = %1%...")) % byte_array.size());
+    xdebug_info(xchar_format(xtr(_X("Handling byte array with size = {1}..."))) % byte_array.size());
     // unresolved_byte_array_ saves the data that not resolved last time
     unresolved_byte_array_ += byte_array;
     xsize_t recogized_size = 0;
@@ -112,7 +113,7 @@ void xnet_terminal::handle_byte_array(const xbyte_array& byte_array)
         else
         {
             unresolved_byte_array_ = unresolved_byte_array_.right(unresolved_byte_array_.size() - recogized_size);
-            xdebug_info(xformat(_X("There are still %1% bytes not recognized.")) % unresolved_byte_array_.size());
+            xdebug_info(xchar_format(xtr(_X("There are still {1} bytes not recognized."))) % unresolved_byte_array_.size());
         }
         // Handle all message immediately
         if (handler_manager_)
@@ -154,7 +155,7 @@ void xnet_terminal::end_monitor_heartbeat()
 
 void xnet_terminal::accept_heartbeat_params(xsize_t interval, xsize_t threshold)
 {
-    xdebug_info(xformat(_X("Accepting heartbeat parameters (interval = %1%, threshold = %2%)...")) % interval % threshold);
+    xdebug_info(xchar_format(xtr(_X("Accepting heartbeat parameters (interval = {1}, threshold = {2})..."))) % interval % threshold);
     heartbeat_interval_ = interval;
     heartbeat_threshold_ = threshold;
 }

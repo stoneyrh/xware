@@ -34,6 +34,7 @@
 
 #include "xnet_handshake_message.h"
 #include "xlogger.h"
+#include "xlocale.h"
 
 namespace xws
 {
@@ -57,7 +58,7 @@ void xnet_handshake_message::set_uuid(const xstring& uuid)
     }
     catch (...)
     {
-        xdebug_info(xformat(_X("Failed to create UUID from string \"%1%\".")) % uuid);
+        xdebug_info(xchar_format(xtr(_X("Failed to create UUID from string \"{1}\"."))) % uuid);
     }
 }
 

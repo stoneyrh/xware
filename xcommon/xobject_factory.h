@@ -37,6 +37,7 @@
 
 #include <map>
 #include "xlogger.h"
+#include "xlocale.h"
 
 namespace xws
 {
@@ -59,7 +60,7 @@ class xobject_factory
                 creators_[key] = creator;
                 return true;
             }
-            xdebug_info(xformat(_X("Creator with key = %1% has a duplicate value.")) % key);
+            xdebug_info(xchar_format(xtr(_X("Creator with key = {1} has a duplicate value."))) % key);
             return false;
         }
         bool unregister_creator(const Key& key)

@@ -35,6 +35,7 @@
 #include "xcrash_handler_win.h"
 #include "xdump_file_provider.h"
 #include "xlogger.h"
+#include "xlocale.h"
 
 #pragma comment(lib, "dbghelp.lib")
 
@@ -87,7 +88,7 @@ bool xcrash_handler_win::dump_exception(__in struct _EXCEPTION_POINTERS* info, c
         }
         else
         {
-            xlog_error(xformat(_X("Failed to create dump file \"%1%\".")) % to);
+            xlog_error(xchar_format(xtr(_X("Failed to create dump file \"{1}\"."))) % to);
         }
     }
     return false;

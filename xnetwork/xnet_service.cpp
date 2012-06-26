@@ -39,6 +39,7 @@
 #include "xnet_message.h"
 #include "xposix_time.h"
 #include "xfinal_command.h"
+#include "xlocale.h"
 
 namespace xws
 {
@@ -139,7 +140,7 @@ void xnet_service::on_data_read(const xbyte_array& byte_array)
 
 void xnet_service::on_data_read_error(const xerror_code& error_code)
 {
-    xdebug_info(xformat(_X("xnet_service encounters error with category = %1%, code = %2%.")) % error_code.category().name() % error_code.value());
+    xdebug_info(xchar_format(xtr(_X("xnet_service encounters error with category = {1}, code = {2}."))) % error_code.category().name() % error_code.value());
     // misc_errors
     if (error_code.category() == xmisc_category)
     {
@@ -156,7 +157,7 @@ void xnet_service::on_data_read_error(const xerror_code& error_code)
 
 void xnet_service::on_handshake_timeout(const xerror_code& error_code)
 {
-    xdebug_info((xformat(_X("Handshake timeout with error = \"%1%\".")) % match_str<xstring, std::string>::apply(error_code.message())));
+    xdebug_info((xchar_format(xtr(_X("Handshake timeout with error = \"{1}\"."))) % match_str<xstring, std::string>::apply(error_code.message())));
     // If the operatio is aborted, then no need to stop
     if (error_code != xasio_error::operation_aborted)
     {
@@ -168,7 +169,7 @@ void xnet_service::on_handshake_timeout(const xerror_code& error_code)
 
 void xnet_service::on_heartbeat_timeout(const xerror_code& error_code)
 {
-    xdebug_info((xformat(_X("Heartbeat timeout with error = \"%1%\".")) % match_str<xstring, std::string>::apply(error_code.message())));
+    xdebug_info((xchar_format(xtr(_X("Heartbeat timeout with error = \"{1}\"."))) % match_str<xstring, std::string>::apply(error_code.message())));
     // If the operatio is aborted, then no need to stop
     if (error_code != xasio_error::operation_aborted)
     {

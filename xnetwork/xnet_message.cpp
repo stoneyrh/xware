@@ -37,6 +37,7 @@
 #include "xassert.h"
 #include "xnetwork.h"
 #include "xlogger.h"
+#include "xlocale.h"
 
 namespace xws
 {
@@ -110,7 +111,7 @@ xnet_message_set xnet_message::from_byte_array(const xbyte_array& byte_array, xs
         xsize_t size = 0;
         xsize_t begin_pos = stream.pos();
         stream >> size;
-        xdebug_info(xformat(_X("byte_array.size() = %1%, size read from stream = %2%.")) % byte_array.size() % size);
+        xdebug_info(xchar_format(xtr(_X("byte_array.size() = {1}, size read from stream = {2}."))) % byte_array.size() % size);
         if (size == 0 || size > byte_array.size())
         {
             xdebug_info(_X("The size indicates in the stream is not correct."));
@@ -137,13 +138,13 @@ xnet_message_set xnet_message::from_byte_array(const xbyte_array& byte_array, xs
                     }
                     else
                     {
-                        xdebug_info(xformat(_X("The size of message (= %1%) does not match that read out from stream (= %2%).")) % size % stream_offset);
+                        xdebug_info(xchar_format(xtr(_X("The size of message (= {1}) does not match that read out from stream (= {2})."))) % size % stream_offset);
                     }
                 }
             }
             else
             {
-                xdebug_info(xformat(_X("Failed to create a message with id = %1%.")) % id);
+                xdebug_info(xchar_format(xtr(_X("Failed to create a message with id = {1}."))) % id);
             }
         }
     }
@@ -156,7 +157,7 @@ xnet_message_set xnet_message::from_byte_array(const xbyte_array& byte_array, xs
 
 void xnet_message::register_creator(const xstring& klass, xnet_message_creator_t creator)
 {
-    xdebug_info(xformat(_X("Registering creator for message \"%1%\"...")) % klass);
+    xdebug_info(xchar_format(xtr(_X("Registering creator for message \"{1}\"..."))) % klass);
     xnet_message_ids& mids = net_message_ids();
     xmid_t id = mids.id_of(klass);
     xassert(id != INVALID_XMID);

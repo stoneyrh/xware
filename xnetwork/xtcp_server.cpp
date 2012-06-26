@@ -35,7 +35,7 @@
 #include "xtcp_server.h"
 #include "xerror_code.h"
 #include "xlogger.h"
-#include "xformat.h"
+#include "xlocale.h"
 #include "xbind.h"
 
 namespace xws
@@ -53,14 +53,14 @@ xtcp_server::~xtcp_server()
 
 bool xtcp_server::start(const xtcp_endpoint& endpoint)
 {
-    xdebug_info((xformat(_X("Starting TCP server at endpoint (%1%:%2%)...")) %
+    xdebug_info((xchar_format(xtr(_X("Starting TCP server at endpoint ({1}:{2})..."))) %
             match_str<xstring, std::string>::apply(endpoint.address().to_string()) %
             endpoint.port()));
     xerror_code error_code;
     acceptor_.open(endpoint.protocol(), error_code);
     if (error_code)
     {
-        xlog_error(xformat(_X("Failed to open acceptor with endpoint (%1%:%2%) with error \"%3%\".")) %
+        xlog_error(xchar_format(xtr(_X("Failed to open acceptor with endpoint ({1}:{2}) with error \"{3}\"."))) %
             match_str<xstring, std::string>::apply(endpoint.address().to_string()) %
             endpoint.port() %
             match_str<xstring, std::string>::apply(error_code.message()));
@@ -70,7 +70,7 @@ bool xtcp_server::start(const xtcp_endpoint& endpoint)
     acceptor_.bind(endpoint, error_code);
     if (error_code)
     {
-        xlog_error(xformat(_X("Failed to bind acceptor with endpoint (%1%:%2%) with error \"%3%\".")) %
+        xlog_error(xchar_format(xtr(_X("Failed to bind acceptor with endpoint ({1}:{2}) with error \"{3}\"."))) %
             match_str<xstring, std::string>::apply(endpoint.address().to_string()) %
             endpoint.port() %
             match_str<xstring, std::string>::apply(error_code.message()));
@@ -80,7 +80,7 @@ bool xtcp_server::start(const xtcp_endpoint& endpoint)
     acceptor_.listen(MAX_CONNECTIONS, error_code);
     if (error_code)
     {
-        xlog_error(xformat(_X("Failed to listen to endpoint (%1%:%2%) with error \"%3%\".")) %
+        xlog_error(xchar_format(xtr(_X("Failed to listen to endpoint ({1}:{2}) with error \"{3}\"."))) %
             match_str<xstring, std::string>::apply(endpoint.address().to_string()) %
             endpoint.port() %
             match_str<xstring, std::string>::apply(error_code.message()));
@@ -102,13 +102,13 @@ void xtcp_server::on_accept(xtcp_io_object_ptr& io_object, const xerror_code& er
 {
     if (error_code)
     {
-        xdebug_info((xformat(_X("Failed to accept connection with error \"%1%\".")) %
+        xdebug_info((xchar_format(xtr(_X("Failed to accept connection with error \"{1}\"."))) %
                 match_str<xstring, std::string>::apply(error_code.message())));
         // TODO: What should be done here
     }
     else
     {
-        xdebug_info((xformat(_X("Accepted one connection from (%1%:%2%).")) %
+        xdebug_info((xchar_format(xtr(_X("Accepted one connection from ({1}:{2})."))) %
                 match_str<xstring, std::string>::apply(io_object->peer_endpoint().address().to_string()) %
                 io_object->peer_endpoint().port()));
         // Start next accept

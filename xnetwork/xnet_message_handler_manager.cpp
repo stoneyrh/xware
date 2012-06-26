@@ -36,6 +36,7 @@
 #include "xnet_message.h"
 #include "xnet_message_ids.h"
 #include "xlogger.h"
+#include "xlocale.h"
 
 namespace xws
 {
@@ -67,18 +68,18 @@ bool xnet_message_handler_manager::connect(const xstring& message, const xstring
         if (factory.has_creator(handler))
         {
             xnet_message_handler_ptr h((factory.creator_of(handler))());
-            xdebug_info(xformat(_X("Connecting message \"%1%\" with handler \"%2%\"...")) % message % handler);
+            xdebug_info(xchar_format(xtr(_X("Connecting message \"{1}\" with handler \"{2}\"..."))) % message % handler);
             message_to_handler_.insert(message_to_handler_t::value_type(mid, h));
             return true;
         }
         else
         {
-            xdebug_info(xformat(_X("Handler \"%1%\" is not a registered handler.")) % handler);
+            xdebug_info(xchar_format(xtr(_X("Handler \"{1}\" is not a registered handler."))) % handler);
         }
     }
     else
     {
-        xdebug_info(xformat(_X("Message \"%1%\" is not a registered message.")) % message);
+        xdebug_info(xchar_format(xtr(_X("Message \"{1}\" is not a registered message."))) % message);
     }
     return false;
 }
@@ -91,12 +92,12 @@ void xnet_message_handler_manager::handle_message_set(const xnet_message_set& se
         xnet_message_handler_ptr handler = handler_of((*iter)->id());
         if (handler)
         {
-            xdebug_info(xformat(_X("Handling message with id = %1%.")) % (*iter)->id());
+            xdebug_info(xchar_format(xtr(_X("Handling message with id = {1}."))) % (*iter)->id());
             handler->handle_message(*iter, context());
         }
         else
         {
-            xdebug_info(xformat(_X("There is no handler for handling message with id = %1%.")) % (*iter)->id());
+            xdebug_info(xchar_format(xtr(_X("There is no handler for handling message with id = {1}."))) % (*iter)->id());
         }
     }
 }

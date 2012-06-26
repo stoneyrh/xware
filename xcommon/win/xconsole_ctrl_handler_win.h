@@ -38,7 +38,7 @@
 #include <windows.h>
 #include "xconsole_event_listener.h"
 #include "xlogger.h"
-#include "xformat.h"
+#include "xlocale.h"
 
 namespace xws
 {
@@ -83,7 +83,7 @@ class xconsole_ctrl_handler_win
         {
             if (!SetConsoleCtrlHandler(xconsole_ctrl_handler_win::handler_routine, true))
             {
-                xlog_error(xformat(_X("Failed to install console control handler with error code = %1%.")) % GetLastError());
+                xlog_error(xchar_format(xtr(_X("Failed to install console control handler with error code = {1}."))) % GetLastError());
             }
             else
             {
@@ -96,7 +96,7 @@ class xconsole_ctrl_handler_win
             {
                 if (!SetConsoleCtrlHandler(NULL, false))
                 {
-                    xlog_error(xformat(_X("Failed to remove console control handler with error code = %1.")) % GetLastError());
+                    xlog_error(xchar_format(xtr(_X("Failed to remove console control handler with error code = {1}."))) % GetLastError());
                 }
                 else
                 {

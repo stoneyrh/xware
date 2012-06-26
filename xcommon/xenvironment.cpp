@@ -35,6 +35,7 @@
 #include "xenvironment.h"
 #include "xassert.h"
 #include "xlogger.h"
+#include "xlocale.h"
 #include <cstdlib>
 #ifdef WINDOWS
 #include <windows.h>
@@ -73,7 +74,7 @@ void xenvironment::parse_pair(xchar* start, xchar* end, xenvironment::variables&
     xassert(start);
     xassert(end);
     xassert(start < end);
-    xdebug_info(xformat(_X("Parsing \"%1%\"...")) % xstring(start, end));
+    xdebug_info(xchar_format(xtr(_X("Parsing \"{1}\"..."))) % xstring(start, end));
     // Skip the first character, it might be '=' or ' '
     xchar* p = start + 1;
     while (p < end && *p != _X('=')) ++ p;
