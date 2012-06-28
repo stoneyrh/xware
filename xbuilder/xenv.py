@@ -80,7 +80,13 @@ xenv.Help(vars.GenerateHelpText(xenv))
 
 def use_boost(xenv, *libs):
     boost_dir = xenv['BOOST_DIR']
-    boost_lib_dir = os.path.join(boost_dir, 'stage', 'lib')
+    if xenv.IsTargetArch64():
+        boost_lib_dir = os.path.join(boost_dir, 'stage', 'lib64')
+    else:
+        boost_lib_dir = os.path.join(boost_dir, 'stage', 'lib32')
+    # Check if the path to boost library there
+    if not os.path.exists(boost_lib_dir):
+        boost_lib_dir = os.path.join(boost_dir, 'stage', 'lib')
     xenv.Append(CPPPATH = [boost_dir], LIBPATH = [boost_lib_dir])
     if is_linux(xenv):
         libs = ('boost_system', 'boost_thread', 'boost_program_options')
@@ -125,6 +131,10 @@ def windows_version_value(xenv):
 
 def with_preprocessed_file(xenv):
     return False
+
+def is_target_arch_64(xenv):
+    arch = xenv['TARGET_ARCH']
+    return arch.find('64') >= 0
 
 def setup(xenv, component = 'build'):
     configuration = 'debug' if is_debug(xenv) else 'release'
@@ -249,5 +259,6 @@ xenv.AddMethod(testee_objects, 'TesteeObjects')
 xenv.AddMethod(testee_objects, 'LocalObjects')
 xenv.AddMethod(setup_test_env, 'SetupTestEnv')
 xenv.AddMethod(is_debugging_unit_test, 'IsDebuggingUnitTest')
+xenv.AddMethod(is_target_arch_64, 'IsTargetArch64')
 # Add builders
 xenv.Append(BUILDERS = {'RunUnitTest' : xunit_test.RunUnitTest})
