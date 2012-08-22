@@ -1,3 +1,7 @@
 bin.v2/
 *.log
 *.jam
+b2
+bjam
+stage/
+tools/build/v2/engine/bootstrap/
