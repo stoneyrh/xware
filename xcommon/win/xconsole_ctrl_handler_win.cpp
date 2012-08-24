@@ -32,7 +32,7 @@
 * ****************************************************************************
 */
 
-#include "xconsole_ctrl_handler_win.h"
+#include "xconsole_ctrl_handler_win.hxx"
 
 namespace xws
 {

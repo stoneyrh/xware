@@ -32,10 +32,10 @@
 * ****************************************************************************
 */
 
-#include "xlog_appender_proxy.h"
-#include "xlog_message.h"
-#include "xassert.h"
-#include "xforeach.h"
+#include "xlog_appender_proxy.hxx"
+#include "xlog_message.hxx"
+#include "xassert.hxx"
+#include "xforeach.hxx"
 
 namespace xws
 {

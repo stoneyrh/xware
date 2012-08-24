@@ -32,7 +32,7 @@
 * ****************************************************************************
 */
 
-#include "xnet_heartbeat_message.h"
+#include "xnet_heartbeat_message.hxx"
 
 namespace xws
 {

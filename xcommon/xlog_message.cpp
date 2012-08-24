@@ -32,7 +32,7 @@
 * ****************************************************************************
 */
 
-#include "xlog_message.h"
+#include "xlog_message.hxx"
 
 namespace xws
 {

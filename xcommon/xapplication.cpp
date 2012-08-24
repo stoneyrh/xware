@@ -32,7 +32,7 @@
 * ****************************************************************************
 */
 
-#include "xapplication.h"
+#include "xapplication.hxx"
 
 namespace xws
 {

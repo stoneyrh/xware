@@ -32,8 +32,8 @@
 * ****************************************************************************
 */
 
-#include "xnet_service_message_handler_context.h"
-#include "xassert.h"
+#include "xnet_service_message_handler_context.hxx"
+#include "xassert.hxx"
 
 namespace xws
 {

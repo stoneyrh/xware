@@ -32,10 +32,10 @@
 * ****************************************************************************
 */
 
-#include "xenvironment.h"
-#include "xassert.h"
-#include "xlogger.h"
-#include "xlocale.h"
+#include "xenvironment.hxx"
+#include "xassert.hxx"
+#include "xlogger.hxx"
+#include "xlocale.hxx"
 #include <cstdlib>
 #ifdef WINDOWS
 #include <windows.h>

@@ -33,7 +33,7 @@
 */
 
 #include <gtest/gtest.h>
-#include "xboolean.h"
+#include "xboolean.hxx"
 
 using namespace xws;
 

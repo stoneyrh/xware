@@ -33,7 +33,7 @@
 */
 
 #include <gtest/gtest.h>
-#include "xobject_factory.h"
+#include "xobject_factory.hxx"
 
 using namespace xws;
 

@@ -32,11 +32,11 @@
 * ****************************************************************************
 */
 
-#include "xnet_handshake_message_handler.h"
-#include "xnet_handshake_message.h"
-#include "xassert.h"
-#include "xlogger.h"
-#include "xlocale.h"
+#include "xnet_handshake_message_handler.hxx"
+#include "xnet_handshake_message.hxx"
+#include "xassert.hxx"
+#include "xlogger.hxx"
+#include "xlocale.hxx"
 
 namespace xws
 {

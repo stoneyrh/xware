@@ -33,9 +33,9 @@
 */
 
 #include <gtest/gtest.h>
-#include "xapplication.h"
-#include "xprogram_options.h"
-#include "xexception.h"
+#include "xapplication.hxx"
+#include "xprogram_options.hxx"
+#include "xexception.hxx"
 
 using namespace xws;
 

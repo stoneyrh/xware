@@ -32,7 +32,7 @@
 * ****************************************************************************
 */
 
-#include "xdata_stream.h"
+#include "xdata_stream.hxx"
 
 namespace xws
 {

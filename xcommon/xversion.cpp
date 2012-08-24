@@ -32,8 +32,8 @@
 * ****************************************************************************
 */
 
-#include "xversion.h"
-#include "xformat.h"
+#include "xversion.hxx"
+#include "xformat.hxx"
 
 namespace xws
 {

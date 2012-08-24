@@ -32,14 +32,14 @@
 * ****************************************************************************
 */
 
-#include "xnet_service.h"
-#include "xbind.h"
-#include "xlogger.h"
-#include "xassert.h"
-#include "xnet_message.h"
-#include "xposix_time.h"
-#include "xfinal_command.h"
-#include "xlocale.h"
+#include "xnet_service.hxx"
+#include "xbind.hxx"
+#include "xlogger.hxx"
+#include "xassert.hxx"
+#include "xnet_message.hxx"
+#include "xposix_time.hxx"
+#include "xfinal_command.hxx"
+#include "xlocale.hxx"
 
 namespace xws
 {

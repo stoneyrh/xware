@@ -32,7 +32,7 @@
 * ****************************************************************************
 */
 
-#include "xdump_file_provider.h"
+#include "xdump_file_provider.hxx"
 
 namespace xws
 {

@@ -33,7 +33,7 @@
 */
 
 #include <gtest/gtest.h>
-#include "xnet_message_handler.h"
+#include "xnet_message_handler.hxx"
 
 using namespace xws;
 

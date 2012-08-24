@@ -32,7 +32,7 @@
 * ****************************************************************************
 */
 
-#include "xbyte_array.h"
+#include "xbyte_array.hxx"
 #include <string.h> // for memcpy
 
 namespace xws

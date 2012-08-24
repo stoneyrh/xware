@@ -33,7 +33,7 @@
 */
 
 #include <gtest/gtest.h>
-#include "xversion.h"
+#include "xversion.hxx"
 
 using namespace xws;
 

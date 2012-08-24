@@ -32,10 +32,10 @@
 * ****************************************************************************
 */
 
-#include "xcrash_handler_win.h"
-#include "xdump_file_provider.h"
-#include "xlogger.h"
-#include "xlocale.h"
+#include "xcrash_handler_win.hxx"
+#include "xdump_file_provider.hxx"
+#include "xlogger.hxx"
+#include "xlocale.hxx"
 
 #pragma comment(lib, "dbghelp.lib")
 

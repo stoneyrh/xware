@@ -32,11 +32,11 @@
 * ****************************************************************************
 */
 
-#include "xagent.h"
-#include "xthread.h"
-#include "xbind.h"
-#include "xlogger.h"
-#include "xnet_service_message_handler_context.h"
+#include "xagent.hxx"
+#include "xthread.hxx"
+#include "xbind.hxx"
+#include "xlogger.hxx"
+#include "xnet_service_message_handler_context.hxx"
 
 namespace xws
 {

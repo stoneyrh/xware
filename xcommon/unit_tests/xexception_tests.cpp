@@ -33,7 +33,7 @@
 */
 
 #include <gtest/gtest.h>
-#include "xexception.h"
+#include "xexception.hxx"
 
 using namespace xws;
 
