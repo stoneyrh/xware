@@ -33,8 +33,8 @@
 */
 
 #include <gtest/gtest.h>
-#include "xscoped_command.h"
-#include "xbind.h"
+#include "xscoped_command.hxx"
+#include "xbind.hxx"
 
 using namespace xws;
 

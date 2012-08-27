@@ -32,11 +32,11 @@
 * ****************************************************************************
 */
 
-#include "xtcp_server.h"
-#include "xerror_code.h"
-#include "xlogger.h"
-#include "xlocale.h"
-#include "xbind.h"
+#include "xtcp_server.hxx"
+#include "xerror_code.hxx"
+#include "xlogger.hxx"
+#include "xlocale.hxx"
+#include "xbind.hxx"
 
 namespace xws
 {

@@ -32,7 +32,7 @@
 * ****************************************************************************
 */
 
-#include "xdata_buffer.h"
+#include "xdata_buffer.hxx"
 #include <string.h> // for memcpy
 
 namespace xws

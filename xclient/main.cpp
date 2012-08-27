@@ -32,11 +32,11 @@
 * ****************************************************************************
 */
 
-#include "xapplication.h"
-#include "xcommand_line_args.h"
-#include "xclient.h"
-#include "xthread.h"
-#include "xconsole_ctrl_handler.h"
+#include "xapplication.hxx"
+#include "xcommand_line_args.hxx"
+#include "xclient.hxx"
+#include "xthread.hxx"
+#include "xconsole_ctrl_handler.hxx"
 
 using namespace xws;
 

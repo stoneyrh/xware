@@ -34,7 +34,7 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include "xagent.h"
+#include "xagent.hxx"
 
 using namespace xws;
 

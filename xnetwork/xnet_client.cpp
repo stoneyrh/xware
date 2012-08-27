@@ -32,7 +32,7 @@
 * ****************************************************************************
 */
 
-#include "xnet_client.h"
+#include "xnet_client.hxx"
 
 namespace xws
 {

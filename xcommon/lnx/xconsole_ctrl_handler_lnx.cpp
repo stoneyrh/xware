@@ -32,7 +32,7 @@
 * ****************************************************************************
 */
 
-#include "xconsole_ctrl_handler_lnx.h"
+#include "xconsole_ctrl_handler_lnx.hxx"
 
 namespace xws
 {

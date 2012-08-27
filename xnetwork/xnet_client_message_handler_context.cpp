@@ -32,7 +32,7 @@
 * ****************************************************************************
 */
 
-#include "xnet_client_message_handler_context.h"
+#include "xnet_client_message_handler_context.hxx"
 
 namespace xws
 {

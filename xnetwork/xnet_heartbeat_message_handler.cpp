@@ -32,9 +32,9 @@
 * ****************************************************************************
 */
 
-#include "xnet_heartbeat_message_handler.h"
-#include "xassert.h"
-#include "xlogger.h"
+#include "xnet_heartbeat_message_handler.hxx"
+#include "xassert.hxx"
+#include "xlogger.hxx"
 
 namespace xws
 {

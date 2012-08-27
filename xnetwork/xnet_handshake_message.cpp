@@ -32,9 +32,9 @@
 * ****************************************************************************
 */
 
-#include "xnet_handshake_message.h"
-#include "xlogger.h"
-#include "xlocale.h"
+#include "xnet_handshake_message.hxx"
+#include "xlogger.hxx"
+#include "xlocale.hxx"
 
 namespace xws
 {

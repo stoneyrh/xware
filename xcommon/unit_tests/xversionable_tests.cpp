@@ -33,7 +33,7 @@
 */
 
 #include <gtest/gtest.h>
-#include "xversionable.h"
+#include "xversionable.hxx"
 
 TEST(xversionable_tests, test_initialization)
 {

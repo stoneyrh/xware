@@ -33,7 +33,7 @@
 */
 
 #include <gtest/gtest.h>
-#include "xdata_buffer.h"
+#include "xdata_buffer.hxx"
 
 using namespace xws;
 

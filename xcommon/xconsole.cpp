@@ -32,8 +32,8 @@
 * ****************************************************************************
 */
 
-#include "xconsole.h"
-#include "xstring_algorithm.h"
+#include "xconsole.hxx"
+#include "xstring_algorithm.hxx"
 
 #ifdef WINDOWS
 ////////////////////

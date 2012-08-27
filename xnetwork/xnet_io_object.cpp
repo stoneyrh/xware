@@ -32,8 +32,8 @@
 * ****************************************************************************
 */
 
-#include "xnet_io_object.h"
-#include "xlogger.h"
+#include "xnet_io_object.hxx"
+#include "xlogger.hxx"
 
 namespace xws
 {

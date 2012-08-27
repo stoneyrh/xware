@@ -33,8 +33,8 @@
 */
 
 #include <gtest/gtest.h>
-#include "xdata_stream.h"
-#include "xuuid.h"
+#include "xdata_stream.hxx"
+#include "xuuid.hxx"
 
 using namespace xws;
 

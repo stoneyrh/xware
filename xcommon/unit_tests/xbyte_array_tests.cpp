@@ -33,7 +33,7 @@
 */
 
 #include <gtest/gtest.h>
-#include "xbyte_array.h"
+#include "xbyte_array.hxx"
 
 using namespace xws;
 

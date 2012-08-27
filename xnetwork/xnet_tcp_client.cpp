@@ -32,11 +32,11 @@
 * ****************************************************************************
 */
 
-#include "xnet_tcp_client.h"
-#include "xtcp_io_object.h"
-#include "xbind.h"
-#include "xlogger.h"
-#include "xlocale.h"
+#include "xnet_tcp_client.hxx"
+#include "xtcp_io_object.hxx"
+#include "xbind.hxx"
+#include "xlogger.hxx"
+#include "xlocale.hxx"
 
 namespace xws
 {

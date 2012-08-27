@@ -1,4 +1,4 @@
-#include "xchat_server.h"
+#include "xchat_server.hxx"
 
 namespace xws
 {

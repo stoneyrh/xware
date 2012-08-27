@@ -33,8 +33,8 @@
 */
 
 #include <gtest/gtest.h>
-#include "xenvironment.h"
-#include "xglobal.h"
+#include "xenvironment.hxx"
+#include "xglobal.hxx"
 
 using namespace xws;
 

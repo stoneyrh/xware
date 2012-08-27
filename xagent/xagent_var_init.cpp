@@ -32,11 +32,11 @@
 * ****************************************************************************
 */
 
-#include "xnet_handshake_message.h"
-#include "xnet_heartbeat_message.h"
-#include "xnet_handshake_message_handler.h"
-#include "xnet_heartbeat_message_handler.h"
-#include "xnet_var_init.h"
+#include "xnet_handshake_message.hxx"
+#include "xnet_heartbeat_message.hxx"
+#include "xnet_handshake_message_handler.hxx"
+#include "xnet_heartbeat_message_handler.hxx"
+#include "xnet_var_init.hxx"
 
 #define XCLIENT_UUID _X("{30201EA2-7AD5-46e8-91D6-7D3E878C8DC4}")
 
