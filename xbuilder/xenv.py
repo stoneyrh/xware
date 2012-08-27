@@ -14,6 +14,11 @@ def detect_boost_path():
         return os.environ['BOOST_DIR']
     return os.path.join(parentDir, 'vendor', 'boost_1_49_0')
 
+def detect_boost_lib_path():
+    if os.environ.has_key('BOOST_LIB_DIR'):
+        return os.environ['BOOST_LIB_DIR']
+    return os.path.join(parentDir, 'vendor', 'boost_1_49_0', 'stage', 'lib')
+
 def detect_gmock_path():
     if os.environ.has_key('GOOGLE_DIR'):
         return os.environ['GOOGLE_DIR']
@@ -26,6 +31,7 @@ vars = SCons.Variables.Variables(None, SCons.Script.ARGUMENTS)
 vars.Add(SCons.Variables.BoolVariable('unicode', 'Use unicode string', True))
 vars.Add(SCons.Variables.BoolVariable('release', 'Build without debug information', False))
 vars.Add(SCons.Variables.PathVariable('boost', 'Include directory for boost', detect_boost_path()))
+vars.Add(SCons.Variables.PathVariable('boost_lib', 'Library directory for boost', detect_boost_lib_path()))
 vars.Add(SCons.Variables.PathVariable('google', 'Include directory for google mock framework', detect_gmock_path()))
 
 if _is_windows():
@@ -80,12 +86,20 @@ xenv.Help(vars.GenerateHelpText(xenv))
 
 def use_boost(xenv, *libs):
     boost_dir = xenv['BOOST_DIR']
-    boost_lib_dir = os.path.join(boost_dir, 'stage', 'lib')
+    boost_lib_dir = xenv['BOOST_LIB_DIR']
     xenv.Append(CPPPATH = [boost_dir], LIBPATH = [boost_lib_dir])
     if is_linux(xenv):
-        libs = ('boost_system', 'boost_thread', 'boost_program_options')
+        libs = ('boost_locale', 'boost_system', 'boost_thread', 'boost_program_options')
     if libs:
         xenv.Append(LIBS = [lib for lib in libs])
+    # These flags must be after those boost libs, this is restricted by Linux
+    if is_linux(xenv):
+        # Check if ICU works, if yes, then get the flags
+        icu_config = xenv.WhereIs('icu-config')
+        if icu_config:
+            # Run '/usr/bin/icu-config --ldflags' to retrieve flags
+            retrieve_icu_ldflags = '%s --ldflags' % icu_config
+            xenv.ParseConfig(retrieve_icu_ldflags)
 
 def use_gmock(xenv):
     google_dir = xenv['GOOGLE_DIR']
@@ -138,6 +152,7 @@ def setup(xenv, component = 'build'):
         build_output = os.path.join('%s_output' % component, system, configuration)
     # Setup paths
     xenv['BOOST_DIR'] = xenv['boost']
+    xenv['BOOST_LIB_DIR'] = xenv['boost_lib']
     xenv['GOOGLE_DIR'] = xenv['google']
 
     if is_unicode(xenv):
