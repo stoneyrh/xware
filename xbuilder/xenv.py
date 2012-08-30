@@ -157,6 +157,8 @@ def with_preprocessed_file(xenv):
 
 def is_target_arch_64(xenv):
     arch = xenv['TARGET_ARCH']
+    if not arch:
+        arch = os.uname()[-1]
     return arch.find('64') >= 0
 
 def setup(xenv, component = 'build'):
