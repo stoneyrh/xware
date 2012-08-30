@@ -6,7 +6,7 @@ Import('libs')
 xenv = xenv.Clone()
 xenv.UseBoost()
 
-xenv.Append(CPPPATH = ['#xcommon', '#xnetwork'], LIBS = [os.path.splitext(lib.name)[0] for lib in libs], LIBPATH = [lib.dir for lib in libs])
+xenv.Prepend(CPPPATH = ['#xcommon', '#xnetwork'], LIBS = [os.path.splitext(lib.name)[0] for lib in libs], LIBPATH = [lib.dir for lib in libs])
 
 sources = xenv.Glob('*.cpp')
 xclient_exe_name = 'xclient'
