@@ -211,4 +211,19 @@ def main():
     print html
 
 if __name__ == '__main__':
-    main()
+    import sys
+    if len(sys.argv) > 1:
+        filenames = sys.argv[1:]
+        htmls = []
+        for filename in filenames:
+            file = open(filename, 'rt')
+            diff = file.read()
+            file.close()
+            html = diff2html(diff)
+            htmls.append(html)
+        print '\n'.join(htmls)
+    else:
+        print 'Usage: diff2html.py file [file...]'
+        #print 'The following is an output example.'
+        #print '-' * 80
+        #main()
