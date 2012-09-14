@@ -56,7 +56,8 @@ def makeBlocks(diff):
     while num < total:
         line = lines[num]
         if line.startswith('---') or line.startswith('+++') or \
-               line.startswith('===') or line.startswith('Index:'):
+               line.startswith('===') or line.lower().startswith('index') or \
+               line.lower().startswith('diff'):
             num = num + 1
             continue
         if line.startswith('@@'):
@@ -74,7 +75,7 @@ def makeBlocks(diff):
             while num < total:
                 line = lines[num]
                 # Leave this line to outside loop
-                if line.startswith('@@'):
+                if line.startswith('@@') or line.lower().startswith('index') or line.startswith('diff'):
                     break
                 # The lines after this line will make a block
                 if line.startswith('-') or line.startswith('+'):
@@ -221,7 +222,8 @@ if __name__ == '__main__':
             file.close()
             html = diff2html(diff)
             htmls.append(html)
-        print '\n'.join(htmls)
+        if htmls:
+            print '\n'.join(htmls)
     else:
         print 'Usage: diff2html.py file [file...]'
         #print 'The following is an output example.'
