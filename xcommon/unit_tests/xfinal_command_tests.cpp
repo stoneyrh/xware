@@ -33,8 +33,8 @@
 */
 
 #include <gtest/gtest.h>
-#include "xfinal_command.h"
-#include "xbind.h"
+#include "xfinal_command.hxx"
+#include "xbind.hxx"
 
 using namespace xws;
 

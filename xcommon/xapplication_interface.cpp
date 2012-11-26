@@ -32,8 +32,8 @@
 * ****************************************************************************
 */
 
-#include "xapplication_interface.h"
-#include "xformat.h"
+#include "xapplication_interface.hxx"
+#include "xformat.hxx"
 
 namespace xws
 {

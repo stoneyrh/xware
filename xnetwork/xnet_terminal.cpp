@@ -32,13 +32,13 @@
 * ****************************************************************************
 */
 
-#include "xnet_terminal.h"
-#include "xlogger.h"
-#include "xassert.h"
-#include "xbind.h"
-#include "xposix_time.h"
-#include "xnet_handshake_message.h"
-#include "xlocale.h"
+#include "xnet_terminal.hxx"
+#include "xlogger.hxx"
+#include "xassert.hxx"
+#include "xbind.hxx"
+#include "xposix_time.hxx"
+#include "xnet_handshake_message.hxx"
+#include "xlocale.hxx"
 
 #define HEARTBEAT_INTERVAL          1
 #define HEARTBEAT_THRESHOLD         3

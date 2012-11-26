@@ -32,7 +32,7 @@
 * ****************************************************************************
 */
 
-#include "xnet_message_ids.h"
+#include "xnet_message_ids.hxx"
 
 namespace xws
 {

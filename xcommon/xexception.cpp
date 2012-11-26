@@ -32,7 +32,7 @@
 * ****************************************************************************
 */
 
-#include "xexception.h"
+#include "xexception.hxx"
 #include <boost/lexical_cast.hpp>
 
 namespace xws

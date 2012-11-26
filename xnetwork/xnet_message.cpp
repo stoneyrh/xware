@@ -32,12 +32,12 @@
 * ****************************************************************************
 */
 
-#include "xnet_message.h"
-#include "xnet_message_ids.h"
-#include "xassert.h"
-#include "xnetwork.h"
-#include "xlogger.h"
-#include "xlocale.h"
+#include "xnet_message.hxx"
+#include "xnet_message_ids.hxx"
+#include "xassert.hxx"
+#include "xnetwork.hxx"
+#include "xlogger.hxx"
+#include "xlocale.hxx"
 
 namespace xws
 {

@@ -32,12 +32,12 @@
 * ****************************************************************************
 */
 
-#include "xglobal.h"
-#include "xuuid.h"
-#include "xuuid_application.h"
-#include "xcommand_line_args.h"
-#include "xstring_algorithm.h"
-#include "xexception.h"
+#include "xglobal.hxx"
+#include "xuuid.hxx"
+#include "xuuid_application.hxx"
+#include "xcommand_line_args.hxx"
+#include "xstring_algorithm.hxx"
+#include "xexception.hxx"
 
 using namespace xws;
 

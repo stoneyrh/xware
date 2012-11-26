@@ -32,8 +32,8 @@
 * ****************************************************************************
 */
 
-#include "xuuid_application.h"
-#include "version.h"
+#include "xuuid_application.hxx"
+#include "version.hxx"
 
 namespace xws
 {

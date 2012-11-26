@@ -32,8 +32,8 @@
 * ****************************************************************************
 */
 
-#include "xlogger.h"
-#include "xlog_message.h"
+#include "xlogger.hxx"
+#include "xlog_message.hxx"
 
 namespace xws
 {

@@ -32,8 +32,8 @@
 * ****************************************************************************
 */
 
-#include "xudp_io_object.h"
-#include "xlogger.h"
+#include "xudp_io_object.hxx"
+#include "xlogger.hxx"
 
 namespace xws
 {

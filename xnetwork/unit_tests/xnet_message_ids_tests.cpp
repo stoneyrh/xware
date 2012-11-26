@@ -33,7 +33,7 @@
 */
 
 #include <gtest/gtest.h>
-#include "xnet_message_ids.h"
+#include "xnet_message_ids.hxx"
 
 using namespace xws;
 

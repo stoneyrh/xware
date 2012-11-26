@@ -32,7 +32,7 @@
 * ****************************************************************************
 */
 
-#include "xdate_time.h"
+#include "xdate_time.hxx"
 
 namespace xws
 {

@@ -32,10 +32,10 @@
 * ****************************************************************************
 */
 
-#include "xapplication.h"
-#include "xcommand_line_args.h"
-#include "xchat_server.h"
-#include "xconsole_ctrl_handler.h"
+#include "xapplication.hxx"
+#include "xcommand_line_args.hxx"
+#include "xchat_server.hxx"
+#include "xconsole_ctrl_handler.hxx"
 
 using namespace xws;
 

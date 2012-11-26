@@ -32,7 +32,7 @@
 * ****************************************************************************
 */
 
-#include "xcrash_handler_lnx.h"
+#include "xcrash_handler_lnx.hxx"
 
 namespace xws
 {

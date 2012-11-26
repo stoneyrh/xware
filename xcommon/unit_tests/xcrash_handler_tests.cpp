@@ -33,7 +33,7 @@
 */
 
 #include <gtest/gtest.h>
-#include "xcrash_handler.h"
+#include "xcrash_handler.hxx"
 
 using namespace xws;
 

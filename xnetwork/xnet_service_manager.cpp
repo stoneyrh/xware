@@ -32,9 +32,9 @@
 * ****************************************************************************
 */
 
-#include "xnet_service_manager.h"
-#include "xforeach.h"
-#include "xlogger.h"
+#include "xnet_service_manager.hxx"
+#include "xforeach.hxx"
+#include "xlogger.hxx"
 
 namespace xws
 {

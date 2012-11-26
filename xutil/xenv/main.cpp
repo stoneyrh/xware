@@ -32,8 +32,8 @@
 * ****************************************************************************
 */
 
-#include "xglobal.h"
-#include "xenvironment.h"
+#include "xglobal.hxx"
+#include "xenvironment.hxx"
 
 using namespace xws;
 

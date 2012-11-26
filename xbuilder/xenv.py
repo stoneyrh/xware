@@ -9,10 +9,33 @@ parentDir = os.path.abspath(os.path.join(thisDir, os.path.pardir))
 def _is_windows():
     return platform.system() == 'Windows'
 
+def _is_linux():
+    return platform.system() == 'Linux'
+
+def current_architecture():
+    return 'x86_64'
+
 def detect_boost_path():
     if os.environ.has_key('BOOST_DIR'):
         return os.environ['BOOST_DIR']
     return os.path.join(parentDir, 'vendor', 'boost_1_49_0')
+
+def detect_boost_lib_path():
+    if os.environ.has_key('BOOST_LIB_DIR'):
+        return os.environ['BOOST_LIB_DIR']
+    boost_dir = detect_boost_path()
+    boost_lib_dir = os.path.join(boost_dir, 'stage', 'lib')
+    if os.path.exists(boost_lib_dir):
+        return boost_lib_dir
+    elif '64' in current_architecture():
+        boost_lib_dir = os.path.join(boost_dir, 'stage', 'lib64')
+    if os.path.exists(boost_lib_dir):
+        return boost_lib_dir
+    else:
+        boost_lib_dir = os.path.join(boost_dir, 'stage', 'lib32')
+    if os.path.exists(boost_lib_dir):
+        return boost_lib_dir
+    return boost_dir
 
 def detect_gmock_path():
     if os.environ.has_key('GOOGLE_DIR'):
@@ -26,6 +49,7 @@ vars = SCons.Variables.Variables(None, SCons.Script.ARGUMENTS)
 vars.Add(SCons.Variables.BoolVariable('unicode', 'Use unicode string', True))
 vars.Add(SCons.Variables.BoolVariable('release', 'Build without debug information', False))
 vars.Add(SCons.Variables.PathVariable('boost', 'Include directory for boost', detect_boost_path()))
+vars.Add(SCons.Variables.PathVariable('boost_lib', 'Library directory for boost', detect_boost_lib_path()))
 vars.Add(SCons.Variables.PathVariable('google', 'Include directory for google mock framework', detect_gmock_path()))
 
 if _is_windows():
@@ -59,9 +83,6 @@ if _is_windows():
 
 architectures = [ 'x86', 'i386', 'amd64', 'emt64', 'x86_64', 'ia64' ]
 
-def current_architecture():
-    return 'x86_64'
-
 vars.Add(SCons.Variables.EnumVariable('arch', 'Specify target architecture', current_architecture(), architectures))
 
 kwargs = {}
@@ -80,12 +101,20 @@ xenv.Help(vars.GenerateHelpText(xenv))
 
 def use_boost(xenv, *libs):
     boost_dir = xenv['BOOST_DIR']
-    boost_lib_dir = os.path.join(boost_dir, 'stage', 'lib')
+    boost_lib_dir = xenv['BOOST_LIB_DIR']
     xenv.Append(CPPPATH = [boost_dir], LIBPATH = [boost_lib_dir])
     if is_linux(xenv):
-        libs = ('boost_system', 'boost_thread', 'boost_program_options')
+        libs = ('boost_locale', 'boost_system', 'boost_thread', 'boost_program_options')
     if libs:
         xenv.Append(LIBS = [lib for lib in libs])
+    # These flags must be after those boost libs, this is restricted by Linux
+    if is_linux(xenv):
+        # Check if ICU works, if yes, then get the flags
+        icu_config = xenv.WhereIs('icu-config')
+        if icu_config:
+            # Run '/usr/bin/icu-config --ldflags' to retrieve flags
+            retrieve_icu_ldflags = '%s --ldflags' % icu_config
+            xenv.ParseConfig(retrieve_icu_ldflags)
 
 def use_gmock(xenv):
     google_dir = xenv['GOOGLE_DIR']
@@ -126,6 +155,12 @@ def windows_version_value(xenv):
 def with_preprocessed_file(xenv):
     return False
 
+def is_target_arch_64(xenv):
+    arch = xenv['TARGET_ARCH']
+    if not arch:
+        arch = os.uname()[-1]
+    return arch.find('64') >= 0
+
 def setup(xenv, component = 'build'):
     configuration = 'debug' if is_debug(xenv) else 'release'
     configuration += '_unicode' if is_unicode(xenv) else '_ansi'
@@ -138,6 +173,18 @@ def setup(xenv, component = 'build'):
         build_output = os.path.join('%s_output' % component, system, configuration)
     # Setup paths
     xenv['BOOST_DIR'] = xenv['boost']
+    # IF the path is passed with command line option or set by environment variable
+    # We will take it
+    if SCons.Script.ARGUMENTS.has_key('boost_lib') or os.environ.has_key('boost_lib'):
+        xenv['BOOST_LIB_DIR'] = xenv['boost_lib']
+    # Otherwise, we need to check it carefully
+    else:
+        if xenv.IsTargetArch64():
+            xenv['BOOST_LIB_DIR'] = os.path.join(xenv['BOOST_DIR'], 'stage', 'lib64')
+        else:
+            xenv['BOOST_LIB_DIR'] = os.path.join(xenv['BOOST_DIR'], 'stage', 'lib32')
+        if not os.path.exists(xenv['BOOST_LIB_DIR']):
+            xenv['BOOST_LIB_DIR'] = os.path.join(xenv['BOOST_DIR'], 'stage', 'lib')
     xenv['GOOGLE_DIR'] = xenv['google']
 
     if is_unicode(xenv):
@@ -249,5 +296,6 @@ xenv.AddMethod(testee_objects, 'TesteeObjects')
 xenv.AddMethod(testee_objects, 'LocalObjects')
 xenv.AddMethod(setup_test_env, 'SetupTestEnv')
 xenv.AddMethod(is_debugging_unit_test, 'IsDebuggingUnitTest')
+xenv.AddMethod(is_target_arch_64, 'IsTargetArch64')
 # Add builders
 xenv.Append(BUILDERS = {'RunUnitTest' : xunit_test.RunUnitTest})
