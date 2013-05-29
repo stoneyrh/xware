@@ -162,7 +162,7 @@ def makeHTML(blocks):
             if right.startswith('+'):
                 color_right = color_add
                 bg_right    = bg_add
-                bg_left     = bg_mod
+                bg_left     = bg_del
         # Remove the first -/+
         if left.startswith('-'):
             left = left[1:]
