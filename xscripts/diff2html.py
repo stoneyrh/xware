@@ -171,6 +171,8 @@ def makeHTML(blocks):
         rows.append(row % (leftLine, color_left, bg_left, text2html(left), rightLine, color_right, bg_right, text2html(right)))
     return table % '\n\t'.join(rows)
 
+template = '<html><head><meta http-equiv="Content-Type" content="text/html; Charset=UTF-8" /><title>Differences</title></head><body>CONTENT</body></html>'
+
 def diff2html(diff):
     blocks = makeBlocks(diff)
     html   = makeHTML(blocks)
@@ -223,7 +225,8 @@ if __name__ == '__main__':
             html = diff2html(diff)
             htmls.append(html)
         if htmls:
-            print '\n'.join(htmls)
+            html = '\n'.join(htmls)
+            print template.replace('CONTENT', html)
     else:
         print 'Usage: diff2html.py file [file...]'
         #print 'The following is an output example.'

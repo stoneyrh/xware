@@ -1,4 +1,4 @@
-from diff2html import diff2html
+from diff2html import diff2html, template
 import os
 
 ignoreList = []
@@ -86,8 +86,12 @@ def main():
             if html:
                 htmls.extend(html)
         if htmls:
+            contents = []
             for html in htmls:
-                print '<h3>' + html['name'] + '[' + html['revision'] + ']' + '</h3><br/>' + html['html']
+                content = '<h3>' + html['name'] + '[' + html['revision'] + ']' + '</h3><br/>' + html['html']
+                contents.append(content)
+            content = '<br/>'.join(contents)
+            print template.replace('CONTENT', content)
     else:
         print 'Usage: parsediff.py file [file...]'
 
